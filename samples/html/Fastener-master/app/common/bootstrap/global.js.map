@@ -1,0 +1,21 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\bootstrap\\global.js"
+    ],
+    "names": [
+        "global",
+        "regex",
+        "specialString",
+        "option",
+        "onlyString",
+        "methods",
+        "sendCommand",
+        "checkPassword"
+    ],
+    "mappings": ";;AAAAA,OAAOC,KAAP,GAAe;AACXC,mBAAgB,kCADL,CACyC;AADzC,CAAf;;AAIAF,OAAOG,MAAP,GAAgB;AACZC,gBAAa,2BADD,EACgC;AAC5CC,aAAS,CAAC,KAAD,EAAO,MAAP,CAFG,CAEe;AAFf,CAAhB;;AAKAL,OAAOM,WAAP,GAAqB;AACjBC,mBAAgB,qCADC,CACwC;AADxC,CAArB",
+    "file": "..\\..\\..\\src\\common\\bootstrap\\global.js",
+    "sourcesContent": [
+        "global.regex = {\n    specialString : /[`~!@#$%^&*()+<>?:\"{},.\\/;'[\\]]/i, //检测有没有违法字符串\n}\n\nglobal.option = {\n    onlyString : 'fastener_TestSitePassWord',   //唯一字符串，用于检测命令是否完成\n    methods: ['get','post']    //支持的模式，后期添加cookies、user-agent等\n}\n\nglobal.sendCommand = {\n    checkPassword : 'echo%20\"fastener_TestSitePassWord\";',   //发送检测的命令\n}"
+    ]
+}

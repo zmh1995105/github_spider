@@ -1,0 +1,12 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\main\\config\\config.js"
+    ],
+    "names": [],
+    "mappings": "AAAA;AACA;;;;;kBAGe;AACb;AADa,C",
+    "file": "..\\..\\..\\src\\main\\config\\config.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * config\n */\nexport default {\n  //key: value\n};"
+    ]
+}

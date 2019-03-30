@@ -1,0 +1,130 @@
+
+
+FRIDAY
+
+9am - 10am
+Breakfast
+
+
+10am - 1pm
+Big Picture: Car Industry and APIs
+
+
+1pm - 2pm
+Lunch
+
+
+2pm - 4pm
+How SV disrupts SUVs: Silicon Valley's influence and disruption on the car space
+
+4pm - 6:30pm
+Opportunities and challenges: Cars in a connected environment
+
+6:30pm - 8pm
+Networking cocktail
+
+
+SATURDAY
+9am - 10am
+Breakfast
+
+
+10am - 1pm
+Upgrading the car market with APIs
+
+
+1pm - 2pm
+Lunch
+
+
+2pm - 4pm
+Enhancing the Driver Experience with APIs
+
+4pm - 6:00pm
+How to develop for Connected Cars - Guidelines and Limits
+
+6pm - 9pm
+Networking cocktail
+
+7pm
+Doors open for the 24H Hackathon
+
+7:30pm - 9pm
+Hackathon kick-off
+Technology pitches
+Team formation
+
+
+SUNDAY
+8:30am - 10am
+Breakfast
+
+
+9am - 12pm
+Workshops with our partners
+
+
+1pm - 2pm
+Lunch
+
+
+2pm - 5pm
+Hacking time finish line
+
+5pm - 6:00pm
+Demos
+
+6pm - 6:30pm
+Jury
+
+6:30 - 8pm
+Networking
+
+
+<p>
+<strong>FRIDAY 13th - Conference</strong></p>
+<p>
+10am - 1pm<br />
+<strong>Big Picture: Car Industry and APIs</strong>
+</p>
+
+<p>
+2pm - 4pm<br />
+<strong>How SV disrupts SUVs: Silicon Valley's influence and disruption on the car space</strong>
+</p>
+
+<p>
+4pm - 6:30pm<br />
+<strong>Opportunities and challenges: Cars in a connected environment</strong>
+</p>
+
+
+<p>
+<strong>SATURDAY 14th - Conference</strong></p>
+<p>
+10am - 1pm<br />
+<strong>Upgrading the car market with APIs</strong>
+</p>
+
+<p>
+2pm - 4pm<br />
+<strong>Enhancing the Driver Experience with APIs</strong>
+</p>
+
+<p>
+4pm - 6pm<br />
+<strong>How to develop for Connected Cars - Guidelines and Limits</strong>
+</p>
+
+<p>
+<strong>SUNDAY 15th - Hackathon</strong></p>
+<p>
+10am - 1pm<br />
+<strong>Workshops</strong>
+</p>
+
+
+<p>
+5pm - 6:30pm<br />
+<strong>Demos & Jury</strong>
+</p>

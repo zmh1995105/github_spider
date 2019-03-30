@@ -1,0 +1,49 @@
+﻿<script language="javascript" type="text/javascript">
+	$().ready(function () {
+
+		$("#AddNoteForm").validate({
+			rules: {
+				Title: {
+					required: true
+				}
+			},
+			messages: {
+				Title: {
+					required: "Please provide a title"
+				}
+			}
+		});
+	});
+</script>
+<style type="text/css">
+form.AddNoteForm label.error, label.error{  color: red; font-style: italic}
+</style>
+<form id="AddNoteForm" method="post" >
+<table class="btn" id="noteForm" style="width:70%">
+		<tr>
+		<td>Title:</td>
+		</tr>
+		<tr>
+		<td><input type="text" id="Title" name="Title" value="{{Title}}" /> </td>
+		</tr>
+
+		<tr>
+		<td><input type="checkbox" id="IsPublic" name="IsPublic"/>&nbsp Is public for view </td>
+		</tr>
+
+		<tr>
+		<td>Note:</td>
+		</tr>
+		<tr>
+		<td>
+		<textarea id="NoteText" name="NoteText" rows="10" >{{NoteText}}</textarea>
+		</td>
+		</tr>
+
+		<tr>
+		<td><input type="submit" id="btnSubmit1" name="btnSubmit1" value="Save Note" /> </td>
+		</tr>
+</table>
+<input type="hidden" id="NoteId" name="NoteId" value="{{NoteId}}" />
+<input type="hidden" id="Note" name="Note" />
+</form>

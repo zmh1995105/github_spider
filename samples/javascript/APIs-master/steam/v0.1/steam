@@ -1,0 +1,147 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function url_replace(url, args, param, type, required, def) {
+	if (args[param] === undefined && required && def !== undefined)
+		args[param] = def;
+	if (args[param] === undefined && required && def === undefined)
+		throw new Error(param + ' is a required parameter');
+	if (type == 'str' && args[param] !== undefined && args[param] !== undefined && args[param] !== null && typeof args[param] != 'string')
+		args[param] = args[param].toString();
+	return url;
+}
+
+var provider = fs('/bin/steam');
+
+exports.auth = function() { return auth({provider:provider}) };
+/** 
+ * GetNewsForApp returns the latest of a game specified by its appID.
+ * @category News
+ * @param {string} [format=json]  Output format. json (default), xml or vdf.	   
+ * @param {string} [appid]  AppID of the game you want the news of.	   
+ * @param {string} [count]  How many news enties you want to get returned.	   
+ * @param {string} [maxlength]  Maximum length of each news entry.	   
+ * @methodhttp GET
+ */
+exports.getNewsForApp = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/';
+	args = args || {};
+	url = url_replace(url, args, 'format', 'str', true, "json");
+	url = url_replace(url, args, 'appid', 'str', true);
+	url = url_replace(url, args, 'count', 'str', true);
+	url = url_replace(url, args, 'maxlength', 'str', true);
+	return http({url:url, params:args, auth:'none', provider:provider}, opts);
+};
+
+/** 
+ * Returns on global achievements overview of a specific game in percentages.
+ * @category User
+ * @param {string} [format=json]  Output format. json (default), xml or vdf.	   
+ * @param {string} [gameid]  AppID of the game you want the news of.	   
+ * @methodhttp GET
+ */
+exports.getGlobalAchievementPercentagesForApp = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002/';
+	args = args || {};
+	url = url_replace(url, args, 'format', 'str', true, "json");
+	url = url_replace(url, args, 'gameid', 'str', true);
+	return http({url:url, params:args, auth:'none', provider:provider}, opts);
+};
+
+/** 
+ * Returns basic profile information for a list of 64-bit Steam IDs.
+ * @category User
+ * @param {string} [format=json]  Output format. json (default), xml or vdf.	   
+ * @param {string} [steamids]  Comma-delimited list of 64 bit Steam IDs to return profile information for. Up to 100 Steam IDs can be requested.	   
+ * @methodhttp GET
+ */
+exports.getPlayerSummaries = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamUser/getPlayerSummaries/v0002/';
+	args = args || {};
+	url = url_replace(url, args, 'format', 'str', true, "json");
+	url = url_replace(url, args, 'steamids', 'str', true);
+	return http({url:url, params:args, auth:'manual', provider:provider}, opts);
+};
+
+/** 
+ * An extremely useful feature would be to grab the Steam IDs of the users in a server. Currently, server queries only return player nicknames, unless you have RCON access to the server. Steam IDs could conceivably be returned by the GetAccountPublicInfoBySteamID but I imagine that would be more cumbersome. A simple solution would be to have a method much like the ResolveVanityURL with the same response
+ * @category User
+ * @param {string} [nickname]  nickname	   
+ * @methodhttp GET
+ */
+exports.resolveNickname = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamUser/ResolveNickname/v0001/';
+	args = args || {};
+	url = url_replace(url, args, 'nickname', 'str', true);
+	return http({url:url, params:args, auth:'manual', provider:provider}, opts);
+};
+
+/** 
+ * Returns the friend list of any Steam user, provided his Steam Community profile visibility is set to "Public".
+ * @category User
+ * @param {string} [format=json]  Output format. json (default), xml or vdf.	   
+ * @param {string} [steamid]  64 bit Steam ID to return friend list for.	   
+ * @param {string} [relationship]  Relationship filter. Possibles values: all, friend.	   
+ * @methodhttp GET
+ */
+exports.getFriendList = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamUser/GetFriendList/v0001/';
+	args = args || {};
+	url = url_replace(url, args, 'format', 'str', true, "json");
+	url = url_replace(url, args, 'steamid', 'str', true);
+	url = url_replace(url, args, 'relationship', 'str', true);
+	return http({url:url, params:args, auth:'manual', provider:provider}, opts);
+};
+
+/** 
+ * Returns a list of achievements for this user by app id
+ * @category User
+ * @param {string} [format=json]  Output format. json (default), xml or vdf.	   
+ * @param {string} [steamid]  64 bit Steam ID to return friend list for.	   
+ * @param {string} [appid]  The ID for the game you're requesting	   
+ * @param {string}  l   Language. If specified, it will return language data for the requested language.	   
+ * @methodhttp GET
+ */
+exports.getPlayerAchievements = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/';
+	args = args || {};
+	url = url_replace(url, args, 'format', 'str', true, "json");
+	url = url_replace(url, args, 'steamid', 'str', true);
+	url = url_replace(url, args, 'appid', 'str', true);
+	url = url_replace(url, args, 'l', 'str');
+	return http({url:url, params:args, auth:'manual', provider:provider}, opts);
+};
+
+/** 
+ * Returns a list of achievements for this user by app id
+ * @category User
+ * @param {string} [format=json]  Output format. json (default), xml or vdf.	   
+ * @param {string} [steamid]  64 bit Steam ID to return friend list for.	   
+ * @param {string} [appid]  The ID for the game you're requesting	   
+ * @param {string}  l   Language. If specified, it will return language data for the requested language.	   
+ * @methodhttp GET
+ */
+exports.getUserStatsForGame = function(args, opts) {
+	var url = ' http://api.steampowered.com/ISteamUserStats/GetUserStatsForGame/v0002/';
+	args = args || {};
+	url = url_replace(url, args, 'format', 'str', true, "json");
+	url = url_replace(url, args, 'steamid', 'str', true);
+	url = url_replace(url, args, 'appid', 'str', true);
+	url = url_replace(url, args, 'l', 'str');
+	return http({url:url, params:args, auth:'manual', provider:provider}, opts);
+};

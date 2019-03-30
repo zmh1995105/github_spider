@@ -1,0 +1,33 @@
+﻿
+<div style="padding-left:10%;padding-right:10%">
+<table width="100%">
+<tr>
+<td>
+<span id="public_notes"><a id="apublic_notes" href="" style="">Public Notes</a></span>&nbsp;&nbsp;
+<span id="my_notes"><a id="amy_notes" href="note/mynotes">My Notes</a></span>&nbsp;&nbsp;
+<span id="add_note"><a id="aadd_note" href="note/add"> Add Note</a></span>
+</td>
+<td align="right" style="padding-right:5px;">
+<span id="sUserEmail"><a href="security/login"> Login</a></span>
+<span id="sLogout"><a href="security/logout" style="text-decoration:none">&nbsp;&nbsp;[Logout]</a></span>
+</td>
+</tr>
+</table>
+<div style="border-top:1px solid #C9D7F1;font-size:1px;"></div>
+</div>
+<script type="text/javascript">
+    var user = "{{Email}}";
+    var activeMI = "{{activeMI}}";
+    if ( user != "") {
+        var html = "<font style=\"color:green\">";
+        $("#sUserEmail").html(html + user+ "</font>");
+        $("#sLogout").show();
+    }
+    else {
+        $("#sLogout").hide();
+     }
+    if (activeMI != "") {
+        var fontStartTag = "<font size=\"3\" style=\"color:#004276;font-weight:bold\" >";
+        $("#" + activeMI).html(fontStartTag + $("#a" + activeMI).html() + "</font>");
+    }
+</script>

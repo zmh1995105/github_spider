@@ -1,0 +1,97 @@
+<?php
+session_start();
+if(!isset($_SESSION['userid']))		// if a session doesn't exist
+{
+	header('Location: ./index.html');
+}
+?>
+
+<html>
+<head>
+  <title>EIT_industries</title>
+  <meta charset="utf-8">
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="main.php">EIT<span class="logo_colour">industries</span></a></h1>
+          <h2>Enriching lives through innovation</h2>
+        </div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li class="selected"><a href="main.php">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="investors.html">Investors</a></li>
+          <li><a href="news.php">News</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="content_header"></div>
+    <div id="site_content">
+      <div id="banner"></div>
+	  <div id="sidebar_container">
+      <div class="sidebar">
+        <div class="sidebar_top"></div>
+        <div class="sidebar_item">
+	  <?php
+            $tmpid = $_SESSION['name'];
+            echo "Hi, '$tmpid'!"
+          ?>
+	  <br>
+	  <button onclick="location.href='./logout.php'"> logout </button>
+        </div>
+        <div class="sidebar_base"></div>
+      </div>
+        <div class="sidebar">
+          <div class="sidebar_top"></div>
+          <div class="sidebar_item">
+            <!-- insert your sidebar items here -->
+            <h3>Latest News</h3>
+            <h4>Fourth Quarter 2018 Common Dividend</h4>
+            <h5>December 21st, 2018</h5>
+            <p> EIT Corporation today announced that its board of directors has declared a $0.1625 per share cash dividend on its common stock. The dividend is payable on December 31, 2018, to stockholders of record as of December 14, 2018.<br /><a href="#">Read more</a></p>
+          </div>
+          <div class="sidebar_base"></div>
+        </div>
+        <div class="sidebar">
+          <div class="sidebar_top"></div>
+          <div class="sidebar_item">
+            <h3>Our Partners</h3>
+            <ul>
+              <li><a href="#">BASE Corp.</a></li>
+              <li><a href="#">PowDuPoint</a></li>
+              <li><a href="#">LxxonCobil</a></li>
+              <li><a href="#">LF Chem</a></li>
+            </ul>
+          </div>
+          <div class="sidebar_base"></div>
+        </div>
+      </div>
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Modern Life Is Built on Chemistry</h1>
+        <p>EIT Coperation has worked with the Chemical Industries Association and ITN Productions to help create 'Solutions for our Future', a series of short films that feature a review of innovation in manufacturing and industry. These news-style reports and editorial profiles highlight the very latest developments across the chemical sector.</p>
+        <p>EIT Coperation is a young company. It has grown to become a leading chemical company with sales today of around $60 billion. Most of our employees have spent all their working lives in the chemical or oil industry. We continue unashamedly to extract best practices from this very impressive group of people in all spheres of activity.  We believe EIT Coperation is a refreshing place to work and we are prepared to embrace new approaches to business.</p>
+        <h2>OUR MARKETS</h2>
+        <p>We produce the raw materials that are essential in the manufacture of a wide variety of goods. Our products make a significant contribution to saving life, improving health and enhancing standards of living for people around the world.<br /><a href="/products.html">Learn more</a></p>
+      </div>
+    </div>
+    <div id="content_footer"></div>
+    <div id="footer">
+      <p><a href="main.php">Home</a> | <a href="about.html">About</a> | <a href="products.html">Products</a> | <a href="investors.html">Investors</a> | <a href="news.php">News</a></p>
+      <p>Copyright 2001- 2018 EIT International LLC. All rights reserved.</p>
+    </div>
+  </div>
+</body>
+</html>

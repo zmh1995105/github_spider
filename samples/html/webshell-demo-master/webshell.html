@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>webshell</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace, 微软雅黑;
+        }
+
+        #console {
+            margin-bottom: 30px;
+        }
+
+        #filter {
+            z-index: -1;
+            font-size: 16px;
+            color: white;
+            border-width: 1px;
+            background-color: black;
+            width: 100%;
+            position: fixed;
+            bottom: 5px;
+            left: 0;
+        }
+    </style>
+    <script src="//cdn.bootcss.com/socket.io/1.7.3/socket.io.min.js"></script>
+    <script src="//cdn.bootcss.com/vue/2.2.6/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="console">
+        <p v-for="line in showLines" v-html="line"></p>
+    </div>
+    <input id="filter" type="text" v-model="filter">
+</div>
+</body>
+
+<script>
+
+  //==================vue渲染逻辑=================
+  var app = new Vue({
+    el      : '#app',
+    data    : {
+      rawLines: [],
+      filter  : ''
+    },
+    computed: {
+      showLines: function () {
+        var self = this;
+        if (!self.filter || !self.rawLines.length)return self.rawLines;
+        return self.rawLines.filter(function (s) {
+          return JSON.stringify(s).indexOf(self.filter) > -1;
+        });
+      }
+    },
+    watch   : {
+      showLines: function () {
+        //有新增行则判断是否滚动页面
+        if (onBottom) {
+          window.scrollTo(0, document.body.scrollHeight);
+        }
+      }
+    }
+  });
+
+  //=============socket.io消息处理逻辑=============
+  var socket = io.connect();
+  socket.on('line', function (data) {
+    app.rawLines.push(data);
+    if (app.rawLines.length > 2000) app.rawLines.splice(0, app.rawLines.length - 2000); //行数上限设为2000
+  });
+
+  socket.on('connect', function () {
+    console.log('connect succeed');
+
+    var id = '', file = '';
+    try {
+      id = /[?&]id\=([^=&]+)/.exec(location.search)[1];  //从url上获取id
+    } catch (err) {
+    }
+
+    try {
+      file = /[?&]file\=([^=&]+)/.exec(location.search)[1];
+    } catch (err) {
+    }
+
+    if (id) {
+      console.log('sub', id);
+      socket.emit('sub', id);
+    } else if (file) {
+      console.log('watchFile', file);
+      socket.emit('watchFile', file);
+    } else {
+      app.rawLines.push('Nothing specify params. Try to use "?file=" or "?id=time" to read a stream.')
+    }
+  });
+
+
+  //===============页面滚动的逻辑==============
+  var onBottom = true;
+
+  window.onscroll = function () {
+
+    window.addEventListener("scroll", function (event) {
+      var scrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+
+      if (document.documentElement.scrollHeight == document.documentElement.clientHeight + scrollTop) {
+        onBottom = true;
+      } else {
+        onBottom = false;
+      }
+    });
+  }
+</script>
+</html>

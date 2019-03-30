@@ -1,0 +1,14 @@
+{"expressions":[{"url":"http://foo.com","params":[{"type":"query","key":"q","value":"qparam"}],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com","params":[{"type":"query","key":"q","value":"qparam1"},{"type":"query","key":"q","value":"qparam2"}],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com","params":[{"type":"query","key":"q","value":"q string"}],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com","params":[{"type":"query","key":"a","value":"b"}],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com","params":[{"type":"header","key":"header","value":"value"}],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com","params":[{"type":"query","key":"q","value":"qparam"},{"type":"query","key":"a","value":"b"},{"type":"header","key":"header","value":"value"}],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com?q=\"q string\"","params":[],"method":"get"}]}
+{"expressions":[{"url":"http://foo.com","params":[],"method":null}]}
+{"expressions":[{"url":"foo","params":[],"method":null}]}
+{"expressions":[{"url":"http://foo.com","params":[],"method":"post"}]}
+{"expressions":[{"url":"foo","params":[],"method":"post"}]}
+{"expressions":[{"url":"foo","params":[]},{"url":"bar","params":[],"method":null}]}
+{"expressions":[{"url":"foo","params":[],"method":"get"},{"url":"bar","params":[],"method":"post"}]}
+{"expressions":[{"url":"foo","params":[{"type":"query","key":"q","value":"a"},{"type":"query","key":"b","value":"c"},{"type":"header","key":"d","value":"e"}],"method":"get"},{"url":"bar","params":[{"type":"query","key":"q","value":"a"},{"type":"query","key":"b","value":"c"},{"type":"header","key":"d","value":"e"}],"method":"post"}]}

@@ -1,0 +1,115 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+args = args || {};
+if (typeof args == 'string') {
+    args = {url: args};
+}
+
+jsClientApi({
+    name: "soundcloud.player",
+	data: args,
+	initialize: js(function(callback) {
+		$.getScript("http://webshell.local/lib/swfobject/swfobject.js", function() {
+            $.getScript("https://raw.github.com/soundcloud/Widget-JS-API/master/soundcloud.player.api.js", callback)
+        });
+	}),
+	loaded: js(function() {
+	}),
+	create: js(function(jsapi) {
+        var playerId = 'scplayer' + this.data.pid;
+        var flashvars = this.data;
+        if (typeof flashvars.enable_api == "undefined")
+            flashvars.enable_api = true;
+        flashvars.object_id = playerId;
+        var params = {
+            allowscriptaccess: "always"
+        };
+        var attributes = {
+            id: playerId,
+            name: playerId
+        };
+        swfobject.embedSWF("http://player.soundcloud.com/player.swf", playerId, "100%", "100%", "8",null, flashvars, params, attributes);
+        var self = this;        
+        soundcloud.addEventListener('onPlayerReady', function(player, data) {
+            self.player = player;
+            self.ready(jsapi);
+        });
+        return false;
+	}),
+	ready: js(function(jsapi) {
+		jsapi.ready();
+	}),
+	interface: {
+		play: js(function() {
+            this.player.api_play()
+        }),
+        pause: js(function() {
+            this.player.api_pause()
+        }),
+        stop: js(function() {
+            this.player.api_stop();
+        }),
+        toggle: js(function() {
+            this.player.api_toggle();
+        }),
+        skip: js(function(trackIndex) {
+            this.player.api_skip(trackIndex);
+        }),
+        seekTo: js(function(seconds) {
+            // player has to be done buffering (onMediaDoneBuffering) to be able to seekTo, fix ?
+            this.player.api_seekTo(seconds);       
+        }),
+        load: js(function(url) {
+            // player will be ready after the onReady event, fix ?
+            this.player.api_load(url);
+        }),
+        next: js(function() {
+            this.player.api_next();
+        }),
+        prev: js(function() {
+            this.player.api_prev();
+        }),
+        setVolume: js(function(value) {
+            this.player.api_setVolume(value);  
+        }),
+        getVolume: js(function() {
+            return this.player.api_getVolume();
+        }),
+        getTrackDuration: js(function() {
+            return this.player.api_getTrackDuration();
+        }),
+        getTrackPosition: js(function() {
+            return this.player.api_getTrackPosition();
+        }),
+        getTracks: js(function() {
+            return this.player.api_getTracks()
+        }),
+        getCurrentTrack: js(function() {
+            return this.api_getCurrentTrack();
+        }),
+        getCurrentTrackIndex: js(function() {
+            return this.api_getCurrentTrackIndex();
+        }),
+        getFlashId: js(function() {
+            return this.api_getFlashId();
+        })
+	}
+}, {
+	view: '<div id="scplayer<%= data.pid %>"></div>'
+});

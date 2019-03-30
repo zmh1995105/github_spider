@@ -1,0 +1,10 @@
+                                     
+1 - !gold <site> - goldeneye attack             #    
+2 - !stopgold - stop goldeneye attack           #
+3 - !hulk <site> - hulk attack                  #
+4 - !stophulk - stop hulk attack                #
+5 - !udp <ip> - udp flooder                     # 
+6 - !stopudp - stop udp flood                   #
+7 - !cmd <command> - execute a systemcommand    #  
+8 - !sadattack <site> - sad attack              #
+9 - !stopsad - stop sad attack                  #

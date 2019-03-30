@@ -1,0 +1,55 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+var args = args || {}
+var sensor = args.sensor || false;
+var location = args.location || args.latitude + ", " + args.longitude;
+
+var url = "http://maps.googleapis.com/maps/api/streetview";
+
+var params = []
+if (args.width && args.height)
+    params[params.length] = "size=" + args.width + "x" + args.height;
+else
+	params[params.length] = "size=400x400"
+
+if (location)
+    params[params.length] = "location=" + location;
+
+if (args.fov)
+    params[params.length] = "fov=" + args.fov;
+
+if (args.heading)
+    params[params.length] = "heading=" + args.heading;
+
+if (args.pitch)
+    params[params.length] = "pitch=" + args.pitch;
+
+params[params.length] = "sensor=" + sensor;
+params[params.length] = "key=AIzaSyBMPZ3mllAMlHw_3u6Hh2TJYoSXi57S0gA";
+
+var fullurl = url;
+if (params.length > 0)
+	fullurl += '?'
+
+for (var i = 0; i < params.length; i++) {
+	if (i != 0)
+		fullurl += '&';
+	fullurl += params[i];
+}
+render(fullurl, { view: '<img src="<%= data %>" />' })

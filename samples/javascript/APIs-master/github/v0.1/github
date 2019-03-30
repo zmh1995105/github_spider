@@ -1,0 +1,3182 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function url_replace(url, args, param, type, required, def) {
+	if (args[param] === undefined && required && def !== undefined)
+		args[param] = def;
+	if (args[param] === undefined && required && def === undefined)
+		throw new Error(param + ' is a required parameter');
+	if (type == 'str' && args[param] !== undefined && args[param] !== undefined && args[param] !== null && typeof args[param] != 'string')
+		args[param] = args[param].toString();
+	if (type == 'int' && args[param] !== undefined && (parseFloat(args[param]) != parseInt(args[param], 10) || isNaN(args[param])))
+		throw new Error(param + ' must be an integer');
+	if (url.indexOf('{' + param + '}') !== -1) {
+		var rgx = new RegExp('\\{' + param + '\\}', 'g');
+		url = url.replace(rgx, args[param]);
+		delete args[param];
+	}
+	return url;
+}
+
+var provider = fs('/bin/github');
+
+exports.auth = function() { return auth({provider:provider}) };
+/**
+ * List a user’s gists
+ * @category Gist
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.gistListUser = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/gists';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List the authenticated user’s gists
+ * @category Gist
+ * @methodhttp GET
+ */
+exports.gistList = function(args, opts) {
+	var url = 'https://api.github.com/gists';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List all public gists
+ * @category Gist
+ * @methodhttp GET
+ */
+exports.gistListPublic = function(args, opts) {
+	var url = 'https://api.github.com/gists/public';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List the authenticated user’s starred gists
+ * @category Gist
+ * @methodhttp GET
+ */
+exports.gistListStarred = function(args, opts) {
+	var url = 'https://api.github.com/gists/starred';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single gist
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp GET
+ */
+exports.gistGet = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit a gist					NOTE: All files from the previous version of the gist are carried over by default if not included in the hash. Deletes can be performed by including the filename with a null hash.
+ * @category Gist
+ * @param {string} id  Gist id
+ * @param {string} [description]  The description for this gist
+ * @param {boolean} public  Set if this gist is public or not
+ * @param {object} files  Files that make up this gist. The key of which should be an optional string filename and the value another optional hash with optional parameters `content` (updated file contents) and `filename` (new name for this file).
+ * @methodhttp PATCH
+ */
+exports.gistEdit = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'public', 'null', true);
+	url = url_replace(url, args, 'files', 'null', true);
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a gist
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp DELETE
+ */
+exports.gistDelete = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Create a gist
+ * @category Gist
+ * @param {string} [description]  The description for this gist
+ * @param {boolean} public  Set if this gist is public or not
+ * @param {object} files  Files that make up this gist. The key of which should be a required string filename and the value another required hash with parameter content.
+ * @methodhttp POST
+ */
+exports.gistCreate = function(args, opts) {
+	var url = 'https://api.github.com/gists';
+	args = args || {};
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'public', 'null', true);
+	url = url_replace(url, args, 'files', 'null', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Check if a gist is starred
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp GET
+ */
+exports.gistStarred = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}/star';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Star a gist
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp PUT
+ */
+exports.gistStar = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}/star';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Unstar a gist
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp DELETE
+ */
+exports.gistUnstar = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}/star';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Fork a gist
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp POST
+ */
+exports.gistFork = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}/fork';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List comments on a gist
+ * @category Gist
+ * @param {string} id  Gist id
+ * @methodhttp GET
+ */
+exports.gistListComments = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a comment
+ * @category Gist
+ * @param {string} id  Gist id
+ * @param {string} body  Content of the comment
+ * @methodhttp POST
+ */
+exports.gistPostComment = function(args, opts) {
+	var url = 'https://api.github.com/gists/{id}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single comment
+ * @category Gist
+ * @param {string} id  Gist comment id
+ * @methodhttp GET
+ */
+exports.gistGetComment = function(args, opts) {
+	var url = 'https://api.github.com/gists/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit a comment
+ * @category Gist
+ * @param {string} id  Gist comment id
+ * @param {string} body  Content of the comment
+ * @methodhttp PATCH
+ */
+exports.gistEditComment = function(args, opts) {
+	var url = 'https://api.github.com/gists/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a comment
+ * @category Gist
+ * @param {string} id  Gist comment id
+ * @methodhttp DELETE
+ */
+exports.gistDeleteComment = function(args, opts) {
+	var url = 'https://api.github.com/gists/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a Blob
+ * @category Blobs
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  Blob SHA
+ * @methodhttp GET
+ */
+exports.getBlob = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/blobs/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a Blob
+ * @category Blobs
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} content  Content of the blob
+ * @param {string} encoding  Encoding of content, can be 'utf-8' or 'base64'
+ * @methodhttp POST
+ */
+exports.createBlob = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/blobs';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'content', 'str', true);
+	url = url_replace(url, args, 'encoding', 'str', true, "utf-8");
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a Commit
+ * @category Commits
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  Commit SHA
+ * @methodhttp GET
+ */
+exports.getCommit = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/commits/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a Commit
+ * @category Commits
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} message  Commit message
+ * @param {string} tree  SHA of the tree object this commit points to
+ * @param {array} [parents]  SHAs of the commits that were the parents of this commit. If omitted or empty, the commit will be written as a root commit. For a single parent, an array of one SHA should be provided, for a merge commit, an array of more than one should be provided.
+ * @param {string} [author.name]  Name of the author of the commit
+ * @param {string} [author.email]  Email of the author of the commit
+ * @param {dateTime} [author.date]  When this commit was authored
+ * @param {string} [committer.name]  Name of the committer of the commit
+ * @param {string} [committer.email]  Email of the committer of the commit
+ * @param {dateTime} [committer.date]  When this commit was committed
+ * @methodhttp POST
+ */
+exports.createBlob = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/commits';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'message', 'str', true);
+	url = url_replace(url, args, 'tree', 'str', true);
+	url = url_replace(url, args, 'parents');
+	url = url_replace(url, args, 'author.name', 'str');
+	url = url_replace(url, args, 'author.email', 'str');
+	url = url_replace(url, args, 'author.date');
+	url = url_replace(url, args, 'committer.name', 'str');
+	url = url_replace(url, args, 'committer.email', 'str');
+	url = url_replace(url, args, 'committer.date');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a Reference
+ * @category References
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} ref  Must be formatted as `heads/branch`, not just `branch`
+ * @methodhttp GET
+ */
+exports.getReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/refs/{ref}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a Reference
+ * @category References
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} ref  Sub-namespace, e.g. `heads` or `tags`
+ * @methodhttp GET
+ */
+exports.getSubReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/refs/{ref}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Update a Reference
+ * @category References
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} ref  Must be formatted as `heads/branch`, not just `branch`
+ * @param {string} sha  SHA1 value to set this reference to
+ * @param {boolean} [force]  Name of the fully qualified reference (ie: refs/heads/master). If it doesn’t start with ‘refs’ and have at least two slashes, it will be rejected
+ * @methodhttp PATCH
+ */
+exports.updateReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/refs/{ref}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	url = url_replace(url, args, 'force');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a Reference
+ * @category References
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} ref  Must be formatted as `heads/branch`, not just `branch`
+ * @methodhttp DELETE
+ */
+exports.deleteReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/refs/{ref}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get all References.					This will return an array of all the references on the system, including things like notes and stashes if they exist on the server. Anything in the namespace, not just heads and tags, though that would be the most common.
+ * @category References
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listReferences = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/refs';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a Reference
+ * @category References
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} ref  Name of the fully qualified reference (ie: refs/heads/master). If it doesn’t start with ‘refs’ and have at least two slashes, it will be rejected
+ * @param {string} sha  SHA1 value to set this reference to
+ * @methodhttp POST
+ */
+exports.createReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/refs';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a Tag
+ * @category Tags
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  Tag SHA
+ * @methodhttp GET
+ */
+exports.getReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/tags/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a Tag Object.					Note that creating a tag object does not create the reference that makes a tag in Git. If you want to create an annotated tag in Git, you have to do this call to create the tag object, and then create the `refs/tags/[tag]` reference. If you want to create a lightweight tag, you simply have to create the reference - this call would be unnecessary.
+ * @category Tags
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} tag  Name of the tag
+ * @param {string} message  Tag message
+ * @param {string} object  SHA of the git object this is tagging
+ * @param {string} type  Type of the object we’re tagging. Normally this is a commit but it can also be a tree or a blob.
+ * @param {string} [tagger.name]  Name of the author of the tag
+ * @param {string} [tagger.email]  Email of the author of the tag
+ * @param {dateTime} [tagger.date]  When this object was tagged
+ * @methodhttp POST
+ */
+exports.createReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/tags';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'tag', 'str', true);
+	url = url_replace(url, args, 'message', 'str', true);
+	url = url_replace(url, args, 'object', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true);
+	url = url_replace(url, args, 'tagger.name', 'str');
+	url = url_replace(url, args, 'tagger.email', 'str');
+	url = url_replace(url, args, 'tagger.date');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a Tree
+ * @category Trees
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  Tree SHA
+ * @methodhttp GET
+ */
+exports.getReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/trees/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a Tree
+ * @category Trees
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  Tree SHA
+ * @param {string} [recursive]  Set to `1` to get the tree recursively
+ * @methodhttp GET
+ */
+exports.getReference = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/trees/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	url = url_replace(url, args, 'recursive', 'str');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a Tree.					The tree creation API will take nested entries as well. If both a tree and a nested path modifying that tree are specified, it will overwrite the contents of that tree with the new path contents and write a new tree out.
+ * @category Trees
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [base_tree]  SHA1 of the tree you want to update with new data
+ * @param {string} tree.path  File referenced in the tree
+ * @param {string} tree.mode  File mode - one of `100644` for file (blob), `100755` for executable (blob), `040000` for subdirectory (tree), `160000` for submodule (commit) or `120000` for a blob that specifies the path of a symlink
+ * @param {string} tree.type  `blob`, `tree`, or `commit`
+ * @param {string} [tree.sha]  SHA1 checksum ID of the object in the tree
+ * @param {string} [tree.content]  Content you want this file to have - GitHub will write this blob out and use that SHA for this entry. Use either this or `tree.sha`
+ * @methodhttp POST
+ */
+exports.createTree = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/git/trees';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'base_tree', 'str');
+	url = url_replace(url, args, 'tree.path', 'str', true);
+	url = url_replace(url, args, 'tree.mode', 'str', true);
+	url = url_replace(url, args, 'tree.type', 'str', true);
+	url = url_replace(url, args, 'tree.sha', 'str');
+	url = url_replace(url, args, 'tree.content', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List your issues
+ * @category Issues
+ * @param {string} [filter]  `assigned`: Issues assigned to you							`created`: Issues created by you							`mentioned`: Issues mentioning you							`subscribed`: Issues you’re subscribed to updates for
+ * @param {string} [state]  `open` or `closed`
+ * @param {string} [labels]  list of comma separated Label names. Example: `bug,ui,@high`
+ * @param {string} [sort]  `created`, `updated` or `comments`
+ * @param {string} [direction]  `asc` or `desc`
+ * @param {dateTime} [since]  Timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+ * @methodhttp GET
+ */
+exports.listIssues = function(args, opts) {
+	var url = 'https://api.github.com/issues';
+	args = args || {};
+	url = url_replace(url, args, 'filter', 'str', false, "assigned");
+	url = url_replace(url, args, 'state', 'str', false, "open");
+	url = url_replace(url, args, 'labels', 'str');
+	url = url_replace(url, args, 'sort', 'str', false, "created");
+	url = url_replace(url, args, 'direction', 'str', false, "desc");
+	url = url_replace(url, args, 'since');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List issues for a repository
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {any} [milestone]  _Integer_ Milestone number							`none` for Issues with no Milestone.							`*` for Issues with any Milestone.
+ * @param {string} [state]  `open` or `closed`
+ * @param {string} [assignee]  _String_ User login							`none` for Issues with no assigned User.							`*` for Issues with any assigned User.
+ * @param {string} [mentioned]  User login.
+ * @param {string} [labels]  list of comma separated Label names. Example: `bug,ui,@high`
+ * @param {string} [sort]  `created`, `updated` or `comments`
+ * @param {string} [direction]  `asc` or `desc`
+ * @param {dateTime} [since]  Timestamp in ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ
+ * @methodhttp GET
+ */
+exports.listRepoIssues = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'milestone');
+	url = url_replace(url, args, 'state', 'str', false, "open");
+	url = url_replace(url, args, 'assignee', 'str');
+	url = url_replace(url, args, 'mentioned', 'str');
+	url = url_replace(url, args, 'labels', 'str');
+	url = url_replace(url, args, 'sort', 'str', false, "created");
+	url = url_replace(url, args, 'direction', 'str', false, "desc");
+	url = url_replace(url, args, 'since');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} title  Issue title
+ * @param {string} [body]  Issue content
+ * @param {string} [assignee]  Login for the user that this issue should be assigned to.
+ * @param {integer} [milestone]  Milestone to associate this issue with.
+ * @param {array} [labels]  Labels to associate with this issue.
+ * @methodhttp POST
+ */
+exports.createIssue = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'body', 'str');
+	url = url_replace(url, args, 'assignee', 'str');
+	url = url_replace(url, args, 'milestone', 'int');
+	url = url_replace(url, args, 'labels');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp GET
+ */
+exports.getIssue = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} title  Issue title
+ * @param {string} [body]  Issue content
+ * @param {string} [assignee]  Login for the user that this issue should be assigned to.
+ * @param {string} [state]  `open` or `closed`
+ * @param {integer} [milestone]  Milestone to associate this issue with.
+ * @param {array} [labels]  Labels to associate with this issue. Pass one or more Labels to replace the set of Labels on this Issue. Send an empty array (`[]`) to clear all Labels from the Issue.
+ * @methodhttp PATCH
+ */
+exports.createIssue = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'body', 'str');
+	url = url_replace(url, args, 'assignee', 'str');
+	url = url_replace(url, args, 'state', 'str', false, "open");
+	url = url_replace(url, args, 'milestone', 'int');
+	url = url_replace(url, args, 'labels');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List comments on an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp GET
+ */
+exports.listIssueComments = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a comment on an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} body  Content of the comment
+ * @methodhttp POST
+ */
+exports.postIssueComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single comment on an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} id  Issue comment id
+ * @methodhttp GET
+ */
+exports.getIssueComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit a comment on an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} id  Issue comment id
+ * @param {string} body  Content of the comment
+ * @methodhttp PATCH
+ */
+exports.editIssueComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a comment on an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} id  Issue comment id
+ * @methodhttp DELETE
+ */
+exports.deleteIssueComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List events for an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp GET
+ */
+exports.listIssueEvents = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List issues events for a repository
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listRepoEvents = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a single issue event for a repository
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Issue event id
+ * @methodhttp GET
+ */
+exports.getIssueEvent = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/events/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List labels on an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp GET
+ */
+exports.listIssueLabels = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Add labels to an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp POST
+ */
+exports.addIssueLabels = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Replace all labels for an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp PUT
+ */
+exports.replaceIssueLabels = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Remove all labels from an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp DELETE
+ */
+exports.removeIssueLabels = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Remove a label from an issue
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} name  Label name
+ * @methodhttp DELETE
+ */
+exports.deleteIssueLabel = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/{number}/labels/{name}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List all labels for a repository
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listLabels = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a label
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name  Name of the label
+ * @param {string} color  6 character hex code, without a leading `#`
+ * @methodhttp POST
+ */
+exports.createLabel = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'color', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single label
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name  Label name
+ * @methodhttp GET
+ */
+exports.getLabel = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/labels/{name}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Update a label
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name  Label name
+ * @param {string} name  Name of the label
+ * @param {string} color  6 character hex code, without a leading `#`
+ * @methodhttp PATCH
+ */
+exports.updateLabel = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/labels/{name}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'color', 'str', true);
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a label
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name  Label name
+ * @methodhttp DELETE
+ */
+exports.deleteLabel = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/labels/{name}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get labels for every issue in a milestone
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the milestone
+ * @methodhttp GET
+ */
+exports.listMilestoneLabels = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/milestones/{number}/labels';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List milestones for a repository
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listMilestones = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/milestones';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a milestone
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} title  Milestone title
+ * @param {string} [state]  `open` or `closed`
+ * @param {string} [description]  Milestone description
+ * @param {dateTime} [due_on]  ISO 8601 time
+ * @methodhttp POST
+ */
+exports.createMilestone = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/milestones';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'state', 'str', false, "open");
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'due_on');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single milestone
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the milestone
+ * @methodhttp GET
+ */
+exports.getMilestone = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/milestones/{number}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Update a milestone
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the milestone
+ * @param {string} title  Milestone title
+ * @param {string} [state]  `open` or `closed`
+ * @param {string} [description]  Milestone description
+ * @param {dateTime} [due_on]  ISO 8601 time
+ * @methodhttp PATCH
+ */
+exports.updateMilestone = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/milestones/{number}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'state', 'str', false, "open");
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'due_on');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a milestone
+ * @category Issues
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the milestone
+ * @methodhttp DELETE
+ */
+exports.deleteMilestone = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/milestones/{number}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List all public organizations for a user.
+ * @category Orgs
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserOrgs = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/orgs';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List public and private organizations for the authenticated user.
+ * @category Orgs
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listOrgs = function(args, opts) {
+	var url = 'https://api.github.com/user/orgs';
+	return http({provider:provider,url:url, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get an organization
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @methodhttp GET
+ */
+exports.getOrg = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit an organization
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} [billing_email]  Billing email address. This address is not publicized
+ * @param {string} [company]  Company name
+ * @param {string} [email]  Publicly visible email address.
+ * @param {string} [location]  Organization location
+ * @param {string} [name]  Organization name
+ * @methodhttp PATCH
+ */
+exports.editOrg = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'billing_email', 'str');
+	url = url_replace(url, args, 'company', 'str');
+	url = url_replace(url, args, 'email', 'str');
+	url = url_replace(url, args, 'location', 'str');
+	url = url_replace(url, args, 'name', 'str');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List all users who are members of an organization. A member is a user that belongs to at least 1 team in the organization. If the authenticated user is also a member of this organization then both concealed and public members will be returned. Otherwise only public members are returned.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @methodhttp GET
+ */
+exports.listOrgMembers = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/members';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get member.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.getOrgMember = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Remove a member.					Removing a user from this list will remove them from all teams and they will no longer have any access to the organization’s repositories.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} user  Name of the user
+ * @methodhttp DELETE
+ */
+exports.removeOrgMember = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List public members.					Members of an organization can choose to have their membership publicized or not.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @methodhttp GET
+ */
+exports.listOrgPublicMembers = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/public_members';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get if a user is a public member.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.checkOrgPublicMember = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/public_members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Publicize a user’s membership.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} user  Name of the user
+ * @methodhttp PUT
+ */
+exports.publicizeOrgMember = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/public_members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Conceal a user’s membership.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} user  Name of the user
+ * @methodhttp DELETE
+ */
+exports.concealOrgMember = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/public_members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List teams.
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @methodhttp GET
+ */
+exports.listOrgTeams = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/teams';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a team.					In order to create a team, the authenticated user must be an owner of {org}
+ * @category Orgs
+ * @param {string} org  Organization name
+ * @param {string} name  Team name
+ * @param {array} [repo_names]  Names of the repositories
+ * @param {string} [permission]  `pull`: team members can pull, but not push to or administer these repositories. Default							`push`: team members can pull and push, but not administer these repositories.							`admin`: team members can pull, push and administer these repositories.
+ * @methodhttp POST
+ */
+exports.createTeam = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/teams';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'repo_names');
+	url = url_replace(url, args, 'permission', 'str', false, "pull");
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a team.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @methodhttp GET
+ */
+exports.getTeam = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit a team.					In order to edit a team, the authenticated user must be an owner of the org that the team is associated with.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @param {string} name  Team name
+ * @param {string} [permission]  `pull`: team members can pull, but not push to or administer these repositories. Default							`push`: team members can pull and push, but not administer these repositories.							`admin`: team members can pull, push and administer these repositories.
+ * @methodhttp PATCH
+ */
+exports.editOrg = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'permission', 'str', false, "pull");
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a team.					In order to delete a team, the authenticated user must be an owner of the org that the team is associated with.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @methodhttp DELETE
+ */
+exports.deleteTeam = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List team members.					In order to list members in a team, the authenticated user must be a member of the team.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @methodhttp GET
+ */
+exports.listTeamMembers = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/members';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get team member.					In order to get if a user is a member of a team, the authenticated user must be a member of the team.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.getTeamMember = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Add team member.					In order to add a user to a team, the authenticated user must have `admin` permissions to the team or be an owner of the org that the team is associated with.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @param {string} user  Name of the user
+ * @methodhttp PUT
+ */
+exports.addTeamMember = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Remove a team member.					In order to remove a user from a team, the authenticated user must have `admin` permissions to the team or be an owner of the org that the team is associated with. NOTE: This does not delete the user, it just remove them from the team.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @param {string} user  Name of the user
+ * @methodhttp DELETE
+ */
+exports.removeTeamMember = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/members/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List team repos.
+ * @category Orgs
+ * @param {string} id  Team id
+ * @methodhttp GET
+ */
+exports.listTeamRepos = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/repos';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get team repo.
+ * @category Orgs
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Team id
+ * @methodhttp GET
+ */
+exports.getTeamRepo = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/repos/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Add team repo.					In order to add a repo to a team, the authenticated user must be an owner of the org that the team is associated with. Also, the repo must be owned by the organization, or a direct for of a repo owned by the organization.
+ * @category Orgs
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Team id
+ * @methodhttp PUT
+ */
+exports.addTeamRepo = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/repos/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Remove team repo.					In order to remove a repo from a team, the authenticated user must be an owner of the org that the team is associated with.					NOTE: This does not delete the repo, it just removes it from the team.
+ * @category Orgs
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Team id
+ * @methodhttp DELETE
+ */
+exports.removeTeamRepo = function(args, opts) {
+	var url = 'https://api.github.com/teams/{id}/repos/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List pull requests
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [state]  `open` or `closed` to filter by state.
+ * @methodhttp GET
+ */
+exports.listPullRequests = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'state', 'str', false, "open");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a pull request.					NOTE: `head` and `base` can be either a sha or a branch name. Typically you would namespace `head` with a user like this: `username:branch`.
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} title  Pull request title
+ * @param {string} [body]  Pull request description
+ * @param {string} base  The branch (or git ref) you want your changes pulled into. This should be an existing branch on the current repository. You cannot submit a pull request to one repo that requests a merge to a base of another repo.
+ * @param {string} head  The branch (or git ref) where your changes are implemented.
+ * @methodhttp POST
+ */
+exports.createPullRequest = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'body', 'str');
+	url = url_replace(url, args, 'base', 'str', true);
+	url = url_replace(url, args, 'head', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Create a pull request from an existing Issue.
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} issue  Issue number in this repository to turn into a Pull Request.
+ * @param {string} base  The branch (or git ref) you want your changes pulled into. This should be an existing branch on the current repository. You cannot submit a pull request to one repo that requests a merge to a base of another repo.
+ * @param {string} head  The branch (or git ref) where your changes are implemented.
+ * @methodhttp POST
+ */
+exports.createPullRequestFromIssue = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'issue', 'int', true);
+	url = url_replace(url, args, 'base', 'str', true);
+	url = url_replace(url, args, 'head', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Update a pull request.					NOTE: `head` and `base` can be either a sha or a branch name. Typically you would namespace `head` with a user like this: `username:branch`.
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Pull request number
+ * @param {string} title  Pull request title
+ * @param {string} [body]  Pull request description
+ * @param {string} [state]  `open` or `closed` to filter by state.
+ * @methodhttp PATCH
+ */
+exports.updatePullRequest = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'body', 'str');
+	url = url_replace(url, args, 'state', 'str');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List commits on a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Pull request number
+ * @methodhttp GET
+ */
+exports.listPullRequestCommits = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/commits';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List pull requests files
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Pull request number
+ * @methodhttp GET
+ */
+exports.listPullRequestFiles = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/files';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get if a pull request has been merged
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Pull request number
+ * @methodhttp GET
+ */
+exports.checkPullRequestMerged = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/merge';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Merge a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Pull request number
+ * @param {string} [commit_message]  The message that will be used for the merge commit
+ * @methodhttp PUT
+ */
+exports.mergePullRequest = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/merge';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'commit_message', 'str');
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List comments on a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @methodhttp GET
+ */
+exports.listPullRequestComments = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a comment on a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the issue
+ * @param {string} body  Content of the comment
+ * @methodhttp POST
+ */
+exports.postPullRequestComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single comment on a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the pull request
+ * @param {string} id  Pull request comment id
+ * @methodhttp GET
+ */
+exports.getPullRequestComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit a comment on a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the pull request
+ * @param {string} id  Pull request comment id
+ * @param {string} body  Content of the comment
+ * @methodhttp PATCH
+ */
+exports.editPullRequestComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a comment on a pull request
+ * @category Pull requests
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {integer} number  Number of the pull request
+ * @param {string} id  Pull request comment id
+ * @methodhttp DELETE
+ */
+exports.deletePullRequestComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/pulls/{number}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'number', 'int', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List repositories for the authenticated user.
+ * @category Repos
+ * @param {string} [type]  `all`, `owner`, `public`, `private` or `member`
+ * @param {string} [sort]  `created`, `updated`, `pushed` or `full_name`
+ * @param {string} [direction]  `asc` or `desc`, default: when using `full_name`: `asc`, otherwise `desc`.
+ * @methodhttp GET
+ */
+exports.listRepos = function(args, opts) {
+	var url = 'https://api.github.com/user/repos';
+	args = args || {};
+	url = url_replace(url, args, 'type', 'str', false, "all");
+	url = url_replace(url, args, 'sort', 'str', false, "full_name");
+	url = url_replace(url, args, 'direction', 'str');
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Create a new repository for the authenticated user.
+ * @category Repos
+ * @param {string} name  Repository name
+ * @param {string} [description]  Repository description
+ * @param {string} [homepage]  Repository homepage
+ * @param {boolean} [private]  `true` to create a private repository, `false` to create a public one. Creating private repositories requires a paid GitHub account.
+ * @param {boolean} [has_issues]  `true` to enable issues for this repository, `false` to disable them.
+ * @param {boolean} [has_wiki]  `true` to enable the wiki for this repository, `false` to disable it.
+ * @param {boolean} [has_downloads]  `true` to enable downloads for this repository, `false` to disable them.
+ * @param {integer} [team_id]  The id of the team that will be granted access to this repository. This is only valid when creating a repo in an organization.
+ * @methodhttp POST
+ */
+exports.createRepo = function(args, opts) {
+	var url = 'https://api.github.com/user/repos';
+	args = args || {};
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'homepage', 'str');
+	url = url_replace(url, args, 'private', 'null', false, "false");
+	url = url_replace(url, args, 'has_issues', 'null', false, "true");
+	url = url_replace(url, args, 'has_wiki', 'null', false, "true");
+	url = url_replace(url, args, 'has_downloads', 'null', false, "true");
+	url = url_replace(url, args, 'team_id', 'int');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List public repositories for the specified user.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} [type]  `all`, `owner`, `public`, `private` or `member`
+ * @param {string} [sort]  `created`, `updated`, `pushed` or `full_name`
+ * @param {string} [direction]  `asc` or `desc`, default: when using `full_name`: `asc`, otherwise `desc`.
+ * @methodhttp GET
+ */
+exports.listUserRepos = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/repos';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'type', 'str', false, "all");
+	url = url_replace(url, args, 'sort', 'str', false, "full_name");
+	url = url_replace(url, args, 'direction', 'str');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repositories for the specified org.
+ * @category Repos
+ * @param {string} org  Organization name
+ * @param {string} [type]  `all`, `owner`, `public`, `private` or `member`
+ * @param {string} [sort]  `created`, `updated`, `pushed` or `full_name`
+ * @param {string} [direction]  `asc` or `desc`, default: when using `full_name`: `asc`, otherwise `desc`.
+ * @methodhttp GET
+ */
+exports.listOrgRepos = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/repos';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'type', 'str', false, "all");
+	url = url_replace(url, args, 'sort', 'str', false, "full_name");
+	url = url_replace(url, args, 'direction', 'str');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a new repository in this organization. The authenticated user must be a member of `org`.
+ * @category Repos
+ * @param {string} org  Organization name
+ * @param {string} name  Repository name
+ * @param {string} [description]  Repository description
+ * @param {string} [homepage]  Repository homepage
+ * @param {boolean} [private]  `true` to create a private repository, `false` to create a public one. Creating private repositories requires a paid GitHub account.
+ * @param {boolean} [has_issues]  `true` to enable issues for this repository, `false` to disable them.
+ * @param {boolean} [has_wiki]  `true` to enable the wiki for this repository, `false` to disable it.
+ * @param {boolean} [has_downloads]  `true` to enable downloads for this repository, `false` to disable them.
+ * @param {integer} [team_id]  The id of the team that will be granted access to this repository. This is only valid when creating a repo in an organization.
+ * @methodhttp POST
+ */
+exports.createOrgRepo = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/repos';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'homepage', 'str');
+	url = url_replace(url, args, 'private', 'null', false, "false");
+	url = url_replace(url, args, 'has_issues', 'null', false, "true");
+	url = url_replace(url, args, 'has_wiki', 'null', false, "true");
+	url = url_replace(url, args, 'has_downloads', 'null', false, "true");
+	url = url_replace(url, args, 'team_id', 'int');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a repository.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.getRepo = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Edit a repository.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name  Repository name
+ * @param {string} [description]  Repository description
+ * @param {string} [homepage]  Repository homepage
+ * @param {boolean} [private]  `true` to create a private repository, `false` to create a public one. Creating private repositories requires a paid GitHub account.
+ * @param {boolean} [has_issues]  `true` to enable issues for this repository, `false` to disable them.
+ * @param {boolean} [has_wiki]  `true` to enable the wiki for this repository, `false` to disable it.
+ * @param {boolean} [has_downloads]  `true` to enable downloads for this repository, `false` to disable them.
+ * @param {integer} [team_id]  The id of the team that will be granted access to this repository. This is only valid when creating a repo in an organization.
+ * @methodhttp PATCH
+ */
+exports.updateRepo = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'homepage', 'str');
+	url = url_replace(url, args, 'private', 'null', false, "false");
+	url = url_replace(url, args, 'has_issues', 'null', false, "true");
+	url = url_replace(url, args, 'has_wiki', 'null', false, "true");
+	url = url_replace(url, args, 'has_downloads', 'null', false, "true");
+	url = url_replace(url, args, 'team_id', 'int');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a repository.					Deleting a repository requires admin access. If OAuth is used, the `delete_repo` scope is required.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp DELETE
+ */
+exports.deleteRepo = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List repository contributors
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {boolean} [anon]  Set to `true` to include anonymous contributors in results.
+ * @methodhttp GET
+ */
+exports.listContributors = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/contributors';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'anon');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repository languages
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listLanguages = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/languages';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repository teams
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listTeams = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/teams';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repository tags
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listTags = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/tags';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repository branches
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listBranches = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/branches';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a repository branch
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} branch  Name of the branch
+ * @methodhttp GET
+ */
+exports.getBranch = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/branches/{branch}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'branch', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repository collaborators
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listCollaborators = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/collaborators';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Check if a user is a collaborator
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} collaborator  Name of the collaborator user
+ * @methodhttp GET
+ */
+exports.checkCollaborator = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/collaborators/{collaborator}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'collaborator', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Add a collaborator
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} collaborator  Name of the collaborator user
+ * @methodhttp PUT
+ */
+exports.addCollaborator = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/collaborators/{collaborator}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'collaborator', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Remove a collaborator
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} collaborator  Name of the collaborator user
+ * @methodhttp DELETE
+ */
+exports.removeCollaborator = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/collaborators/{collaborator}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'collaborator', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List commit comments for a repository.					Comments are ordered by ascending ID.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listCommitsComments = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a single commit comment
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Commit comment id
+ * @methodhttp GET
+ */
+exports.getCommitComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Update a commit comment
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Commit comment id
+ * @param {string} body  Content of the comment
+ * @methodhttp PATCH
+ */
+exports.editCommitComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a commit comment
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Commit comment id
+ * @methodhttp DELETE
+ */
+exports.deleteCommitComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/comments/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List comments for a single commit
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  SHA of the commit
+ * @methodhttp GET
+ */
+exports.listCommitComments = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/commits/{sha}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a commit comment
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  SHA of the commit
+ * @param {string} body  Content of the comment
+ * @param {string} commit_id  Sha of the commit to comment on.
+ * @param {integer} line  Line number in the file to comment on.
+ * @param {string} path  Relative path of the file to comment on.
+ * @param {integer} position  Line index in the diff to comment on.
+ * @methodhttp POST
+ */
+exports.postCommitComment = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/commits/{sha}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	url = url_replace(url, args, 'body', 'str', true);
+	url = url_replace(url, args, 'commit_id', 'str', true);
+	url = url_replace(url, args, 'line', 'int', true);
+	url = url_replace(url, args, 'path', 'str', true);
+	url = url_replace(url, args, 'position', 'int', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single commit
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  SHA of the commit
+ * @methodhttp GET
+ */
+exports.getCommit = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/commits/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List commits on a repository
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [sha]  Sha or branch to start listing commits from.
+ * @param {string} [path]  Only commits containing this file path will be returned.
+ * @methodhttp GET
+ */
+exports.listCommits = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/commits';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str');
+	url = url_replace(url, args, 'path', 'str');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a single commit
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} sha  SHA of the commit
+ * @methodhttp GET
+ */
+exports.getCommit = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/commits/{sha}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sha', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Compare two commits
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} base
+ * @param {string} head
+ * @methodhttp GET
+ */
+exports.compareCommits = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/compare/{base}...{head}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'base', 'str', true);
+	url = url_replace(url, args, 'head', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * This method returns the preferred README for a repository.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [ref]  The String name of the Commit/Branch/Tag.
+ * @methodhttp GET
+ */
+exports.getReadme = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/readme';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', false, "master");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * This method returns the contents of any file or directory in a repository.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} path  The content path
+ * @param {string} [ref]  The String name of the Commit/Branch/Tag.
+ * @methodhttp GET
+ */
+exports.getContents = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/contents/{path}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'path', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', false, "master");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * This method will return a 302 to a URL to download a tarball or zipball archive for a repository.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} archive_format  Either tarball or zipball
+ * @param {string} [ref]  Valid Git reference.
+ * @methodhttp GET
+ */
+exports.getArchive = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/{archive_format}/{ref}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'archive_format', 'str', true);
+	url = url_replace(url, args, 'ref', 'str', false, "master");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List downloads for a repository
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listDownloads = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/downloads';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a new download (Create the resource)
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name
+ * @param {integer} size  Size of file in bytes.
+ * @param {string} [description]
+ * @param {string} [content_type]
+ * @methodhttp POST
+ */
+exports.createDownload = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/downloads';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'size', 'int', true);
+	url = url_replace(url, args, 'description', 'str');
+	url = url_replace(url, args, 'content_type', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single download
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Download id
+ * @methodhttp GET
+ */
+exports.getDownload = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/downloads/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Delete a download
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Download id
+ * @methodhttp DELETE
+ */
+exports.deleteDownload = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/downloads/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List forks
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [sort]  `newest`, `oldest` or `watchers`
+ * @methodhttp GET
+ */
+exports.listForks = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/forks';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'sort', 'str', false, "newest");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a fork.					Forking a Repository happens asynchronously. Therefore, you may have to wait a short period before accessing the git objects.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [org]  Organization login. The repository will be forked into this organization.
+ * @methodhttp POST
+ */
+exports.fork = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/forks';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'org', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List keys.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listRepoKeys = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/keys';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a key
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} [title]
+ * @param {string} [key]  `ssh-rsa AAA...`
+ * @methodhttp POST
+ */
+exports.createRepoKey = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/keys';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'key', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get a single key
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Key id
+ * @methodhttp GET
+ */
+exports.getRepoKey = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/keys/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Update a key
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Key id
+ * @param {string} [title]
+ * @param {string} [key]  `ssh-rsa AAA...`
+ * @methodhttp PATCH
+ */
+exports.editRepoKey = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/keys/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'key', 'str');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a key
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Key id
+ * @methodhttp DELETE
+ */
+exports.deleteRepoKey = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/keys/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List watchers
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listWatchers = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/watchers';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repos being watched by a user
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserWatched = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/watched';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repos being watched by the authenticated user
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listWatched = function(args, opts) {
+	var url = 'https://api.github.com/repos/watched';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Check if you are watching a repo
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.checkUserWatched = function(args, opts) {
+	var url = 'https://api.github.com/repos/watched/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Watch a repo
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp PUT
+ */
+exports.watch = function(args, opts) {
+	var url = 'https://api.github.com/repos/watched/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Stop watching a repo
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp DELETE
+ */
+exports.unwatch = function(args, opts) {
+	var url = 'https://api.github.com/repos/watched/{user}/{repo}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List hooks services
+ * @category Repos
+ * @methodhttp GET
+ */
+exports.hooks = function(args, opts) {
+	var url = 'https://api.github.com/hooks';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List hooks
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listHooks = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/hooks';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a hook
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} name  The name of the service that is being called. See /hooks for the possible names.
+ * @param {object} config  An object containing key/value pairs to provide settings for this hook. These settings vary between the services and are defined in the github-services repo. Booleans are stored internally as “1” for true, and “0” for false. Any JSON true/false values will be converted automatically.
+ * @param {array} [events]  Determines what events the hook is triggered for.
+ * @param {boolean} [active]  Determines whether the hook is actually triggered on pushes.
+ * @methodhttp POST
+ */
+exports.createHook = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/hooks';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'config', 'null', true);
+	url = url_replace(url, args, 'events', 'null', false, "['push']");
+	url = url_replace(url, args, 'active');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get single hook
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Hook id
+ * @methodhttp GET
+ */
+exports.getHook = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/hooks/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Create a hook
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Hook id
+ * @param {string} name  The name of the service that is being called. See /hooks for the possible names.
+ * @param {object} config  An object containing key/value pairs to provide settings for this hook. These settings vary between the services and are defined in the github-services repo. Booleans are stored internally as “1” for true, and “0” for false. Any JSON true/false values will be converted automatically.
+ * @param {array} [events]  Determines what events the hook is triggered for. This replaces the entire array of events.
+ * @param {array} [add_events]  Determines a list of events to be added to the list of events that the Hook triggers for.
+ * @param {array} [remove_events]  Determines a list of events to be added to the list of events that the Hook triggers for.
+ * @param {boolean} [active]  Determines a list of events to be removed from the list of events that the Hook triggers for.
+ * @methodhttp POST
+ */
+exports.editHook = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/hooks/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'config', 'null', true);
+	url = url_replace(url, args, 'events', 'null', false, "['push']");
+	url = url_replace(url, args, 'add_events');
+	url = url_replace(url, args, 'remove_events');
+	url = url_replace(url, args, 'active');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a hook
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Hook id
+ * @methodhttp DELETE
+ */
+exports.deleteHook = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/hooks/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * This will trigger the hook with the latest push to the current repository.
+ * @category Repos
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} id  Hook id
+ * @methodhttp POST
+ */
+exports.testHook = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/hooks/{id}/test';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single user
+ * @category Users
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.getUser = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Get the authenticated user
+ * @category Users
+ * @methodhttp GET
+ */
+exports.me = function(args, opts) {
+	var url = 'https://api.github.com/user';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Update the authenticated user
+ * @category Users
+ * @param {string} name
+ * @param {string} email  Publicly visible email address.
+ * @param {string} [blog]
+ * @param {string} [company]
+ * @param {string} [location]
+ * @param {boolean} [hireable]
+ * @param {string} [bio]
+ * @methodhttp POST
+ */
+exports.editMe = function(args, opts) {
+	var url = 'https://api.github.com/user';
+	args = args || {};
+	url = url_replace(url, args, 'name', 'str', true);
+	url = url_replace(url, args, 'email', 'str', true);
+	url = url_replace(url, args, 'blog', 'str');
+	url = url_replace(url, args, 'company', 'str');
+	url = url_replace(url, args, 'location', 'str');
+	url = url_replace(url, args, 'hireable');
+	url = url_replace(url, args, 'bio', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List email addresses for a user
+ * @category Users
+ * @methodhttp GET
+ */
+exports.listEmails = function(args, opts) {
+	var url = 'https://api.github.com/user/emails';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Add email address(es)
+ * @category Users
+ * @methodhttp POST
+ */
+exports.addEmails = function(args, opts) {
+	var url = 'https://api.github.com/user/emails';
+	args = args || {};
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Remove email address(es)
+ * @category Users
+ * @methodhttp DELETE
+ */
+exports.removeEmails = function(args, opts) {
+	var url = 'https://api.github.com/user/emails';
+	args = args || {};
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List a user’s followers
+ * @category Users
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listWatchers = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/followers';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List the authenticated user’s followers
+ * @category Users
+ * @methodhttp GET
+ */
+exports.listWatched = function(args, opts) {
+	var url = 'https://api.github.com/user/followers';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List who a user is following
+ * @category Users
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserFollowing = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/following';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List who the authenticated user is following
+ * @category Users
+ * @methodhttp GET
+ */
+exports.listFollowing = function(args, opts) {
+	var url = 'https://api.github.com/user/following';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Check if you are following a user
+ * @category Users
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.checkUserWatched = function(args, opts) {
+	var url = 'https://api.github.com/user/following/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Follow a user
+ * @category Users
+ * @param {string} user  Name of the user
+ * @methodhttp PUT
+ */
+exports.follow = function(args, opts) {
+	var url = 'https://api.github.com/user/following/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.put({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Unfollow a user
+ * @category Users
+ * @param {string} user  Name of the user
+ * @methodhttp DELETE
+ */
+exports.unfollow = function(args, opts) {
+	var url = 'https://api.github.com/user/following/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List public keys
+ * @category Users
+ * @methodhttp GET
+ */
+exports.listKeys = function(args, opts) {
+	var url = 'https://api.github.com/user/keys';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Create a public key
+ * @category Users
+ * @param {string} [title]
+ * @param {string} [key]  `ssh-rsa AAA...`
+ * @methodhttp POST
+ */
+exports.createKey = function(args, opts) {
+	var url = 'https://api.github.com/user/keys';
+	args = args || {};
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'key', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Get a single public key
+ * @category Users
+ * @param {string} id  Key id
+ * @methodhttp GET
+ */
+exports.getKey = function(args, opts) {
+	var url = 'https://api.github.com/user/keys/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Update a public key
+ * @category Users
+ * @param {string} id  Key id
+ * @param {string} [title]
+ * @param {string} [key]  `ssh-rsa AAA...`
+ * @methodhttp PATCH
+ */
+exports.editKey = function(args, opts) {
+	var url = 'https://api.github.com/user/keys/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'key', 'str');
+	return http.patch({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Delete a public key
+ * @category Users
+ * @param {string} id  Key id
+ * @methodhttp DELETE
+ */
+exports.deleteKey = function(args, opts) {
+	var url = 'https://api.github.com/user/keys/{id}';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'str', true);
+	return http.delete({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * List public events
+ * @category Events
+ * @methodhttp GET
+ */
+exports.listEvents = function(args, opts) {
+	var url = 'https://api.github.com/events';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List repository events
+ * @category Events
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listRepoEvents = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List issue events for a repository
+ * @category Events
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listIssuesEvents = function(args, opts) {
+	var url = 'https://api.github.com/repos/{user}/{repo}/issues/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List public events for a network of repositories
+ * @category Events
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @methodhttp GET
+ */
+exports.listNetworksEvents = function(args, opts) {
+	var url = 'https://api.github.com/networks/{user}/{repo}/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List public events for an organization
+ * @category Events
+ * @param {string} org  Name of the organization
+ * @methodhttp GET
+ */
+exports.listOrgPublicEvents = function(args, opts) {
+	var url = 'https://api.github.com/orgs/{org}/events';
+	args = args || {};
+	url = url_replace(url, args, 'org', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List events that a user has received.					These are events that you’ve received by watching repos and following users. If you are authenticated as the given user, you will see private events. Otherwise, you’ll only see public events.
+ * @category Events
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserReceivedEvents = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/received_events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List public events that a user has received
+ * @category Events
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserPublicReceivedEvents = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/received_events/public';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List events performed by a user.					If you are authenticated as the given user, you will see your private events. Otherwise, you’ll only see public events.
+ * @category Events
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserEvents = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List public events performed by a user
+ * @category Events
+ * @param {string} user  Name of the user
+ * @methodhttp GET
+ */
+exports.listUserPublicEvents = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/events/public';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * List events for an organization.					This is the user’s organization dashboard. You must be authenticated as the user to view this.
+ * @category Events
+ * @param {string} user  Name of the user
+ * @param {string} org  Name of the organization
+ * @methodhttp GET
+ */
+exports.listOrgEvents = function(args, opts) {
+	var url = 'https://api.github.com/users/{user}/events/orgs/{org}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'org', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'oauth2'}, opts);
+};
+
+/**
+ * Find issues by state and keyword.
+ * @category Search
+ * @param {string} user  Name of the user
+ * @param {string} repo  Name of the repository
+ * @param {string} state  `open` or `closed`
+ * @param {string} keyword  Search term
+ * @methodhttp GET
+ */
+exports.searchIssues = function(args, opts) {
+	var url = 'https://api.github.com/legacy/issues/search/{user}/{repo}/{state}/{keyword}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true);
+	url = url_replace(url, args, 'repo', 'str', true);
+	url = url_replace(url, args, 'state', 'str', true);
+	url = url_replace(url, args, 'keyword', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Find repositories by keyword. Note, this legacy method does not follow the v3 pagination pattern. This method returns up to 100 results per page and pages can be fetched using the `start_page` parameter.
+ * @category Search
+ * @param {string} keyword  Search term
+ * @param {string} [language]  Filter results by language
+ * @param {string} [start_page]  Page number to fetch
+ * @methodhttp GET
+ */
+exports.searchRepos = function(args, opts) {
+	var url = 'https://api.github.com/legacy/repos/search/{keyword}';
+	args = args || {};
+	url = url_replace(url, args, 'keyword', 'str', true);
+	url = url_replace(url, args, 'language', 'str');
+	url = url_replace(url, args, 'start_page', 'str');
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Find users by keyword.
+ * @category Search
+ * @param {string} keyword  Search term
+ * @methodhttp GET
+ */
+exports.searchUsers = function(args, opts) {
+	var url = 'https://api.github.com/legacy/user/search/{keyword}';
+	args = args || {};
+	url = url_replace(url, args, 'keyword', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Email search.					This API call is added for compatibility reasons only. There’s no guarantee that full email searches will always be available.
+ * @category Search
+ * @param {string} email  Email address
+ * @methodhttp GET
+ */
+exports.searchEmails = function(args, opts) {
+	var url = 'https://api.github.com/legacy/user/email/{email}';
+	args = args || {};
+	url = url_replace(url, args, 'email', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/**
+ * Render an arbritrary Markdown document
+ * @category Markdown
+ * @param {string} text  The Markdown text to render
+ * @param {string} [mode]  The rendering mode.							- `markdown` to render a document as plain Markdown, just like README files are rendered.							- `gfm` to render a document as user-content, e.g. like user comments or issues are rendered. In GFM mode, hard line breaks are always taken into account, and issue and user mentions are linked accordingly.
+ * @param {string} [context]  The repository context, only taken into account when rendering as `gfm`
+ * @methodhttp POST
+ */
+exports.markdown = function(args, opts) {
+	var url = 'https://api.github.com/markdown';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	url = url_replace(url, args, 'mode', 'str');
+	url = url_replace(url, args, 'context', 'str');
+	return http.post({provider:provider,url:url,body:JSON.stringify(args), auth:'none'}, opts);
+};
+
+/**
+ * The raw API it not JSON-based. It takes a Markdown document as plaintext (text/plain or text/x-markdown) and renders it as plain Markdown without a repository context (just like a README.md file is rendered – this is the simplest way to preview a readme online).
+ * @category Markdown
+ * @param {string} text  The Markdown text to render
+ * @methodhttp POST
+ */
+exports.markdownRaw = function(args, opts) {
+	var url = 'https://api.github.com/markdown/raw';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	return http.post({provider:provider,url:url,body:args.text, auth:'none', contenttype: "text/plain"}, opts);
+};

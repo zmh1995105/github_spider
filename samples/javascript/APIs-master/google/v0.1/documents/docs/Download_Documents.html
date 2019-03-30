@@ -1,0 +1,388 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<!DOCTYPE html>
+<html>
+  <body>
+    
+    <div class="apicontainer">
+      <div class="main api-profile">
+	<div class="constraint">
+	  
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-downloadDocument" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      downloadDocument 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Download text documents, drawings and presentations in a variety of formats.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies the output format for spreadsheets.Values for documents: "txt", "odt", "pdf", "html", "rtf", "doc", "png", "zip"Values for presentations: "pdf", "png", "ppt", and "txt".Values for drawings: "jpeg", "pdf", "png", svg.values for spreadsheets: "xls", "csv", "pdf", "ods", "tsv, "html" </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> exportFormat </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">int</span>
+
+
+
+      
+      <p> Specifies a particular revision. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> revision </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies a version number. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> GData-Version </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Type of document. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> document-type </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies the document/drawing/presentation id to download. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> docID </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-downloadSpreadsheet" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      downloadSpreadsheet 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Download spreadsheets in a variety of formats.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies the output format for spreadsheets.Values for documents: "txt", "odt", "pdf", "html", "rtf", "doc", "png", "zip"Values for presentations: "pdf", "png", "ppt", and "txt".Values for drawings: "jpeg", "pdf", "png", svg.values for spreadsheets: "xls", "csv", "pdf", "ods", "tsv, "html" </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> exportFormat </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">int</span>
+
+
+
+      
+      <p> Specifies a particular revision. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> revision </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies a version number. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> GData-Version </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Type of document. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> document-type </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies the spreadsheet key/id to download. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> key </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Specifies the spreadsheet grid to export. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> gid </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+	</div>
+      </div>
+    </div>
+    
+    <footer>
+      Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu May 16 2013 18:20:05 GMT+0200 (CEST)
+    </footer>
+    
+    <script> prettyPrint(); </script>
+  </body>
+</html>

@@ -1,0 +1,3 @@
+﻿ALTER DATABASE [$(DatabaseName)]
+    ADD FILE (NAME = [WebNote], FILENAME = '$(Path2)WebNote.mdf', FILEGROWTH = 1024 KB) TO FILEGROUP [PRIMARY];
+

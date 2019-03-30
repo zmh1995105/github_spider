@@ -1,0 +1,62 @@
+{
+    "overview": {
+        "title": "Overview",
+        "baseline": "",
+        "submenu": {
+            "intro": "Introduction",
+            "getting-started": "Getting started",
+            "js-aas": "Javascript as a service",
+            "fs": "File system",
+            "apis-endpoints-as-js-object": "APIs endpoints as JS Object",
+            "auth": "APIs Authentication made easy",
+            "add-your-api": "Add your API"
+        }
+    },
+    "writing-scripts": {
+        "title": "Writing Scripts",
+        "baseline": "",
+        "submenu": {
+            "intro": "Introduction",
+            "stdlib": "Standard library (builtin functions)",
+            "args": "Scripts Arguments",
+            "apis": "APIs",
+            "auth": "Auth and APIKey management",
+            "views": "HTML Views",
+            "unify": "Unify APIs using contract (soon)",
+            "ui-layer": "UI Layer (soon)",
+            "crons": "Crons - Events/Triggers (soon)"
+        }
+    },
+    "stdlib": {
+        "title": "Standard Library",
+        "baseline": "",
+        "submenu": {
+            "display": "Display/debug",
+            "http": "HTTP",
+            "fs": "Files management",
+            "views": "Views"
+        }
+    },
+    "executing-scripts": {
+        "title": "Executing Scripts",
+        "baseline": "",
+        "submenu": {
+            "execute-js": "Execute Javascript via HTTP",
+            "fs": "FS API",
+            "js-sdk": "Javascript SDK",
+            "node-sdk": "Node.js SDK"
+        }
+    },
+    "add-your-api": {
+        "title": "Add your API",
+        "baseline": "",
+        "submenu": {
+            "js-wrapper": "API Wrapper in Javascript",
+            "generate-from-wadl": "Generate from WADL",
+            "generate-from-mashape": "Generate from Mashape XML file",
+            "api-docs": "API Documentation",
+            "jsdoc": "Generate docs with jsdoc",
+            "setup-auth": "Setup Authentication: conf.json"
+        }
+    }
+}

@@ -1,0 +1,78 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+module_exports = function(type, width, height, labels, datasets, data, options) {
+    jsClientApi({
+        name: "chartjs",
+        data: {
+            type: type || 'line',
+            width: width || 800,
+            height: height || 300,
+            labels: labels || [],
+            datasets: datasets || [],
+            options: options || {},
+            data: data || []
+        },
+        initialize: js(function(callback, cbname) {
+            $.getScript("http://api.webshell.io/fs/thyb/chart/v1.1/Chart.js", callback);
+        }),
+        loaded: js(function() {
+        }),
+        create: js(function(jsapi) {
+            var ctx = document.getElementById('chart-js' + this.data.pid).getContext("2d");
+            this.ch = new Chart(ctx);
+            //console.log(this.data);
+            var d = this.data;
+            if (d.type == 'line') {
+                this.ch.Line({
+                    labels: d.labels,
+                    datasets: d.datasets
+                }, d.options);
+            }
+            else if (d.type == 'bar') {
+                this.ch.Bar({
+                    labels: d.labels,
+                    datasets: d.datasets
+                }, d.options);
+            }
+            else if (d.type == 'radar') {
+                this.ch.Radar({
+                    labels: d.labels,
+                    datasets: d.datasets
+                }, d.options);
+            }
+            else if (d.type == 'polarArea') {
+                this.ch.PolarArea(d.data, d.options);
+            }
+            else if (d.type == 'pie') {
+                this.ch.Pie(d.data, d.options);
+            }
+            else if (d.type == 'doughnut') {
+                this.ch.Doughnut(d.data, d.options);
+            }
+        }),
+        ready: js(function(jsapi) {
+            
+        }),
+        interface: {
+
+        }
+    }, {
+    	view: '<canvas id="chart-js<%= data.pid %>" width="<%= data.width %>" height="<%= data.height %>"></canvas>'
+    })
+}

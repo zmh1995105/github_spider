@@ -1,0 +1,59 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<h1>Klout API</h1>
+
+<p></p>
+
+<table class="table">
+	<thead>
+		<th>Method</th>
+		<th>Description</th>
+		<th width="250">Exemple</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>getKloutId(params)</code></td>
+			<td>This method allows you to retrieve a KloutID from numeric twitter id or google+ id. The <code>params.userId</code> is the google+ or twitter id and <code>params.idType</code> can be <code>tw</code>, <code>twitter</code>, <code>gp</code> or <code>google+</code>.</td>
+			<td><pre class="prettyprint">apis.klout.getKloutId({userId: "112620727907435773834", idType: "google+"})</pre></td>
+		</tr>
+		<tr>
+			<td><code>getTwitterId(kloutId)</code></td>
+			<td>This method allows you to retrieve a TwitterId for a numeric KloutId. </td>
+			<td><pre class="prettyprint">apis.klout.getTwitterId('45598950992084523')</pre></td>
+		</tr>
+		<tr>
+			<td><code>score(kloutId)</code></td>
+			<td>This method allows you to retrieve a user's Klout Score and deltas.</td>
+			<td><pre class="prettyprint">apis.klout.score('635263')</pre></td>
+		</tr>
+		<tr>
+			<td><code>showUser(kloutId)</code></td>
+			<td>This method allows you to retrieve a user.</td>
+			<td><pre class="prettyprint">apis.klout.showUser('635263')</pre></td>
+		</tr>
+		<tr>
+			<td><code>topics(kloutId)</code></td>
+			<td>This method allows you to retrieve a user's topics.</td>
+			<td><pre class="prettyprint">apis.klout.topics('635263')</pre></td>
+		</tr>
+		<tr>
+			<td><code>influence(kloutId)</code></td>
+			<td>This method allows you to retrieve a user's influencers and influencees.</td>
+			<td><pre class="prettyprint">apis.klout.topics('635263')</pre></td>
+		</tr>
+	</tbody>
+</table>

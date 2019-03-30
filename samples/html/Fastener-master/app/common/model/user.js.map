@@ -1,0 +1,30 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\model\\user.js"
+    ],
+    "names": [
+        "init",
+        "args",
+        "tablePrefix",
+        "tableName",
+        "addUser",
+        "data",
+        "add",
+        "username",
+        "password",
+        "userList",
+        "select",
+        "findUser",
+        "where",
+        "find",
+        "think",
+        "model",
+        "mongo"
+    ],
+    "mappings": "AAAA;AACA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAII;qBACAA,I,mBAAa;AAAA;;AAAA,0CAALC,IAAK;AAALA,gBAAK;AAAA;;AACT,8DAAMD,IAAN,kDAAcC,IAAd;AACA,aAAKC,WAAL,GAAmB,WAAnB;AACA,aAAKC,SAAL,GAAiB,MAAjB;AACH,K;AACD;;;qBACMC,O;;gBAAQC,I,uEAAO,E;;;;;;mCACJ,KACRC,GADQ,CACJ;AACDC,0CAAUF,KAAKE,QADd;AAEDC,0CAAUH,KAAKG;AAFd,6BADI,C;;;;;;;;;;;;;;;;;;;AAMjB;;;qBACMC,Q;;;;;;;mCACW,KACTC,MADS,E;;;;;;;;;;;;;;;;;;;AAGjB;;;qBACMC,Q;;gBAASN,I,uEAAO,E;;;;;;mCACL,KACTO,KADS,CACH;AACFL,0CAAUF,KAAKE,QADb;AAEFC,0CAAUH,KAAKG;AAFb,6BADG,EAKRK,IALQ,E;;;;;;;;;;;;;;;;;;;;;EAtBQC,MAAMC,KAAN,CAAYC,K",
+    "file": "..\\..\\..\\src\\common\\model\\user.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * model\n */\nexport default class extends think.model.mongo {\n    //初始化\n    init(...args){\n        super.init(...args);\n        this.tablePrefix = 'fastener_';\n        this.tableName = 'user';\n    }\n    //添加用户\n    async addUser(data = {}) {\n        return await this\n            .add({\n                username: data.username,\n                password: data.password\n            })\n    }\n    //用户列表\n    async userList(){\n        return await this.\n            select();\n    }\n    //查找用户\n    async findUser(data = {}){\n        return await this.\n            where({\n                username: data.username,\n                password: data.password\n            })\n            .find();\n    }\n}"
+    ]
+}

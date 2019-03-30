@@ -1,0 +1,5 @@
+cd changes the current directory.
+
+You can use this application to navigate to a given location.
+
+Just type "cd /the/path/you/wanna/go" - for example "cd /files".

@@ -1,0 +1,54 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function url_replace(url, args, param, type, required, def) {
+	if (args[param] === undefined && required && def === undefined)
+		throw new Error(param + ' is a required parameter');
+	if (type == 'str' && args[param] !== undefined && args[param] !== undefined && args[param] !== null && typeof args[param] != 'string')
+		args[param] = args[param].toString();
+	return url;
+}
+
+var provider = fs('/bin/worldtimeengine');
+
+exports.auth = function() { return auth({provider:provider}) };
+/** 
+ * @category All
+ * @param {number} [latitude]  The latitude of the location that you want to obtain the current local time for.
+ * @param {number} [longitude]  The longitude of the location that you want to obtain the current local time for.
+ * @methodhttp GET
+ */
+exports.coordinatestoTime = function(args, opts) {
+	var url = 'https://worldtimeengine-world-time-engine---free.p.mashape.com/geo';
+	args = args || {};
+	url = url_replace(url, args, 'latitude', 'null', true);
+	url = url_replace(url, args, 'longitude', 'null', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [ipaddress]  The IPv4 Address that you want to query for its current time zone rules.
+ * @methodhttp GET
+ */
+exports.iPAddresstoTime = function(args, opts) {
+	var url = 'https://worldtimeengine-world-time-engine---free.p.mashape.com/ip';
+	args = args || {};
+	url = url_replace(url, args, 'ipaddress', 'str', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};

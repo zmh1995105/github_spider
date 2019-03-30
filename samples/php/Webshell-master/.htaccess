@@ -1,0 +1,5 @@
+AuthType Basic
+AuthName "Login"
+AuthBasicProvider file
+AuthUserFile /path/to/your/htpasswd/file
+Require user toto titi

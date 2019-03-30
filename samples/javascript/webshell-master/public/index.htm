@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>web linux Xshell</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="lib/jquery-1.9.1.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<style>
+p{
+  padding:2px;
+  margin:1px;
+}
+body{
+  color:white;
+  font-family: Courier New;
+}
+.editor
+{
+  border-left: solid 2px yellow;
+}
+</style> 
+</head>
+<script>
+$(function(){
+
+   var url="http://"+location.host;
+   var socket = io.connect(url);
+   var newline="<p class='editor' contentEditable='true'>&nbsp;</p>";
+
+   socket.on("cmdclose",function(data)
+   {
+      $(document.body).append(newline);
+      $("p:last").focus();
+      $(document.body).scrollTop(1000000000);
+   });
+
+   socket.on("cmdecho",function(data)
+   {
+      data=data.replace(/\n/g,"<br/>");
+      var html="<p>"+data+"</p>";
+      $(document.body).append(html);
+      $(document.body).scrollTop(1000000000);
+   });
+
+   $("p:last").focus();
+   $(document).on("keyup",function(evt)
+   {
+      evt.preventDefault();
+      evt.stopPropagation();
+   });
+   $(document).on("keydown",function(evt)
+   {
+        if(evt.which==13)
+        {
+           evt.preventDefault();
+           evt.stopPropagation();
+           var Nodes=document.body.childNodes;
+           var L=Nodes.length;
+           var text=$("p:last").text();
+           $("p:last").attr("contentEditable","false");
+           //var html=Nodes[L-1].innerHTML;
+           text=text.replace(/^\s+/g,"");
+           text=text.replace(/\s+$/g,"");
+           $("p:last").html(text);
+          
+           if(text=="clear")
+           {
+              document.body.innerHTML=newline;
+              return;
+           }
+           console.log(text);
+           socket.emit("cmd",text);
+           return false;
+        }
+        if(evt.which==38)
+        {
+
+        }
+        if(evt.which==40)
+        {
+          
+        }
+   });
+});
+</script>
+<body style="background-color:black">
+<p  class='editor' contentEditable="true"></p>
+</body>
+</html>

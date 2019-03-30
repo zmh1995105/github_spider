@@ -1,0 +1,60 @@
+speakers
+
+Larry burns OK
+
+
+Kin Lane
+OK
+
+
+Sid Bhatia
+OK
+
+
+Sumit Sharma, Mulesoft
+OK
+
+
+Irakli Nadareishvili, CA Technologies
+OK
+
+
+Ed Anuff, Apigee
+OK
+
+Rob harvey, Getaround
+OK
+
+
+Jakub Nesetril, Apiary
+OK
+
+Michael O'Shea, Abalta Tech
+OK
+
+
+Ram Jayraman, Automatic.com
+OK
+
+Ismael Elshareef, Edmunds
+ok
+
+
+Jason Wolenik, FABERNOVEL
+OK
+
+Alexandre Lebrun, Wit.ai
+OK
+
+Sylvain Carle, Twitter
+OK
+
+Jason Harmon, Paypal
+OK
+
+Nick Muerdter, US Department of Energy
+OK
+
+Mehdi Medjaoui
+OK
+

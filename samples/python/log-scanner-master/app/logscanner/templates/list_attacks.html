@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block body %}
+    {% if type is none %}
+        <h1>Attacks</h1>
+        {% else %}
+        <h1>{{ type }} Attacks</h1>
+    {% endif %}
+    <table class="table table-striped">
+        <tr>
+            <th>Timestamp</th>
+            <th>IP Address</th>
+            <th>Country</th>
+            <th>URI</th>
+            <th>Query</th>
+            <th>Possible attacks</th>
+        </tr>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.entry.timestamp }}</td>
+            <td><a href="{{ url_for('.ip_activity', ip=entry.ip) }}">{{ entry.ip }}</a></td>
+            <td>{{ entry.country }}</td>
+            <td>{{ entry.entry.uri }}</td>
+            <td>{{ entry.entry.query }}</td>
+            <td>{{ entry.type }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

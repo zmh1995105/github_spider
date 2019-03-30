@@ -1,0 +1,42 @@
+{
+	"manifest_version": 2
+	,"name": "WebDump"
+	,"version": "0.0.0.1"
+	,"description": "npu Ha]I[aTuu Alt+Shift+D oTnpaBJLReT Ha cepBep page url u page DOMTree."
+	
+	,"icons": {
+		"16": "icon16.png"
+		,"48": "icon48.png"
+		,"128": "icon128.png"
+	}
+	
+	,"permissions": [
+		"tabs"
+		,"activeTab"
+		,"http://*/"
+		,"https://*/"
+		,"storage"
+	]
+	
+	,"background": {
+		"scripts":[
+			"postObject.js"
+			,"dump.js"
+			,"background.js"
+		]
+	}
+	
+	,"commands": {
+		"save_dump_action": {
+			"suggested_key": {
+				"default": "Alt+Shift+D"
+			}
+		,"description": "Save web dump"
+		}
+	}
+	
+	,"options_ui": {
+		"page": "options.html"
+		,"open_in_tab": false
+	}
+}

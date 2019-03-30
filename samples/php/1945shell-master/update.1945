@@ -1,0 +1,9 @@
+//$update="NONE";
+$update="YES";
+$version="2017";
+$codename="Wake me up when september end";
+$releasedate="30 September 2017";
+$build="September";
+$status="Build";
+$author="shutdown57";
+$email="indonesianpeople.shutdown57@gmail.com";

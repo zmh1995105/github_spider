@@ -1,0 +1,53 @@
+#------------------#
+# GENERAL SETTINGS #
+#------------------#
+SANDBOX_HOST: 157.7.190.188
+SANDBOX_PORT: 9999
+USE_SSL: 0
+
+#------------------#
+# SANDBOX SETTINGS #
+#------------------#
+
+# SANDBOX_HTTPD_ENGINEはどのHTTPエンジンを使用してsandboxの解析を行うかを選択します。
+# 実稼働にはAPACHEを推奨します。
+# APACHE or PLACK or STARMAN
+SANDBOX_HTTPD_ENGINE: APACHE
+
+# 解析対象のPHPスクリプトを配置するためのディレクトリを決定します。
+WEBROOT_DIR: /tmp/OPWD_SANDBOX/webroot/
+
+# TRACELOGを出力するディレクトリを決定します。
+TRACELOG_DIR: /tmp/OPWD_SANDBOX/tracelog/
+
+# 各種設定ファイルを格納するディレクトリを決定します。
+SETTING_DIR: /tmp/OPWD_SANDBOX/etc/
+
+# ログファイル格納場所を決定します
+LOG_DIR: /tmp/OPWD_SANDBOX/logs/
+
+# APACHE設定ファイル格納場所を決定します
+APACHE_DIR: /tmp/OPWD_SANDBOX/etc/apache2
+
+# PLACK or STARMANをHTTP_MIDDLEWARE_ENGINEにした場合、PHPインタプリタサーバを別個に立ち上げます。
+PHP_BUILTIN_SERVER_HOST: 127.0.0.1
+PHP_BUILTIN_SERVER_PORT: 6666
+
+# PHPインタプリタサーバが出力するログファイルを決定します
+PHP_BUILTIN_SERVER_LOGFILE: php_builtin_server.log
+
+# SANDBOX上で稼働するHTTPサーバのIPを決定します。
+SANDBOX_HTTPD_HOST: 0.0.0.0
+# SANDBOX上で稼働するHTTPサーバのPORTを決定します。
+SANDBOX_HTTPD_PORT: 9999
+SANDBOX_HTTPD_LOGFILE: httpd.log
+SANDBOX_HTTPD_ERRFILE: httpd_err.log
+
+# SANDBOXが解析対象PHPスクリプトをHTTP上から実行する際のTIMEOUTを決定します。
+SANDBOX_UA_TIMEOUT: 60
+
+#-----------------#
+# CLINET SETTINGS #
+#-----------------#
+
+CLIENT_UA_TIMEOUT: 60

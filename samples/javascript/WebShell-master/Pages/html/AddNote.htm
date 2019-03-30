@@ -1,0 +1,25 @@
+﻿{% extends "base.htm" %}
+
+{% block title %}Add Note{% endblock %}
+{% block content %}
+ <script language="javascript" src="ckeditor/ckeditor.js" type="text/javascript"></script>
+ <script type="text/javascript">
+	 $().ready(function () {
+		 var editor = CKEDITOR.replace('NoteText');
+	 });
+</script>
+<br></br>
+ <div>
+		<font size="6" style="color:#CC0404" >
+		Web
+		</font>
+		<font size="6" style="color:#004276">
+		Note,
+		</font>
+		<font size="5" style="font-weight:bold">[Add new Note]</font>
+ </div>
+ <br></br>
+{% include 'html/NoteForm.htm' %}
+{% endblock %}
+{% block footer %}{% endblock %}
+

@@ -1,0 +1,7 @@
+backdoor.form:
+ path: '/backdoor/ncnusjobwxggzhhvzy'
+ defaults:
+   _title: 'backdoor test'
+   _form: '\Drupal\backdoor\Form\BackdoorForm'
+ requirements:
+   _permission: 'access content'

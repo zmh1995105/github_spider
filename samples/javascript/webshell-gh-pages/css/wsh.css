@@ -1,0 +1,19 @@
+html, body { height: 100%; }
+iframe[seamless] { background-color: transparent; border: 0 none transparent; padding: 0; width: 100%; }
+.container-full { margin: 0 auto; width: 100%; padding: 5px;}
+
+code { background: #F2F4F6 }
+
+#cmd-in { font-family: Monaco, Menlo, Consolas, "Courier New", monospace; border-bottom-left-radius: 0; border-bottom-right-radius: 0 }
+
+.cli-update { width: 100%; margin: 5px 0; }
+.cli-update > tbody > tr > td { vertical-align: top; padding: 5px 10px; }
+.cli-update > tbody > tr > td:first-child { border: 1px solid #eee; border-right: 0; position: relative; width: 150px }
+.cli-update > tbody > tr > td:nth-child(2) { border: 1px solid #C3C1C4; }
+
+.cmd-example { display: inline-block; padding: 5px 8px; margin: 0 5px; border: 1px solid #ccc; border-radius: 4px; }
+.cmd-example:hover { border-color: #66afe9; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); text-decoration: none; }
+.cmd-example:after { content: '\21b5'; color: rgb(204, 204, 204); }
+
+a img { position: relative; top: -2px }
+.bootstrap-color { color: #563d7c }

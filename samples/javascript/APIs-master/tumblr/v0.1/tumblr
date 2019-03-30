@@ -1,0 +1,1062 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function url_replace(url, args, param, type, required, def) {
+	if (args[param] === undefined && required && def !== undefined)
+		args[param] = def;
+	if (args[param] === undefined && required && def === undefined)
+		throw new Error(param + ' is a required parameter');
+	if (type == 'str' && args[param] !== undefined && args[param] !== undefined && args[param] !== null && typeof args[param] != 'string')
+		args[param] = args[param].toString();
+	if (type == 'int' && args[param] !== undefined && (parseFloat(args[param]) != parseInt(args[param], 10) || isNaN(args[param])))
+		throw new Error(param + ' must be an integer');
+	if (url.indexOf('{' + param + '}') !== -1) {
+		var rgx = new RegExp('\\{' + param + '\\}', 'g');
+		url = url.replace(rgx, args[param]);
+		delete args[param];
+	}
+	if (url.indexOf('[/' + param + ']') !== -1) {
+		if (args[param] === undefined && def === undefined && ! required)
+			url = url.replace('[/' + param + ']', '');
+		else
+			url = url.replace('[/' + param + ']', '/' + args[param]);
+		delete args[param];
+	}
+	return url;
+}
+
+var provider = fs('/bin/tumblr');
+
+exports.auth = function() { return auth({provider:provider}) };
+/** 
+ * This method returns general information about the blog, such as the title, number of posts, and other high-level data.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @methodhttp GET
+ */
+exports.blogInfo = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/info';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * You can get a blog's avatar in 9 different sizes. The default size is 64x64.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {integer} [size]  The size of the avatar (square, one value for both length and width). Must be one of the values:16, 24, 30, 40, 48, 64, 96, 128, 512
+ * @methodhttp GET
+ */
+exports.avatar = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/avatar[/size]';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'size', 'int', false, "64");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/** 
+ * Retrieve a Blog's Followers.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {integer} [limit]  The number of results to return: 1–20, inclusive.
+ * @param {integer} [offset]  Result to start at.
+ * @methodhttp GET
+ */
+exports.followers = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/followers';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'limit', 'int', false, "20");
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Retrieve Published Posts.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} [type]  The type of post to return. Specify one of the following:  text, quote, link, answer, video, audio, photo, chat.
+ * @param {integer} [id]  A specific post ID. Returns the single post specified or (if not found) a 404 error.
+ * @param {string} [tag]  Limits the response to posts with the specified tag.
+ * @param {integer} [limit]  The number of results to return: 1–20, inclusive.
+ * @param {integer} [offset]  Result to start at.
+ * @param {boolean} [reblog_info]  Indicates whether to return reblog information (specify true or false). Returns the various reblogged_ fields.
+ * @param {boolean} [notes_info]  Indicates whether to return notes information (specify true or false). Returns note count and note metadata.
+ * @param {string} [filter]  Specifies the post format to return, other than HTML:			text – Plain text, no HTML			raw – As entered by the user (no post-processing); if the user writes in Markdown, the Markdown will be returned rather than HTML
+ * @methodhttp GET
+ */
+exports.getPosts = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/posts[/type]';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str');
+	url = url_replace(url, args, 'id', 'int');
+	url = url_replace(url, args, 'tag', 'str');
+	url = url_replace(url, args, 'limit', 'int', false, "20");
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	url = url_replace(url, args, 'reblog_info', 'null', false, "false");
+	url = url_replace(url, args, 'notes_info', 'null', false, "false");
+	url = url_replace(url, args, 'filter', 'str');
+	return http({provider:provider,url:url,params:args, auth:'manual'}, opts);
+};
+
+/** 
+ * Retrieve Queued Posts.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {integer} [offset]  Result to start at.
+ * @param {integer} [limit]  The number of results to return: 1–20, inclusive.
+ * @param {string} [filter]  Specifies the post format to return, other than HTML:			text – Plain text, no HTML			raw – As entered by the user (no post-processing); if the user writes in Markdown, the Markdown will be returned rather than HTML
+ * @methodhttp GET
+ */
+exports.queuedPosts = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/posts/queue';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	url = url_replace(url, args, 'limit', 'int', false, "20");
+	url = url_replace(url, args, 'filter', 'str');
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Retrieve Draft Posts	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} [filter]  Specifies the post format to return, other than HTML:			text – Plain text, no HTML			raw – As entered by the user (no post-processing); if the user writes in Markdown, the Markdown will be returned rather than HTML
+ * @methodhttp GET
+ */
+exports.draftPosts = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/posts/draft';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'filter', 'str');
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Retrieve Draft Posts	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {integer} [offset]  Post number to start at
+ * @param {string} [filter]  Specifies the post format to return, other than HTML:			text – Plain text, no HTML			raw – As entered by the user (no post-processing); if the user writes in Markdown, the Markdown will be returned rather than HTML
+ * @methodhttp GET
+ */
+exports.draftPosts = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/posts/submission';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	url = url_replace(url, args, 'filter', 'str');
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} [title]  The optional title of the post, HTML entities must be escaped.
+ * @param {string} body  The full post body, HTML allowed
+ * @methodhttp POST
+ */
+exports.postText = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} [caption]  The user-supplied caption, HTML allowed
+ * @param {string} [link]  The "click-through URL" for the photo.
+ * @param {string} source  The photo source URL
+ * @param {array} data  One or more image files (submit multiple times to create a slide show).
+ * @methodhttp POST
+ */
+exports.postPhoto = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'link', 'str');
+	url = url_replace(url, args, 'source', 'str', true);
+	url = url_replace(url, args, 'data', 'null', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} quote  The full text of the quote, HTML entities must be escpaed
+ * @param {string} [source]  Cited source, HTML allowed
+ * @methodhttp POST
+ */
+exports.postQuote = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'quote', 'str', true);
+	url = url_replace(url, args, 'source', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} [title]  The title of the page the link points to, HTML entities should be escaped.
+ * @param {string} url  The link
+ * @param {string} [description]  A user-supplied description, HTML allowed.
+ * @methodhttp POST
+ */
+exports.postLink = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'url', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} [title]  The title of the chat.
+ * @param {string} conversation  The text of the conversation/chat, with dialogue labels (no HTML).
+ * @methodhttp POST
+ */
+exports.postChat = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'conversation', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} [caption]  The user-supplied caption.
+ * @param {string} external_url  The URL of the site that hosts the audio file (not tumblr).
+ * @param {string} data  An audio file.
+ * @methodhttp POST
+ */
+exports.postAudio = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'external_url', 'str', true);
+	url = url_replace(url, args, 'data', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {string} [caption]  The user-supplied caption.
+ * @param {string} embed  HTML embed code for the video.
+ * @param {string} data  A video file
+ * @methodhttp POST
+ */
+exports.postVideo = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'embed', 'str', true);
+	url = url_replace(url, args, 'data', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} [title]  The optional title of the post, HTML entities must be escaped.
+ * @param {string} body  The full post body, HTML allowed
+ * @methodhttp POST
+ */
+exports.editPostText = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} [caption]  The user-supplied caption, HTML allowed
+ * @param {string} [link]  The "click-through URL" for the photo.
+ * @param {string} source  The photo source URL
+ * @param {array} data  One or more image files (submit multiple times to create a slide show).
+ * @methodhttp POST
+ */
+exports.editPostPhoto = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'link', 'str');
+	url = url_replace(url, args, 'source', 'str', true);
+	url = url_replace(url, args, 'data', 'null', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} quote  The full text of the quote, HTML entities must be escpaed
+ * @param {string} [source]  Cited source, HTML allowed
+ * @methodhttp POST
+ */
+exports.editPostQuote = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'quote', 'str', true);
+	url = url_replace(url, args, 'source', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} [title]  The title of the page the link points to, HTML entities should be escaped.
+ * @param {string} url  The link
+ * @param {string} [description]  A user-supplied description, HTML allowed.
+ * @methodhttp POST
+ */
+exports.editPostLink = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'url', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} [title]  The title of the chat.
+ * @param {string} conversation  The text of the conversation/chat, with dialogue labels (no HTML).
+ * @methodhttp POST
+ */
+exports.editPostChat = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'conversation', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} [caption]  The user-supplied caption.
+ * @param {string} external_url  The URL of the site that hosts the audio file (not tumblr).
+ * @param {string} data  An audio file.
+ * @methodhttp POST
+ */
+exports.editPostAudio = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'external_url', 'str', true);
+	url = url_replace(url, args, 'data', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Edit a Blog Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {string} [caption]  The user-supplied caption.
+ * @param {string} embed  HTML embed code for the video.
+ * @param {string} data  A video file
+ * @methodhttp POST
+ */
+exports.editPostVideo = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/edit';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'embed', 'str', true);
+	url = url_replace(url, args, 'data', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [title]  The optional title of the post, HTML entities must be escaped.
+ * @param {string} body  The full post body, HTML allowed
+ * @methodhttp POST
+ */
+exports.reblogPostText = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'body', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [caption]  The user-supplied caption, HTML allowed
+ * @param {string} [link]  The "click-through URL" for the photo.
+ * @param {string} source  The photo source URL
+ * @param {array} data  One or more image files (submit multiple times to create a slide show).
+ * @methodhttp POST
+ */
+exports.reblogPostPhoto = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'link', 'str');
+	url = url_replace(url, args, 'source', 'str', true);
+	url = url_replace(url, args, 'data', 'null', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} quote  The full text of the quote, HTML entities must be escpaed
+ * @param {string} [source]  Cited source, HTML allowed
+ * @methodhttp POST
+ */
+exports.reblogPostQuote = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'quote', 'str', true);
+	url = url_replace(url, args, 'source', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [title]  The title of the page the link points to, HTML entities should be escaped.
+ * @param {string} url  The link
+ * @param {string} [description]  A user-supplied description, HTML allowed.
+ * @methodhttp POST
+ */
+exports.reblogPostLink = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'url', 'str', true);
+	url = url_replace(url, args, 'description', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [title]  The title of the chat.
+ * @param {string} conversation  The text of the conversation/chat, with dialogue labels (no HTML).
+ * @methodhttp POST
+ */
+exports.reblogPostChat = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'title', 'str');
+	url = url_replace(url, args, 'conversation', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [caption]  The user-supplied caption.
+ * @param {string} external_url  The URL of the site that hosts the audio file (not tumblr).
+ * @param {string} data  An audio file.
+ * @methodhttp POST
+ */
+exports.reblogPostAudio = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'external_url', 'str', true);
+	url = url_replace(url, args, 'data', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Reblog a Post.	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {string} type  The type of post to create. Specify one of the following:  text, photo, quote, link, chat, audio, video.
+ * @param {string} [state]  The state of the post. Specify one of the following:  published, draft, queue, private
+ * @param {string} [tags]  Comma-separated tags for this post
+ * @param {string} [tweet]  Manages the autotweet (if enabled) for this post: set to off for no tweet, or enter text to override the default tweet
+ * @param {string} [date]  The GMT date and time of the post, as a string.
+ * @param {string} [format]  Sets the format type of post. Supported formats are: html, markdown
+ * @param {string} [slug]  Add a short text summary to the end of the post URL
+ * @param {integer} id  The ID of the post to edit.
+ * @param {integer} reblog_key  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [comment]  The reblog key for the reblogged post – get the reblog key with a /posts request
+ * @param {string} [caption]  The user-supplied caption.
+ * @param {string} embed  HTML embed code for the video.
+ * @param {string} data  A video file
+ * @methodhttp POST
+ */
+exports.reblogPostVideo = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/reblog';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true, "text");
+	url = url_replace(url, args, 'state', 'str', false, "published");
+	url = url_replace(url, args, 'tags', 'str');
+	url = url_replace(url, args, 'tweet', 'str');
+	url = url_replace(url, args, 'date', 'str');
+	url = url_replace(url, args, 'format', 'str', false, "html");
+	url = url_replace(url, args, 'slug', 'str');
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'int', true);
+	url = url_replace(url, args, 'comment', 'str');
+	url = url_replace(url, args, 'caption', 'str');
+	url = url_replace(url, args, 'embed', 'str', true);
+	url = url_replace(url, args, 'data', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Delete a Post	 
+ * @category Blog Methods
+ * @param {string} base-hostname  The standard or custom blog hostname.
+ * @param {integer} id  The ID of the post to delete
+ * @methodhttp POST
+ */
+exports.deletePost = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/blog/{base-hostname}/post/delete';
+	args = args || {};
+	url = url_replace(url, args, 'base-hostname', 'str', true);
+	url = url_replace(url, args, 'id', 'int', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Use this method to retrieve the user's account information that matches the OAuth credentials submitted with the request.	 
+ * @category User Methods
+ * @methodhttp GET
+ */
+exports.userInfo = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/info';
+	args = args || {};
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Use this method to retrieve the dashboard that matches the OAuth credentials submitted with the request.	 
+ * @category User Methods
+ * @param {integer} [limit]  The number of results to return: 1–20, inclusive.
+ * @param {integer} [offset]  Post number to start at.
+ * @param {string} [type]  The type of post to return. Specify one of the following:  text, photo, quote, link, chat, audio, video, answer.
+ * @param {integer} [since_id]  Return posts that have appeared after this ID.	      Use this parameter to page through the results: first get a set of posts, and then get posts since the last ID of the previous set.
+ * @param {boolean} [reblog_info]  Indicates whether to return reblog information (specify true or false). Returns the various reblogged_ fields.
+ * @param {boolean} [notes_info]  Indicates whether to return notes information (specify true or false). Returns note count and note metadata.
+ * @methodhttp GET
+ */
+exports.userDashboard = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/dashboard';
+	args = args || {};
+	url = url_replace(url, args, 'limit', 'int', false, "20");
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	url = url_replace(url, args, 'type', 'str');
+	url = url_replace(url, args, 'since_id', 'int', false, "0");
+	url = url_replace(url, args, 'reblog_info', 'null', false, "false");
+	url = url_replace(url, args, 'notes_info', 'null', false, "false");
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Use this method to retrieve the liked posts that match the OAuth credentials submitted with the request.	 
+ * @category User Methods
+ * @param {integer} [limit]  The number of results to return: 1–20, inclusive.
+ * @param {integer} [offset]  Post number to start at.
+ * @methodhttp GET
+ */
+exports.userLikes = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/likes';
+	args = args || {};
+	url = url_replace(url, args, 'limit', 'int', false, "20");
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Use this method to retrieve the blogs followed by the user whose OAuth credentials are submitted with the request.	 
+ * @category User Methods
+ * @param {integer} [limit]  The number of results to return: 1–20, inclusive.
+ * @param {integer} [offset]  Post number to start at.
+ * @methodhttp GET
+ */
+exports.userFollowing = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/following';
+	args = args || {};
+	url = url_replace(url, args, 'limit', 'int', false, "20");
+	url = url_replace(url, args, 'offset', 'int', false, "0");
+	return http({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Follow a blog.	 
+ * @category User Methods
+ * @param {string} url  The URL of the blog to follow
+ * @methodhttp POST
+ */
+exports.userFollow = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/follow';
+	args = args || {};
+	url = url_replace(url, args, 'url', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Unfollow a blog.	 
+ * @category User Methods
+ * @param {string} url  The URL of the blog to follow
+ * @methodhttp POST
+ */
+exports.userUnfollow = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/unfollow';
+	args = args || {};
+	url = url_replace(url, args, 'url', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Like a Post.	 
+ * @category User Methods
+ * @param {integer} id  The ID of the post to like
+ * @param {string} reblog_key  The reblog key for the post id
+ * @methodhttp POST
+ */
+exports.userLike = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/like';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Unlike a Post.	 
+ * @category User Methods
+ * @param {integer} id  The ID of the post to like
+ * @param {string} reblog_key  The reblog key for the post id
+ * @methodhttp POST
+ */
+exports.userUnlike = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/user/unlike';
+	args = args || {};
+	url = url_replace(url, args, 'id', 'int', true);
+	url = url_replace(url, args, 'reblog_key', 'str', true);
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};
+
+/** 
+ * Get Posts with tag.	 
+ * @category User Methods
+ * @param {string} tag  The tag on the posts you'd like to retrieve
+ * @param {integer} before  The timestamp of when you'd like to see posts before.
+ * @param {integer} before  The timestamp of when you'd like to see posts before.
+ * @param {integer} limit  The number of results to return: 1–20, inclusive.
+ * @param {string} [filter]  Specifies the post format to return, other than HTML:			text – Plain text, no HTML			raw – As entered by the user (no post-processing); if the user writes in Markdown, the Markdown will be returned rather than HTML
+ * @methodhttp POST
+ */
+exports.userUnlike = function(args, opts) {
+	var url = 'http://api.tumblr.com/v2/tagged';
+	args = args || {};
+	url = url_replace(url, args, 'tag', 'str', true);
+	url = url_replace(url, args, 'before', 'int', true);
+	url = url_replace(url, args, 'before', 'int', true);
+	url = url_replace(url, args, 'limit', 'int', true, "20");
+	url = url_replace(url, args, 'filter', 'str');
+	return http.post({provider:provider,url:url,params:args, auth:'oauth1'}, opts);
+};

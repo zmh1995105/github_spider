@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<h1 class="page-header">压缩包上传</h1>
+<form class="" action="{{ url_for('add_file') }}" method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="file">请上传ZIP文件，不要大于3MB</label>
+    <input type="file" name="file" class="form-control" />
+  </div>
+  <button type="submit" name="submit" class="btn btn-primary">upload</button>
+</form>
+{% if alllen %}
+ <div class="alert alert-warning">
+      <ul class="flashes">
+            <li>总个数:{{  alllen }}</li>
+              
+            <li>正常文件:{{  right }}个</li>
+            <li>恶意文件:{{  error }}个</li>
+            <li>恶意文件率: {{ error/alllen }} </li>
+       </ul>
+ </div>
+{% endif %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+          {% for m in message %}
+            {% if ':M' in m %}
+              <div class="alert alert-danger">
+                  <ul class="flashes">
+                  <li>{{ m.split(':')[0] }} {{'木马文件！' }}</li>
+                  </ul>
+              </div>
+           {% elif ':N' in m %}
+              <div class="alert alert-success">
+                  <ul class="flashes">
+                  <li>{{  m.split(':')[0]}} {{'正常文件。' }}</li>
+                  </ul>
+              </div>
+            {% else %}
+               <div class="alert alert-warning">
+                  <ul class="flashes">
+                  <li>{{  m.split(':')[0]}} {{'Error' }}</li>
+                  </ul>
+              </div>
+           {% endif %}
+          {% endfor %}
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% endblock %}

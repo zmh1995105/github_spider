@@ -1,0 +1,7 @@
+prettytable
+Mako
+PyYAML
+python-dateutil
+PySocks
+readline
+pyOpenSSL

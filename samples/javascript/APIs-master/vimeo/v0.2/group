@@ -1,0 +1,68 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function request(args, opts, method) {
+    var a = args;
+
+    if (typeof a == 'string')
+        a = {groupname: a}
+        
+    if (typeof a.format == 'undefined')
+        a.format = 'json'
+        
+    if (a.format != 'json' && a.format != 'xml' && a.format != 'php')
+        throw new Error('format should be `json` or `xml` or `php`');
+    
+    return get({
+        url: 'http://vimeo.com/api/v2/group/' + a.groupname + '/' + method + '.' + a.format,
+        format: a.format
+    }, opts);
+}
+
+/** 
+ * Videos added to that group
+ * @category Group
+ * @param {string} [groupname] Either the shortcut URL or ID of the group.
+ * @param {string} [output] Specify the output type. We currently offer JSON, PHP, and XML formats. (default: JSON)
+ * @methodhttp GET
+ */
+exports.getVideos = function(args, opts) {
+    return request(args, opts, 'videos');
+}
+
+/** 
+ * Users who have joined the group
+ * @category Group
+ * @param {string} [groupname] Either the shortcut URL or ID of the group.
+ * @param {string} [output] Specify the output type. We currently offer JSON, PHP, and XML formats. (default: JSON)
+ * @methodhttp GET
+ */
+exports.getUsers = function(args, opts) {
+    return request(args, opts, 'users');
+}
+
+/** 
+ * Group info for the specified group
+ * @category Group
+ * @param {string} [groupname] Either the shortcut URL or ID of the group.
+ * @param {string} [output] Specify the output type. We currently offer JSON, PHP, and XML formats. (default: JSON)
+ * @methodhttp GET
+ */
+exports.getInfo = function(args, opts) {
+    return request(args, opts, 'info');
+}

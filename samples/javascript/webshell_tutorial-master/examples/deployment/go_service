@@ -1,0 +1,15 @@
+upstream goweb {
+    server 127.0.0.1:8080;
+} 
+
+server {
+    listen 80;
+    server_name example.net;
+
+    access_log /var/log/nginx/example_access.log;
+    error_log /var/log/nginx/example_error.log;
+    location / {
+        proxy_set_header  X-Real-IP  $remote_addr;
+        proxy_pass http://goweb;
+    }
+}

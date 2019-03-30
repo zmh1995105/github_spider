@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    var tplView = Context.Request.Query["tpl"];
+}
+
+<div class="row">
+    <h1>Below we include an MVC partial (hint - LFI):</h1>
+</div>
+
+<div class="row">
+    <div>
+        @if(!String.IsNullOrEmpty(tplView)){
+                @Html.Partial(@tplView);
+		}
+    </div>
+</div>

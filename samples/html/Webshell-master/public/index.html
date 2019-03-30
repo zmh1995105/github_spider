@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type"
+
+          content="text/html; charset=utf-8">
+    <title>Socket.io</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese"
+          rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+<h1>Web Shell</h1>
+
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="script.js"></script>
+
+<div class="shell-wrap">
+    <p class="shell-top-bar">SHELL</p>
+    <div class="shell-body" id="result">
+
+    </div>
+    <div id="form" style="background: black; color: #00ff00">
+
+        <form method="POST" name="form" style="text-align: right">
+            <span>$</span>
+            <input type="text" name="command" class="command">
+        </form>
+    </div>
+</div>
+<script>
+
+    var socket = io.connect('http://localhost:3000');
+    socket.on('connect', function () {
+        socket
+                .emit('authenticate', {token: localStorage.getItem('token')}) //send the jwt
+                .on('authenticated', function () {
+                    console.log('authenticated');
+                })
+                .on('unauthorized', function (msg) {
+                    console.log(msg);
+                    console.log("unauthorized: " + JSON.stringify(msg.data));
+                    window.location.href = '/login.html';
+                    throw new Error(msg.data.type);
+                })
+    });
+</script>
+
+<script>
+</script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<section id="execute-js">
+	<h2>Webshell HTTP API - Execute Javascript via HTTP</h2>
+	<p>To resume how work Webshell, you just have to send an HTTP request (GET or POST) to <code>http://api.webshell.io</code> with some Javascript to execute in parameter. We process your code on the fly and give you a JSON with the results. As it's just an HTTP Request, you can make it in any language you want. Just, if you want to use it in a server side language, don't forget to inject in the DOM manually views and method calls for client side scripts (some samples are available in the <a href="#node-sdk">node.js SDK</a> part).</p>
+	<p><code>http://api.webshell.io?code={code}&args={args}&output={output}&key={key}&secret={secret}</code></p>
+
+	<h4>Paramaters</h4>
+	<table class="table">
+		<thead>
+			<th style="width:10%">Parameters</th>
+			<th style="width:40%">Description</th>
+			<th style="width:50%">Example</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>code</td>
+				<td>This is where you will place the Javascript code to query APIs powered by node.js :) the code can be on multiple lines and the variable <code>args</code> is added in the context of your codeaccording to the <code>args</code> parameter</td>
+				<td><code>apis.gravatar(args.mail)</code></td>
+			</tr>
+			<tr>
+				<td>args</td>
+				<td>Send arguments to your code, which are accessible using the <code>args</code> object, making it more configurable</td>
+				<td><code>{mail:'team%40webshell.io'}</code></pre></td>
+			</tr>
+			<tr>
+				<td>sid</td>
+				<td>The <code>sid</code> is used to identify your current on Webshell user and load his context (see <a href="#">Persistant variable</a>). You have to set <code>sid</code> with one retrieved in the response of the previous request in <code>_meta.cookie_add.sid</code>. <span style="display: block" class="alert-info">In the Javascript SDK, the sid is used transparently.</span></td>
+				<td></td>
+			<tr>
+				<td>output</td>
+				<td>Define the output of your request. You can choose between <code>json</code> or <code>xml</code>. This parameter is optional and by default set to <code>json</code></td>
+				<td><code>xml</code></td>
+			</tr>
+			<tr>
+				<td>key</td>
+				<td>Define your public API Key to get full access to Webshell APIs. To get one, create an app in your <a href="/dashbaord">dashboard</a></td>
+				<td><code>Your API Key</td>
+			</tr>
+			<tr>
+				<td>secret</td>
+				<td>Define your secret key <strong>if you are server side</strong>. Today, it allows you to do nothing more but we will soon add some features accessible only from server side (to be sure it is really you who executes the request)</td>
+				<td><code>Your secret Key</code></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>Response format</h4>
+	<p>This endpoint send back an array of result. A result can be some data returned by a script/an API, an HTML views to execute client side API or a call to make to a client side API already created. A result is structured as the following: </p>
+	<pre class="prettyprint">{
+  "data": (obj),
+  "_meta": {
+    "view": (string),
+    "cookie_add": {
+       sid: (string)
+    }
+  }
+}</pre><br />
+	<p>All fields are optional.</p>
+	<p>If <code>_meta</code> is not defined, instead of return an object containing a <code>data</code> field, it return directly the data itself as result</p>
+	<p>In your first request, you have a result containing only </p>
+	<pre class="prettyprint">{
+  "_meta": {
+    "cookie_add": {
+      "sid": (string)
+    }
+  }
+}</pre><br />
+	<p>You can use <code>_meta.cookie_add.sid</code> to fill the sid param to use persistant data in your following request. A result which contains <code>cookie_add</code> have no <code>data</code> or <code>view</code> fields</p>
+	<h4>Samples</h4>
+	<p>For example, if you want to execute a simple GET request to retrieve the meteo on :<br />
+	<pre class="prettyprint">get({
+  url: "https://api.metwit.com/v2/weather",
+  params: {
+    "location_lat": "45.45",
+    "location_lng": "9.18"
+  }
+})</pre>.<br /> via CURL: </p>
+
+	<p class="alert-info">In Javascript, if the last instruction is a number, a string or an object, the script will return it</p>
+	<pre class="prettyprint">$> curl --url "http://api.webshell.io" -d 'code=get({"url":"https://api.metwit.com/v2/weather","params":{"location_lat": "45.45", "location_lng": "9.18"}})'
+[
+  {
+    "objects": [
+      {
+        "weather": {
+          "status": "clear",
+          "measured": {
+            "wind_speed": 3.084,
+            "wind_direction": 140,
+            "temperature": 288,
+            "humidity": 51
+          }
+        },
+        (...)
+      },
+      (...)
+    ],
+  },
+  {
+    "_meta": {
+      "cookie_add": {
+        "sid": "CfLFMRVAZ9ljhH9U571Lp25E"
+      }
+    }
+  }
+]
+</pre><br />
+	<p>This Webshell response is an array containing 2 informations:</p>
+	<ul>
+		<li>The result of the last instruction (here <code>get()</code> builtin function). So it return the data of the Weather API.</li>
+		<li>an object with no <code>data</code> and a <code>_meta.add_cookie.sid</code> to allow you to identify your user on Webshell</li>
+	</ul>
+	<p>Of course, if you set a sid, the second result (<code>_meta.add_cookie.sid</code>) of the response will not be push in the results stack:</p>
+	<pre class="prettyprint">$> curl --url "http://api.webshell.io" -d 'code=get({"url":"https://api.metwit.com/v2/weather","params":{"location_lat": "45.45", "location_lng": "9.18"}})&sid=CfLFMRVAZ9ljhH9U571Lp25E'
+[
+  {
+    "objects": [
+      {
+        "weather": {
+          "status": "clear",
+          "measured": {
+            "wind_speed": 3.084,
+            "wind_direction": 140,
+            "temperature": 288,
+            "humidity": 51
+          }
+        },
+        (...)
+      },
+      (...)
+    ],
+  }
+]</pre><br />
+</section>
+<section id="fs">
+	<h2>FS API</h2>
+	<h4>Raw files</h4>
+	<p>To read files on Webshell, use a simple GET on this url: <code>http://raw.webshell.io/{username}/path/to/file</code>
+	<pre class="prettyprint">$> curl --url "http://raw.webshell.io/bin/facebook/v0.1/README.md"</pre><br />
+	<p>or using jquery <code>$.get</code></p>
+	<pre class="prettyprint">var readmeUrl = 'http://raw.webshell.io/bin/facebook/v0.1/README.md';
+$.get(readmeUrl, {}, function(data) {
+  alert(data);
+});</pre><br />
+	<p>If you store image/css/js files on the file system, you can use these link directly in your HTML</p>
+	<pre class="prettyprint">&lt;img src="http://raw.webshell.io/bin/github/v0.1/icon.png" 
+     alt="Github icon" /&gt;</pre>
+    <h4>Execute file</h4>
+    <p>You can execute a file directly via an URL to retrieve the JSON using this url: <code>http://fs.webshell.io/{username}/path/to/file[?arg1=value1[&arg2=value2]]</code></p>
+    <pre class="prettyprint">$> curl --url "http://api.webshell.io/fs/bin/gravatar?mail=team@webshell.io</pre><br />
+    <p>or using jquery <code>$.get</code></p>
+	<pre class="prettyprint">$.get('http://api.webshell.io/fs/bin/gravatar', {
+  mail: "team@webshell.io"
+}, function(data) {
+  var json = JSON.parse(data);
+  console.log(json);
+});</pre>
+	<p>It's the same thing if you did <code>fs.bin.gravatar({mail: "team@webshell.io"});</code>. It's usefull for just a simple call</p>
+
+	<h4>Render</h4>
+	<p>To render views of your script, you can use this url: <code>{username}.webshell.io/path/to/file</code>. You can use for exemple iframe for embed some code</p>
+	<pre class="prettyprint">// content of /thyb/gmapsDemo
+var m = apis.google.maps();
+m.center('paris');
+m.zoom(16);
+
+//in your HTML
+&lt;iframe src="http://thyb.webshell.io/gmapsDemo"&gt;&lt;/iframe&gt;</pre><br />
+	<p>We're working on some UI Component to let your design complete apps using APIs in Webshell.</p>
+</section>
+<section id="js-sdk">
+	<h2>Javascript SDK</h2>
+	<p><a target="_blank" href="https://github.com/webshell/webshell-js-sdk">Github repository link</a></p>
+	<p>	<p>This SDK javascript is the easiest way to use the Webshell API client side.</p>
+	<p>To use this SDK, jQuery have to be loaded first.</p>
+
+	<h4>Installation</h4>
+	<p>Just add after jQuery loading a script on your SDK path</p>
+	<pre class="prettyprint">&lt;script type="text/javascript" src="/path/to/webshell.js"&gt;&lt;/script&gt;</pre>
+
+	<h4>Hello world using JS SDK</h4>
+	<p>And then, you can use <code>wsh</code> object to execute some queries.</p>
+	<pre class="prettyprint">//initialize the SDK with your API Key
+  wsh.initialize('YOUR_APIKEY');
+
+  //Execute a request to display a Google Maps in fullscreen
+  wsh.exec({
+    code: function() {
+      var m = apis.google.maps({height: '100%'});
+      m.center('paris');
+      m.zoom(18);
+    },
+    process: function(json, meta) {
+      $('body').append(meta.view);
+    }
+  })
+})</pre>
+
+<p>You can call any other APIs on the platform in the same way. The javascript given in the <code>code</code> attribute of <code>wsh.exec()</code> is processed on our server and we retrieve all kind of data for you.</p>
+
+<h4>wsh Object</h4>
+
+<p>Once the SDK loaded, you can use the `wsh` variable in your code.</p>
+
+<p><strong>wsh.initialize(apikey)</strong></p>
+
+<p>Before to use the Webshell API, be sure you have executed this function to initialize the SDK with your APIKey. APIKey are displayed in the <a href="http://webshell.io/dashboard">Dashboard</a></p>
+
+<p><strong>wsh.exec(obj)</strong></p>
+
+<p>This method make a call to Webshell to execute the javascript given in the <code>code</code> function.</p>
+
+<pre class="prettyprint">wsh.exec({
+  code: function() {
+    //some code which have be executed by Webshell
+  },
+  args: {
+    //data to escape in `code`
+  },
+  process: function(data, meta) {
+    //this method is executed for each view in the results
+  },
+  success: function(json) {
+    //call after process all view with the final json response
+  },
+  complete: function(json) {
+    //call when all HTML views and javascript are loaded and ready to be used
+  }
+});</pre><br />
+
+<code>code</code> can be a string containing some javascript or a function with the javascript which have to be executed by Webshell inside.</p>
+</section>
+<section id="node-sdk">
+	<h2>Node.js SDK</h2>
+	<p><a target="_blank" href="https://github.com/webshell/webshell-node-sdk">Github repository link</a></p>
+	<h4>Installation</h4>
+	<p>The easier way to install this sdk is to use npm:</p>
+
+	<pre class="prettyprint">npm install wsh</pre>
+
+	<p>You can also clone this repo or download the latest release, to add it into your <code>node_modules</code> folder.</p>
+
+	<h4>Hello world using Node SDK</h4>
+
+	<p>This is a simple app using Webshell. To run this sample, you have to replace <code>MY_WEBSHELL_PUBLIC_KEY</code>, <code>MY_WEBSHELL_SECRET_KEY</code>, <code>MY_DOMAIN</code> with valid infos from the registered app.</p>
+
+<pre class="prettyprint">var wsh = require('wsh');
+
+// init webshell with authentications keys
+wsh.init({
+  key:"MY_WEBSHELL_PUBLIC_KEY",
+  secret:"MY_WEBSHELL_SECRET_KEY",
+  domain:"MY_DOMAIN" // e.g: mysite.com
+});
+
+// execute webshell code
+var wshcall = wsh.exec({
+  code: function() {
+    for (var i in args.myarr)
+      echo(args.myarr[i]);
+    dump(args);
+    return apis.tumblr.getPosts({
+      "base-hostname": "webshellnews.tumblr.com"
+    }, {view:null});
+  },
+  args: {myarr: ["hello", "world"]}
+});
+
+// set events
+wshcall.on('error', function(err) {
+  console.log('wsh error:', err);
+});
+wshcall.on('process', function(data, meta) {
+  console.log('processing', {
+    'data': data,
+    'meta': meta
+  });
+});
+wshcall.on('success', function(res) {
+  console.log('succeeded, result:', res);
+});</pre>
+
+<p>You can call any other APIs on the platform in the same way. The javascript given in the `code` attribute of `wsh.exec()` is processed on our server and we retrieve all kind of data for you.</p>
+
+<h4>SDK Reference</h4>
+
+<p><strong>wsh.init({key, secret, csid, domain})</strong></p>
+<p>All these parameters must be strings and are optional.</p>
+<p>After initializing your <code>wsh</code> object with the <code>wsh.init</code>, you can use <code>wsh.exec</code> with these default parameters.</p>
+
+<h4>wsh.exec({...}) or wsh.exec(code)</h4>
+<p>This method executes some code on webshell. The only required parameter (if you have init wsh before) is `code`. This can be directly the first argument, or a key of the given object.</p>
+<p>The object can take these parameters:</p>
+
+<pre class="prettyprint">wsh.exec({
+  code: function() {
+    // some code which have be executed by Webshell
+  },
+  args: ... // data to use in the script
+  here: {latitude, longitude} // only if you wish to manage geolocation of your users
+  
+  csid: "..."      //   You can manage a webshell session by its key
+  session: {}      //   or any storing object
+
+  key: "..."       //   These parameters are authentications informations
+  secret: "..."    //   and only required if you did not set them with wsh.exec
+  domain: "..."    //
+})</pre><br />
+<p><code>code</code> can be a string of the javascript, or a function with the javascript which need to be executed by Webshell.</p>
+
+<p><code>wsh.exec</code> returns a WebshellCall object used to handle some events specifically to a call.</p>
+
+<h4>Events</h4>
+
+<p>The <code>wsh</code> object and the WebshellCall objects can emit several events:</p>
+
+<p><strong>wsh.on('process', ...)</strong></p>
+
+<p>When the sdk receives a view from the server.</p>
+
+<p><strong>wsh.on('success', ...)</strong></p>
+
+<p>When an execution finishes and returns a result.</p>
+
+<p><strong>wsh.on('error', ...)</strong></p>
+
+<p>When any error on webshell or sdk occurs.</p>
+
+</section>

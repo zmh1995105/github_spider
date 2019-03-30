@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+
+# Osx Temp Files
+.DS_Store
+
+# Python Cache File
+*.pyc
+# Out shell 
+out/*

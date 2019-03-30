@@ -1,0 +1,17 @@
+{
+  "name": "复制Shell配置",
+  "name_en": "CopyShell",
+  "main": "index.js",
+  "icon": "clipboard",
+  "version": "0.1",
+  "description": "复制选中的WebShell配置到剪贴板",
+  "description_en": "Copy WebShell URL to ClibBoard",
+  "author": {
+    "name": "Medici.Yan",
+    "email": "Medici.Yan@gmail.com"
+  },
+  "category": "",
+  "category_en": "",
+  "multiple": false,
+  "scripts": ["php", "asp", "aspx", "custom"]
+}

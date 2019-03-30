@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1 class="page-header">一个简单的WebShell检测平台 ：）</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-success">
+      <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endwith %}
+<p class="lead">简单试运行中......欢迎提供建议<b>cn_xiaoc@163.com</b></p>
+{% endblock %}

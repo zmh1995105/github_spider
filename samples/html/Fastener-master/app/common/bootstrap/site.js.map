@@ -1,0 +1,53 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\bootstrap\\site.js"
+    ],
+    "names": [
+        "global",
+        "CheckStatusCode",
+        "StatusCode",
+        "status",
+        "toString",
+        "substring",
+        "length",
+        "statusInfo",
+        "msg",
+        "err",
+        "checkSite",
+        "url",
+        "resolve",
+        "reject",
+        "get",
+        "res",
+        "checkSitePassword",
+        "password",
+        "siteStatus",
+        "feasibleMethods",
+        "i",
+        "sendParams",
+        "option",
+        "methods",
+        "sendCommand",
+        "checkPassword",
+        "end",
+        "text",
+        "indexOf",
+        "onlyString",
+        "push",
+        "console",
+        "log",
+        "undefined",
+        "addSiteToDatabase",
+        "site",
+        "think",
+        "model",
+        "config",
+        "addSite"
+    ],
+    "mappings": "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",
+    "file": "..\\..\\..\\src\\common\\bootstrap\\site.js",
+    "sourcesContent": [
+        "import request from 'superagent';\r\n\r\n/**\r\n * 判断状态码\r\n * @author Black-Hole <158blackhole@gmail.com>\r\n * @description 判断状态码属于哪一种，并返回状态码信息\r\n * @function\r\n * @param {string|number} status - 要进行判断的状态码\r\n * @returns {String} 返回判断后的信息\r\n */\r\nglobal.CheckStatusCode = status => {\r\n    let StatusCode = status.toString().substring(0,status.toString().length-1);\r\n    let statusInfo;\r\n    switch (StatusCode) {\r\n        case '20':\r\n            statusInfo = {\r\n                status: '20x',\r\n                msg: \"网页存在，开始验证密码正确性\"\r\n            };\r\n            break;\r\n        case '30':\r\n            statusInfo = {\r\n                status: '30x',\r\n                msg: \"状态码返回30x，页面可能是重定向，请检查后重试\"\r\n            };\r\n            break;\r\n        case '40':\r\n            statusInfo = {\r\n                status: '40x',\r\n                msg: \"状态码返回40x，可能是页面可能不存在，请检查后重试\"\r\n            };\r\n            break;\r\n        case '41':\r\n            statusInfo = {\r\n                status: '41x',\r\n                msg: \"状态码返回41x，可能是服务器验证数据包出现问题，请检查后重试\"\r\n            };\r\n            break;\r\n        case '42':\r\n            statusInfo = {\r\n                status: '41x',\r\n                msg: \"状态码返回41x，可能是当前资源被锁定，请检查后重试\"\r\n            };\r\n            break;\r\n        case '50':\r\n            statusInfo = {\r\n                status: '50x',\r\n                msg: \"状态码返回41x，可能是服务器出现错误，请检查后重试\"\r\n            };\r\n            break;\r\n        default:\r\n            statusInfo = {\r\n                status: err.status,\r\n                msg: \"未知状态码，请检查后重试\"\r\n            };\r\n            break;\r\n    }\r\n    return statusInfo;\r\n}\r\n\r\n/**\r\n * 检测站点状态\r\n * @author Black-Hole <158blackhole@gmail.com>\r\n * @description 检测站点的状态码是否为200\r\n * @function\r\n * @param {string} url - 要进行检测的站点地址\r\n * @returns {String} 返回检测后的状态\r\n */\r\nglobal.checkSite = async url =>{\r\n    return new Promise((resolve, reject) => {\r\n        request.get(url, function(err, res){\r\n            resolve(CheckStatusCode(res.status));\r\n        });\r\n    });\r\n}\r\n\r\n/**\r\n * 检测站点密码是否正确\r\n * @author Black-Hole <158blackhole@gmail.com>\r\n * @description 检测站点的密码是否正确\r\n * @function\r\n * @param {string} url - 要进行检测的站点地址\r\n * @param {string} password - 进行检查的密码\r\n * @returns {String} 返回检测后的状态\r\n */\r\nglobal.checkSitePassword = async (url,password) => {\r\n    let siteStatus,feasibleMethods = [];\r\n    for(let i = 0;i < option.methods.length;i++){\r\n        let sendParams = (option.methods[i] == 'get')?'query':'send';\r\n        await new Promise((resolve) => {\r\n            request[option.methods[i]](url)\r\n            [sendParams](password+\"=\"+sendCommand.checkPassword)  //要发送的验证命令\r\n            .end((err,res) => {\r\n                if(err != null){\r\n                    siteStatus = CheckStatusCode(res.status);\r\n                    resolve();\r\n                }\r\n                if(res.text.indexOf(option.onlyString) != -1){  //如果页面存在制指定的字符串\r\n                    feasibleMethods.push(option.methods[i]);\r\n                    resolve();\r\n                }\r\n                console.log(res.text)\r\n                resolve();\r\n            });\r\n        })\r\n    }\r\n    if(siteStatus == undefined){\r\n        return {\r\n            status: '40x',\r\n            msg: '密码可能出错，请确认后，重新提交'\r\n        };\r\n    }else{\r\n        if(feasibleMethods.length > 0){\r\n            return {\r\n                status: '20x',\r\n                msg: '密码验证成功，开始加入到数据库里',\r\n                methods: feasibleMethods\r\n            };\r\n        }else{\r\n            if(siteStatus == \"\"){\r\n                return {\r\n                    status: '40x',\r\n                    msg: '密码可能出错，请确认后，重新提交'\r\n                };\r\n            }\r\n        }\r\n    }\r\n}\r\n\r\nglobal.addSiteToDatabase = (url,password,methods) => {\r\n    let site = think.model(\"site\",think.config('db'));\r\n    site.addSite({\r\n        url: url,\r\n        password: password,\r\n        methods: methods\r\n    })\r\n    return {\r\n        status: 'success',\r\n        msg: '添加站点成功'\r\n    }\r\n}"
+    ]
+}

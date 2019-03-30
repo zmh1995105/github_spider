@@ -1,0 +1,39 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\api\\controller\\private.js"
+    ],
+    "names": [
+        "addsiteAction",
+        "self",
+        "socket",
+        "http",
+        "data",
+        "site",
+        "model",
+        "checkSite",
+        "url",
+        "site_url",
+        "password",
+        "site_password",
+        "siteCheck",
+        "think",
+        "isEmpty",
+        "emit",
+        "status",
+        "msg",
+        "siteStatus",
+        "checkSitePassword",
+        "checkSitePasswordInfo",
+        "addSiteToDatabase",
+        "methods",
+        "addSiteToDatabaseInfo",
+        "controller",
+        "base"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;qBAIUA,a;+FAAcC,I;;;;;;AACZC,kC,GAASD,KAAKE,IAAL,CAAUD,M;AACnBE,gC,GAAOH,KAAKE,IAAL,CAAUC,I;AACjBC,gC,GAAO,KAAKC,KAAL,CAAW,MAAX,C;;mCACWD,KAAKE,SAAL,CAAe,EAAG;AACpCC,qCAAKJ,KAAKK,QADuB;AAEjCC,0CAAUN,KAAKO;AAFkB,6BAAf,C;;;AAAlBC,qC;;gCAIAC,MAAMC,OAAN,CAAcF,SAAd,C;;;;;AACA,iCAAKG,IAAL,CAAU,kBAAV,EAA6B,EAAG;AAC5BC,wCAAQ,KADiB;AAEzBC,qCAAK;AAFoB,6BAA7B;6DAIO,K;;;;mCAEYV,UAAUH,KAAKK,QAAf,C;;;AAAnBS,sC;AAAgD;AACpD,iCAAKH,IAAL,CAAU,kBAAV,EAA6B,EAAG;AAC5BC,wCAAQE,WAAWF,MADM;AAEzBC,qCAAKC,WAAWD;AAFS,6BAA7B;;kCAIGC,WAAWF,MAAX,KAAsB,K;;;;;6DACd,K;;;;mCAEuBG,kBAAkBf,KAAKK,QAAvB,EAAgCL,KAAKO,aAArC,C;;;AAA9BS,iD;AAAoF;AACxF,iCAAKL,IAAL,CAAU,kBAAV,EAA6B;AACzBC,wCAAQI,sBAAsBJ,MADL;AAEzBC,qCAAKG,sBAAsBH;AAFF,6BAA7B;;kCAIGG,sBAAsBJ,MAAtB,IAAgC,K;;;;;6DACxB,K;;;;mCAEuBK,kBAAkBjB,KAAKK,QAAvB,EAAgCL,KAAKO,aAArC,EAAmDS,sBAAsBE,OAAzE,C;;;AAA9BC,iD;AAAoH;AACxH,iCAAKR,IAAL,CAAU,kBAAV,EAA6B;AACzBC,wCAAQ,SADiB;AAEzBC,qCAAK;AAFoB,6BAA7B;;;;;;;;;;;;;;;;;;EAlCqBJ,MAAMW,UAAN,CAAiBC,I",
+    "file": "..\\..\\..\\src\\api\\controller\\private.js",
+    "sourcesContent": [
+        "'use strict';\r\n\r\nexport default class extends think.controller.base {\r\n    \r\n    async addsiteAction(self){\r\n        let socket = self.http.socket;\r\n        let data = self.http.data;\r\n        let site = this.model(\"site\");\r\n        let siteCheck = await site.checkSite({  //验证数据库里是否已经存在此站点信息\r\n            url: data.site_url,\r\n            password: data.site_password\r\n        })\r\n        if(!think.isEmpty(siteCheck)){\r\n            this.emit(\"addsite callback\",{  //使用socket把信息发送给前端\r\n                status: \"50x\",\r\n                msg: \"数据库里已经存在相同的站点信息，请勿重复添加\"\r\n            });\r\n            return false;\r\n        }\r\n        let siteStatus = await checkSite(data.site_url);    //开始进行测试站点的状态码是否为200\r\n        this.emit(\"addsite callback\",{  //使用socket把信息发送给前端\r\n            status: siteStatus.status,\r\n            msg: siteStatus.msg\r\n        });\r\n        if(siteStatus.status !== '20x'){    //如果不是200状态码，将不向下执行\r\n            return false;\r\n        }\r\n        let checkSitePasswordInfo = await checkSitePassword(data.site_url,data.site_password);  //开始验证密码是否正确\r\n        this.emit(\"addsite callback\",{\r\n            status: checkSitePasswordInfo.status,\r\n            msg: checkSitePasswordInfo.msg\r\n        });\r\n        if(checkSitePasswordInfo.status != '20x'){\r\n            return false;\r\n        }\r\n        let addSiteToDatabaseInfo = await addSiteToDatabase(data.site_url,data.site_password,checkSitePasswordInfo.methods);    //开始把数据添加到数据里\r\n        this.emit(\"addsite callback\",{\r\n            status: 'success',\r\n            msg: '添加站点成功'\r\n        });\r\n    }\r\n}"
+    ]
+}

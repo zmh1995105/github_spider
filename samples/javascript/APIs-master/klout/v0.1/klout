@@ -1,0 +1,116 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+({
+	getTwitterId: function(params, opts) {
+		var user;
+		if (typeof params == "string")
+			user = params;
+		else
+			user = params.kloutId;	
+		var url = "identity.json/klout/" + user + "/tw";
+
+		return http({
+			provider:fs('..'),
+			url:url,
+			method: 'GET'
+		}, opts);
+	},
+	getKloutId: function(params, opts) {
+		var url = "identity.json/";
+		var user;
+		var args = {};
+		user = params.userId;
+
+		var id = parseInt(user);
+		var isId = !isNaN(id) && id.toString().length == user.length;
+		if (isId) {
+			if (params.idType == "tw" || params.idType == "twitter")
+				url += "tw/" + id.toString();
+			else if (params.idType == "gp" || params.idType == "google+")
+				url += "gp/" + id.toString();
+		}
+		else {
+			args.screenName = user;
+			url += "twitter";
+		}
+
+		return http({
+			provider:fs('..'),
+			url:url,
+			method: 'GET',
+			params: args
+		}, opts);
+	},
+	score: function(params, opts) {
+		var user;
+		if (typeof params == "string")
+			user = params;
+		else
+			user = params.user;	
+		var url = "user.json/" + user + "/score";
+
+		return http({
+			provider:fs('..'),
+			url:url,
+			method: 'GET'
+		}, opts);
+	},
+	showUser: function(params, opts) {
+		var user;
+		if (typeof params == "string")
+			user = params;
+		else
+			user = params.user;	
+		var url = "user.json/" + user;
+
+		return http({
+			provider:fs('..'),
+			url:url,
+			method: 'GET'
+		}, opts);
+	},
+	topics: function(params, opts) {
+		var user;
+		if (typeof params == "string")
+			user = params;
+		else
+			user = params.user;	
+		var url = "user.json/" + user + "/topics";
+
+		return http({
+			provider:fs('..'),
+			url:url,
+			method: 'GET'
+		}, opts);
+	},
+	influence: function(params, opts) {
+		var user;
+		if (typeof params == "string")
+			user = params;
+		else
+			user = params.user;	
+		var url = "user.json/" + user + "/influence";
+
+		return http({
+			provider:fs('..'),
+			url:url,
+			method: 'GET'
+		}, opts);
+	}
+})

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block style %}
+    {{ super() }}
+    <style>
+    .suspected {background-color: darkorange!important;}
+    </style>
+{% endblock %}
+{% block body %}
+    <h1>{{ ip }} activities</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>Timestamp</th>
+            <th>URI</th>
+            <th>Query</th>
+            <th>Possible attacks</th>
+        </tr>
+        {% for entry in entries %}
+            {% set suspect = False %}
+            {% if entry.attacks|length > 0 %}
+                {% set suspect = True %}
+            {% endif %}
+        <tr class="{{ 'suspected' if suspect else '' }}">
+            <td>{{ entry.timestamp }}</td>
+            <td>{{ entry.uri }}</td>
+            <td>{{ entry.query }}</td>
+            <td>{{ entry.attacks|join(', ', 'type') }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

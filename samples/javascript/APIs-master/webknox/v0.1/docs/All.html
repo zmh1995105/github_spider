@@ -1,0 +1,606 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<!DOCTYPE html>
+<html>
+  <body>
+    
+    <div class="apicontainer">
+      <div class="main api-profile">
+	<div class="constraint">
+	  
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-detectLanguage" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      detectLanguage 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text for which the language should be determined. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-detectPartofSpeech" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      detectPartofSpeech 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text for which the POS tags should be found. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-detectSentiment" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      detectSentiment 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text for which the sentiment should be detected. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The language of the given text (en=English, de=German). </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> language </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Optionally consider only sentences that contain a context word for the sentiment detection. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> contextWords </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-extractDates" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      extractDates 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text from which dates should be extracted. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-extractEntities" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      extractEntities 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text in which entities should be detected. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-extractLocations" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      extractLocations 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text from which locations should be extracted. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-ratetheQuality" style="">
+  <div class="title">
+    <span class="method POST"> POST </span><span class="route">
+      ratetheQuality 
+    </span>
+  </div>
+  
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The title of the article. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> title </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The text of the article (including HTML tags). </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> text </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+	</div>
+      </div>
+    </div>
+    
+    <footer>
+      Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed May 15 2013 18:11:59 GMT+0200 (CEST)
+    </footer>
+    
+    <script> prettyPrint(); </script>
+  </body>
+</html>

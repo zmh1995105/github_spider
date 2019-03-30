@@ -1,0 +1,1941 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function url_replace(url, args, param, type, required, def) {
+	if (args[param] === undefined && required && def !== undefined)
+		args[param] = def;
+	if (args[param] === undefined && required && def === undefined)
+		throw new Error(param + ' is a required parameter');
+	if (type == 'str' && args[param] !== undefined && args[param] !== undefined && args[param] !== null && typeof args[param] != 'string')
+		args[param] = args[param].toString();
+	if (type == 'int' && args[param] !== undefined && (parseFloat(args[param]) != parseInt(args[param], 10) || isNaN(args[param])))
+		throw new Error(param + ' must be an integer');
+	if (type == 'loc' && args[param] !== undefined && typeof args[param] == 'object' && args[param].lat !== undefined && args[param].lng !== undefined)
+		args[param] = args[param].lat + ',' + args[param].lng;
+	if (url.indexOf('{' + param + '}') !== -1) {
+		var rgx = new RegExp('\\{' + param + '\\}', 'g');
+		url = url.replace(rgx, args[param]);
+		delete args[param];
+	}
+	return url;
+}
+
+var provider = fs('/bin/facebook');
+
+exports.auth = function() { return auth({provider:provider}) };
+/** 
+ * Search over all public objects in the social graph
+ * @category Search
+ * @param {string} q  The search string
+ * @param {string} type  Supports these types of objects: post (All public posts), user, page, event, application, group, place, checkin               
+ * @param {wsh:location} [center]  You can narrow your search to a specific location by adding the center parameter with lat (latitude) and lng (longitude)
+ * @param {integer} [distance]  You can narrow your search from a specific distance of parameter center
+ * @methodhttp GET
+ */
+exports.search = function(args, opts) {
+	var url = 'https://graph.facebook.com/search';
+	args = args || {};
+	url = url_replace(url, args, 'q', 'str', true);
+	url = url_replace(url, args, 'type', 'str', true);
+	url = url_replace(url, args, 'center', 'loc');
+	url = url_replace(url, args, 'distance', 'int');
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A photo album
+ * @category Album
+ * @param {string} album  Represents the ID of the album object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getAlbum = function(args, opts) {
+	var url = 'https://graph.facebook.com/{album}';
+	args = args || {};
+	url = url_replace(url, args, 'album', 'str', true, "99394368305");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos contained in this album
+ * @category Album
+ * @param {string} album  Represents the ID of the album object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getAlbumPhotos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{album}/photos';
+	args = args || {};
+	url = url_replace(url, args, 'album', 'str', true, "99394368305");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The comments made on this album
+ * @category Album
+ * @param {string} album  Represents the ID of the album object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getAlbumComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{album}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'album', 'str', true, "99394368305");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Specifies information about an event, including the location, event name, and which invitees plan                    to attend.               
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getEvent = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * This event's wall
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getEventFeed = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/feed';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the users who have been not yet responded to their invitation to this event
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getEventNoReply = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/noreply';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the users who have been responded "Maybe" to their invitation to this event
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getEventMaybe = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/maybe';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the users who have been invited to this event
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getEventInvited = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/invited';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the users who are attending this event
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getEventAttending = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/attending';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the users who declined their invitation to this event
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getEventDeclined = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/declined';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The event's profile picture
+ * @category Event
+ * @param {string} event  Represents the ID of the event object.
+ * @param {string} [type]  One of square (50x50), small (50 pixels wide, variable height), and large (about 200 pixels wide,                    variable height)               
+ * @methodhttp GET
+ */
+exports.getEventPicture = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event}/picture';
+	args = args || {};
+	url = url_replace(url, args, 'event', 'str', true, "331218348435");
+	url = url_replace(url, args, 'type', 'str', false, "small");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A Facebook group
+ * @category Group
+ * @param {string} group  Represents the ID of the group object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getGroup = function(args, opts) {
+	var url = 'https://graph.facebook.com/{group}';
+	args = args || {};
+	url = url_replace(url, args, 'group', 'str', true, "2204501798");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * This group's wall
+ * @category Group
+ * @param {string} group  Represents the ID of the group object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getGroupFeed = function(args, opts) {
+	var url = 'https://graph.facebook.com/{group}/feed';
+	args = args || {};
+	url = url_replace(url, args, 'group', 'str', true, "2204501798");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the users who are members of this group
+ * @category Group
+ * @param {string} group  Represents the ID of the group object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getGroupMembers = function(args, opts) {
+	var url = 'https://graph.facebook.com/{group}/members';
+	args = args || {};
+	url = url_replace(url, args, 'group', 'str', true, "2204501798");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The profile picture of this group
+ * @category Group
+ * @param {string} group  Represents the ID of the group object.
+ * @param {string} [type]  One of square (50x50), small (50 pixels wide, variable height), and large (about 200 pixels wide,                    variable height)               
+ * @methodhttp GET
+ */
+exports.getGroupPicture = function(args, opts) {
+	var url = 'https://graph.facebook.com/{group}/picture';
+	args = args || {};
+	url = url_replace(url, args, 'group', 'str', true, "2204501798");
+	url = url_replace(url, args, 'type', 'str', false, "small");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A link shared on a user's wall
+ * @category Link
+ * @param {string} link  Represents the ID of the link object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getLink = function(args, opts) {
+	var url = 'https://graph.facebook.com/{link}';
+	args = args || {};
+	url = url_replace(url, args, 'link', 'str', true, "114961875194024");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the comments on this link
+ * @category Link
+ * @param {string} link  Represents the ID of the link object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getLinkComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{link}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'link', 'str', true, "114961875194024");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A Facebook note
+ * @category Note
+ * @param {string} note  Represents the ID of the note object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getNote = function(args, opts) {
+	var url = 'https://graph.facebook.com/{note}';
+	args = args || {};
+	url = url_replace(url, args, 'note', 'str', true, "122788341354");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the comments on this note
+ * @category Note
+ * @param {string} note  Represents the ID of the note object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getNoteComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{note}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'note', 'str', true, "122788341354");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * People who like the note
+ * @category Note
+ * @param {string} note  Represents the ID of the note object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getNoteLikes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{note}/likes';
+	args = args || {};
+	url = url_replace(url, args, 'note', 'str', true, "122788341354");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getPage = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The page's wall
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageFeed = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/feed';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The page's profile picture
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [type]  One of square (50x50), small (50 pixels wide, variable height), and large (about 200 pixels wide,                    variable height)               
+ * @methodhttp GET
+ */
+exports.getPagePicture = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/picture';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'type', 'str', false, "small");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos, videos, and posts in which this page has been tagged
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageTagged = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/tagged';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The page's posted links
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageLinks = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/links';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos this page has uploaded
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPagePhotos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/photos';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The groups this page is a member of
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageGroups = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/groups';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photo albums this page has created
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageAlbums = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/albums';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The page's status updates
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageStatuses = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/statuses';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The videos this page has created
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageVideos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/videos';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The page's notes
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageNotes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/notes';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The page's own posts
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPagePosts = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/posts';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The events this page is attending
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageEvents = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/events';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Checkins made by the friends of the current session user
+ * @category Page
+ * @param {string} page  Represents the ID of the page object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPageCheckins = function(args, opts) {
+	var url = 'https://graph.facebook.com/{page}/checkins';
+	args = args || {};
+	url = url_replace(url, args, 'page', 'str', true, "platform");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * An individual photo
+ * @category Photo
+ * @param {string} photo  Represents the ID of the photo object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getPhoto = function(args, opts) {
+	var url = 'https://graph.facebook.com/{photo}';
+	args = args || {};
+	url = url_replace(url, args, 'photo', 'str', true, "98423808305");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the comments on this photo
+ * @category Photo
+ * @param {string} photo  Represents the ID of the photo object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPhotoComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{photo}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'photo', 'str', true, "98423808305");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * People who like the photo
+ * @category Photo
+ * @param {string} photo  Represents the ID of the photo object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPhotoLikes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{photo}/likes';
+	args = args || {};
+	url = url_replace(url, args, 'photo', 'str', true, "98423808305");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * An individual entry in a profile's feed
+ * @category Post
+ * @param {string} post  Represents the ID of the post object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getPost = function(args, opts) {
+	var url = 'https://graph.facebook.com/{post}';
+	args = args || {};
+	url = url_replace(url, args, 'post', 'str', true, "19292868552_118464504835613");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the comments on this post
+ * @category Post
+ * @param {string} post  Represents the ID of the post object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getPostComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{post}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'post', 'str', true, "19292868552_118464504835613");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A status message on a user's wall
+ * @category Status Message
+ * @param {string} status  Represents the ID of the status object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getStatus = function(args, opts) {
+	var url = 'https://graph.facebook.com/{status}';
+	args = args || {};
+	url = url_replace(url, args, 'status', 'str', true, "367501354973");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the comments on this message
+ * @category Status Message
+ * @param {string} status  Represents the ID of the status object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getStatusComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{status}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'status', 'str', true, "367501354973");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A user profile.
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections an                    object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getUser = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Your user profile.
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections an                    object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.me = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Search an individual user's News Feed, restricted to that user's friends
+ * @category Search
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections an                    object has without knowing its type ahead of time.               
+ * @param {string} [q]  The text for which to search.
+ * @methodhttp GET
+ */
+exports.getUserSearch = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/home';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "robertscoble");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	url = url_replace(url, args, 'q', 'str', false, "facebook");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's News Feed. Requires the read_stream permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserHome = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/home';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's wall. Requires the read_stream permission to see non-public posts.
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserFeed = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/feed';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos, videos, and posts in which this user has been tagged. Requires the user_photo_tags,                    user_video_tags, friend_photo_tags, or friend_video_tags permissions               
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserTagged = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/tagged';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's own posts. Requires the read_stream permission to see non-public posts.
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserPosts = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/posts';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's profile picture
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [type]  One of square (50x50), small (50 pixels wide, variable height), and large (about 200 pixels wide,                    variable height)               
+ * @methodhttp GET
+ */
+exports.getUserPicture = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/picture';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'type', 'str', false, "small");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's friends
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserFriends = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/friends';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The activities listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserActivities = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/activities';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The music listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserCheckins = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/checkins';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The interests listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserInterests = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/interests';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The music listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserMusic = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/music';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The books listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserBooks = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/books';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The movies listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserMovies = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/movies';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The television listed on the user's profile
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserTelevision = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/television';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All the pages this user has liked. Requires the user_likes or friend_likes permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserLikes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/likes';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos this user is tagged in. Requires the user_photos or friend_photos permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserPhotos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/photos';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photo albums this user has created. Requires the user_photos or friend_photos permission               
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserAlbums = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/albums';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The videos this user has been tagged in. Requires the user_videos or friend_videos permission.               
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserVideos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/videos';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The groups this user is a member of. Requires the user_groups or friend_groups permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserGroups = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/groups';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's status updates. Requires the read_stream permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserStatuses = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/statuses';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's posted links. Requires the read_stream permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserLinks = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/links';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The user's notes. Requires the read_stream permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserNotes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/notes';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The events this user is attending. Requires the user_events or friend_events permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserEvents = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/events';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The threads in this user's inbox. Requires the read_mailbox permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserInbox = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/inbox';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The messages in this user's outbox. Requires the read_mailbox permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserOutbox = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/outbox';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The updates in this user's inbox. Requires the read_mailbox permission
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserUpdates = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/updates';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The Facebook pages owned by the current user
+ * @category User
+ * @param {string} user  Represents the ID of the user object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getUserAccounts = function(args, opts) {
+	var url = 'https://graph.facebook.com/{user}/accounts';
+	args = args || {};
+	url = url_replace(url, args, 'user', 'str', true, "me");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * An individual video
+ * @category Video
+ * @param {string} video  Represents the ID of the video object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections                    an object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getVideo = function(args, opts) {
+	var url = 'https://graph.facebook.com/{video}';
+	args = args || {};
+	url = url_replace(url, args, 'video', 'str', true, "614004947048");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * All of the comments on this video
+ * @category Video
+ * @param {string} video  Represents the ID of the video object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getVideoComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{video}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'video', 'str', true, "614004947048");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Write to the given profile's feed/wall.
+ * @category Publish
+ * @param {string} profile_id  undefined
+ * @param {string} message  The message
+ * @param {string} [picture]  If available, a link to the picture included with this post
+ * @param {string} [link]  The link attached to this post
+ * @param {string} [caption]  The caption of the link (appears beneath the link name)
+ * @param {string} [name]  The name of the link
+ * @param {string} [description]  A description of the link (appears beneath the link caption)
+ * @methodhttp POST
+ */
+exports.postProfileIdFeed = function(args, opts) {
+	var url = 'https://graph.facebook.com/{profile_id}/feed';
+	args = args || {};
+	url = url_replace(url, args, 'profile_id', 'str', true, "me");
+	url = url_replace(url, args, 'message', 'str', true, "");
+	url = url_replace(url, args, 'picture', 'str', false, "{attachment}");
+	url = url_replace(url, args, 'link', 'str', false, "");
+	url = url_replace(url, args, 'caption', 'str', false, "");
+	url = url_replace(url, args, 'name', 'str', false, "");
+	url = url_replace(url, args, 'description', 'str', false, "");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Comment on the given post
+ * @category Publish
+ * @param {string} post_id  undefined
+ * @param {string} message  comment on the given post
+ * @methodhttp POST
+ */
+exports.postPostIdComments = function(args, opts) {
+	var url = 'https://graph.facebook.com/{post_id}/comments';
+	args = args || {};
+	url = url_replace(url, args, 'post_id', 'str', true, "163046417207_399962632207");
+	url = url_replace(url, args, 'message', 'str', true, "Test comment, please ignore!");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Write to the given profile's feed/wall.
+ * @category Publish
+ * @param {string} post_id  undefined
+ * @methodhttp POST
+ */
+exports.postPostIdLikes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{post_id}/likes';
+	args = args || {};
+	url = url_replace(url, args, 'post_id', 'str', true, "163046417207_399962632207");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Write a note on the given profile.
+ * @category Publish
+ * @param {string} profile_id  undefined
+ * @param {string} message  The message
+ * @param {string} subject  undefined
+ * @methodhttp POST
+ */
+exports.postProfileIdNotes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{profile_id}/notes';
+	args = args || {};
+	url = url_replace(url, args, 'profile_id', 'str', true, "me");
+	url = url_replace(url, args, 'message', 'str', true, "");
+	url = url_replace(url, args, 'subject', 'str', true, "Test post");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Write a note on the given profile.
+ * @category Publish
+ * @param {string} profile_id  undefined
+ * @param {string} message  The message
+ * @param {string} link  undefined
+ * @methodhttp POST
+ */
+exports.postProfileIdLinks = function(args, opts) {
+	var url = 'https://graph.facebook.com/{profile_id}/links';
+	args = args || {};
+	url = url_replace(url, args, 'profile_id', 'str', true, "me");
+	url = url_replace(url, args, 'message', 'str', true, "");
+	url = url_replace(url, args, 'link', 'str', true, "");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Post an event in the given profile.
+ * @category Publish
+ * @param {string} profile_id  undefined
+ * @methodhttp POST
+ */
+exports.postProfileIdEvents = function(args, opts) {
+	var url = 'https://graph.facebook.com/{profile_id}/events';
+	args = args || {};
+	url = url_replace(url, args, 'profile_id', 'str', true, "me");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Attend the given event.
+ * @category Publish
+ * @param {string} event_id  undefined
+ * @methodhttp POST
+ */
+exports.postEventIdAttending = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event_id}/attending';
+	args = args || {};
+	url = url_replace(url, args, 'event_id', 'str', true, "331218348435");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Maybe attend the given event.
+ * @category Publish
+ * @param {string} event_id  undefined
+ * @methodhttp POST
+ */
+exports.postEventIdMaybe = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event_id}/maybe';
+	args = args || {};
+	url = url_replace(url, args, 'event_id', 'str', true, "331218348435");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Decline the given event.
+ * @category Publish
+ * @param {string} event_id  undefined
+ * @methodhttp POST
+ */
+exports.postEventIdDeclined = function(args, opts) {
+	var url = 'https://graph.facebook.com/{event_id}/declined';
+	args = args || {};
+	url = url_replace(url, args, 'event_id', 'str', true, "331218348435");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Create an album.
+ * @category Publish
+ * @param {string} profile_id  undefined
+ * @param {string} message  The message
+ * @param {string} name  undefined
+ * @methodhttp POST
+ */
+exports.postProfileIdAlbums = function(args, opts) {
+	var url = 'https://graph.facebook.com/{profile_id}/albums';
+	args = args || {};
+	url = url_replace(url, args, 'profile_id', 'str', true, "me");
+	url = url_replace(url, args, 'message', 'str', true, "");
+	url = url_replace(url, args, 'name', 'str', true, "");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Upload a photo to an album.
+ * @category Publish
+ * @param {string} album_id  undefined
+ * @param {string} message  The photo
+ * @methodhttp POST
+ */
+exports.postAlbumIdPhotos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{album_id}/photos';
+	args = args || {};
+	url = url_replace(url, args, 'album_id', 'str', true, "me");
+	url = url_replace(url, args, 'message', 'str', true, "{attachment}");
+	return http.post({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Delete an object in the graph.
+ * @category Delete
+ * @param {string} object_id  undefined
+ * @methodhttp DELETE
+ */
+exports.deleteObjectId = function(args, opts) {
+	var url = 'https://graph.facebook.com/{object_id}';
+	args = args || {};
+	url = url_replace(url, args, 'object_id', 'str', true, "OBJECTID");
+	return http.delete({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Remove a 'like' from a post.
+ * @category Delete
+ * @param {string} post_id  undefined
+ * @methodhttp DELETE
+ */
+exports.deletePostIdLikes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{post_id}/likes';
+	args = args || {};
+	url = url_replace(url, args, 'post_id', 'str', true, "OBJECTID");
+	return http.delete({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * A check-in that was made through Facebook Places.
+ * @category Places
+ * @param {string} checkin  Represents the ID of the checkin object.
+ * @param {string} [metadata]  The Graph API supports introspection of objects, which enables you to see all of the connections an                    object has without knowing its type ahead of time.               
+ * @methodhttp GET
+ */
+exports.getCheckin = function(args, opts) {
+	var url = 'https://graph.facebook.com/{checkin}';
+	args = args || {};
+	url = url_replace(url, args, 'checkin', 'str', true, "robertscoble");
+	url = url_replace(url, args, 'metadata', 'str', false, "0");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/** 
+ * An application's profile
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @methodhttp GET
+ */
+exports.getApplication = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	return http({provider:provider,url:url,params:args, auth:'none'}, opts);
+};
+
+/** 
+ * The application's wall.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationFeed = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/feed';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The application's own posts.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationPosts = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/posts';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The application's logo
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [type]  One of square (50x50), small (50 pixels wide, variable height), and large (about 200 pixels wide,                variable height)           
+ * @methodhttp GET
+ */
+exports.getApplicationPicture = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/picture';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'type', 'str', false, "small");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos, videos, and posts in which this application has been tagged.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationTagged = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/tagged';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The application's posted links.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationLinks = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/links';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photos this application is tagged in.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationPhotos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/photos';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The photo albums this application has created.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationAlbums = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/albums';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The application's status updates.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationStatuses = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/statuses';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The videos this application has created
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationVideos = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/videos';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The application's notes.
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationNotes = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/notes';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * The events this page is managing
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationEvents = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/events';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};
+
+/** 
+ * Usage metrics for this application
+ * @category Application
+ * @param {string} application  Represents the ID of the application object.
+ * @param {string} [since]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [until]  A unix timestamp or any date accepted by strtotime
+ * @param {string} [limit]  Limit the number of items returned.
+ * @param {string} [offset]  An offset to the response. Useful for paging.
+ * @methodhttp GET
+ */
+exports.getApplicationInsights = function(args, opts) {
+	var url = 'https://graph.facebook.com/{application}/insights';
+	args = args || {};
+	url = url_replace(url, args, 'application', 'str', true, "2439131959");
+	url = url_replace(url, args, 'since', 'str', false, "last week");
+	url = url_replace(url, args, 'until', 'str', false, "yesterday");
+	url = url_replace(url, args, 'limit', 'str', false, "3");
+	url = url_replace(url, args, 'offset', 'str', false, "2");
+	return http({provider:provider,url:url,params:args}, opts);
+};

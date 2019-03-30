@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fastener Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+      .jumbotron{
+        margin-bottom: 50px;
+        padding-right: 60px;
+        padding-left: 60px;
+        text-align: center;
+      }
+      .login {
+        text-align: center;
+        position: relative;
+        width: 50%;
+        margin: 0 auto;
+      }
+      .login > .input-group,button,.svg_captcha{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+      .login > .input-group:nth-of-type(2){
+        top: 55px;
+      }
+      .login > .input-group:nth-of-type(3){
+        top: 110px;
+      }
+      .svg_captcha{
+        top:165px;
+      }
+      .login > button {
+        top: 236px;
+        height: 34px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="jumbotron">
+      <h1>Fastener</h1>
+      <p class="lead">Fastener（译：纽扣，取自女朋友名字首拼）是一款Web端的站点控制器，它存在的意义是为了更好的让管理员更好的维护自己的站点，无需登录服务器，且随时随地查看。</p>
+    </div>
+    <div class="login">
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">
+          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+        </span>
+        <input type="text" id="username" class="form-control" placeholder="用户名" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon2">
+          <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+        </span>
+        <input type="password" id="password" class="form-control" placeholder="密码" aria-describedby="basic-addon2">
+      </div>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon3">
+          <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+        </span>
+        <input type="text" class="form-control captcha" placeholder="验证码(输入空格键或点击图片切换验证码)" aria-describedby="basic-addon3">
+      </div>
+      <div class="svg_captcha"></div>
+      <button type="button" class="btn btn-primary btn-block loginSystem">登录</button>
+    </div>
+  </body>
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="/static/js/config.js"></script>
+  <script>
+    $(document).ready(()=>{
+      let reCaptcha = () => {
+        $(".captcha").val("");
+        $.ajax({
+          url: "/home/captcha",
+          type: "post",
+          dataType: "html",
+        })
+        .done(function(info){
+          $(".svg_captcha *").remove();
+          $(".svg_captcha").append(info);
+        });
+      }
+      $(".svg_captcha").click(() => {
+        reCaptcha();
+      })
+      $(".captcha").bind('keyup', (e) => {
+        if(e.keyCode == "32"){
+          reCaptcha();
+        }
+      });
+      reCaptcha();
+
+      $(".loginSystem").click(() => {
+        let username = $("#username").val();
+        let password = $("#password").val();
+        let captcha  = $(".captcha").val();
+        if(username == ""){
+          alert("用户名为空");
+          return false;
+        }
+        if(password == ""){
+          alert("密码为空");
+          return false;
+        }
+        if(captcha == ""){
+          alert("验证码为空");
+          return false;
+        }
+        if(!regex.specialString.test(username)){
+          $.ajax({
+            url: "/home/login_check",
+            type: "post",
+            dataType: "json",
+            data: {
+              username: username,
+              password: password,
+              captcha:  captcha
+            }
+          })
+          .done((info) => {
+            if(info.errno > 0){
+              alert(info.errmsg);
+              if(info.data == "captcha"){
+                reCaptcha();
+              }
+              return false;
+            }
+            location.href = "/";
+          })
+        }else{
+          alert("请确定您的用户名是规范的");
+        }
+      });
+
+      $("input").keyup((e) => {
+        if(e.keyCode == "13"){
+          $(".loginSystem").click();
+        }
+      })
+    })
+  </script>
+</html>

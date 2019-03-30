@@ -1,0 +1,54 @@
+<html>
+    <body>
+<h1>Bruteforce</h1>
+<div class="content">
+    <table>
+        <form method="post">
+            <tr>
+                <td><span>Type</span></td>
+                <td><select name="proto"><option value="ftp">FTP</option><option value="mysql">MySql</option>
+                <option value="pgsql">PostgreSql</option></select></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="c" value=" htmlspecialchars($GLOBALS[cwd]) ">
+                    <input type="hidden" name="a" value=" htmlspecialchars($_POST[a]) ">
+                    <input type="hidden" name="charset" value=" htmlspecialchars($_POST[charset]) ">
+                    <span>Server:port</span></td>
+                <td><input type="text" name="server" value="127.0.0.1"></td>
+            </tr>
+            <tr>
+                <td><span>Brute type</span></td>
+                <td><label><input type="radio" name="type" value="1" checked> /etc/passwd</label></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><label style="padding-left:15px"><input type="checkbox" name="reverse" value="1" checked>reverse (login -> nigol)</label></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><label><input type="radio" name="type" value="2"> Dictionary</label></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <table style="padding-left:15px">
+                        <tr>
+                            <td><span>Login</span></td>
+                            <td><input type="text" name="login" value="root"></td>
+                        </tr>
+                        <tr>
+                            <td><span>Dictionary</span></td>
+                            <td><input type="text" name="dict" value=" htmlspecialchars($GLOBALS[cwd]) passwd.dic"></td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type="submit" value=">>"></td>
+            </tr>
+        </form>
+    </table>
+<body>
+</html>

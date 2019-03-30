@@ -1,0 +1,118 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+function url_replace(url, args, param, type, required, def) {
+	if (args[param] === undefined && required && def === undefined)
+		throw new Error(param + ' is a required parameter');
+	if (type == 'str' && args[param] !== undefined && args[param] !== undefined && args[param] !== null && typeof args[param] != 'string')
+		args[param] = args[param].toString();
+	return url;
+}
+
+var provider = fs('/bin/webknox');
+
+exports.auth = function() { return auth({provider:provider}) };
+/** 
+ * @category All
+ * @param {string} [text]  The text for which the language should be determined.
+ * @methodhttp GET
+ */
+exports.detectLanguage = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/language';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [text]  The text for which the POS tags should be found.
+ * @methodhttp GET
+ */
+exports.detectPartofSpeech = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/posTags';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [text]  The text for which the sentiment should be detected.
+ * @param {string} [language]  The language of the given text (en=English, de=German).
+ * @param {string}  contextWords   Optionally consider only sentences that contain a context word for the sentiment detection.
+ * @methodhttp GET
+ */
+exports.detectSentiment = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/sentiment';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	url = url_replace(url, args, 'language', 'str', true);
+	url = url_replace(url, args, 'contextWords', 'str');
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [text]  The text from which dates should be extracted.
+ * @methodhttp GET
+ */
+exports.extractDates = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/dates';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [text]  The text in which entities should be detected.
+ * @methodhttp GET
+ */
+exports.extractEntities = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/entities';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [text]  The text from which locations should be extracted.
+ * @methodhttp GET
+ */
+exports.extractLocations = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/locations';
+	args = args || {};
+	url = url_replace(url, args, 'text', 'str', true);
+	return http({url:url, params:args, provider:provider}, opts);
+};
+
+/** 
+ * @category All
+ * @param {string} [title]  The title of the article.
+ * @param {string} [text]  The text of the article (including HTML tags).
+ * @methodhttp POST
+ */
+exports.ratetheQuality = function(args, opts) {
+	var url = 'https://webknox-text-processing.p.mashape.com/text/quality';
+	args = args || {};
+	url = url_replace(url, args, 'title', 'str', true);
+	url = url_replace(url, args, 'text', 'str', true);
+	return http.post({url:url, body:args, provider:provider}, opts);
+};

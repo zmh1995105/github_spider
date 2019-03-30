@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WShellV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/static/css/main.css" />
+    <!--
+    <script src="main.js"></script>
+    -->
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- jquery.js -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <!--vue.js-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>WShellV</h1>
+        <h2>可扩展的webshell管理工具</h2>
+    </div>
+
+    <div class="container">
+
+        <!--增加shell-->
+        <div class="toolbar row col-sm-12">
+            <!-- 按钮触发模态框  增加shell -->
+            <button class="btn btn-primary" data-toggle="modal" data-target="#shelladdpost">增加shell</button>
+            <!-- 模态框（Modal） 增加shell -->
+            <div class="modal fade" id="shelladdpost" tabindex="-1" role="dialog" aria-labelledby="shelladd" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">添加shell</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form" action="/" method="post">
+                                <div class="form-group">
+                                    <label for="shelladdurl" class="col-sm-2 control-label">地址</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="shelladdurl" placeholder="" v-model="shelladdurl">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control" id="shelladdpwd" placeholder="" v-model="shelladdpwd">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addtypename" class="col-sm-2 control-label">脚本类型</label>
+                                    <div class="col-sm-10">
+                                        <select id="addtypename" class="form-control" v-model="addtypename">
+                                            <option>php</option>
+                                            <!--
+                                            <option>asp</option>
+                                            <option>jsp</option>
+                                            -->
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addpluginname" class="col-sm-2 control-label">插件</label>
+                                    <div class="col-sm-10">
+                                        <select id="addpluginname" class="form-control" v-model="addpluginname">
+                                            <option v-for="(plugin, index) in plugins">{{ plugin }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addcodingname" class="col-sm-2 control-label">编码</label>
+                                    <div class="col-sm-10">
+                                        <select id="addcodingname" class="form-control" v-model="addcodingname">
+                                            <option v-for="(coding, index) in codings">{{ coding }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button @click="post_add_shell" type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal -->
+            </div>
+        </div>
+
+
+        <div class="row col-sm-12">
+
+            <!--标签页头-->
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active"><a id="tabshell" href="#shell" data-toggle="tab">Shell</a></li>
+                <li><a id="tabfmanager" href="#fmanager" data-toggle="tab">文件管理</a></li>
+                <li><a id="tabvterm" href="#vterm" data-toggle="tab">虚拟终端</a></li>
+            </ul>
+
+            <!--标签页内容-->
+            <div id="myTabContent" class="tab-content">
+
+                <!--shell列表标签页-->
+                <div class="tab-pane fade in active" id="shell">
+                    <table class="table table-striped col-sm-12">
+                        <thead>
+                            <tr>
+                                <th>地址</th>
+                                <th>类型</th>
+                                <th>插件</th>
+                                <th>编码</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(shellinfo, index) in shelllist">
+                                <td class="hide">{{ shellinfo.id }}</td>
+                                <td>{{ shellinfo.url }}</td>
+                                <td>{{ shellinfo.method }}</td>
+                                <td>{{ shellinfo.plugin }}</td>
+                                <td>{{ shellinfo.coding }}</td>
+                                <td>
+                                    <button @click="delshell(index)" class="image-button bg-color-darken fg-color-white"><img src="/static/img/del.png"/></button>
+                                    <button @click="show_fmanager(index)" class="image-button bg-color-darken fg-color-white"><img src="/static/img/file.png"/></button>
+                                    <button @click="show_vterm(index)" class="image-button bg-color-darken fg-color-white"><img src="/static/img/terminal.png"/></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--文件管理标签页-->
+                <div class="tab-pane fade" id="fmanager">
+                    <div class="input-group">
+                        <span class="input-group-addon"> > </span>
+                        <input type="text" class="form-control" v-model="folderPath" @keyup.enter="path_to_folder" />
+                        <span class="input-group-btn">
+                            <button @click="path_to_folder" class="btn btn-primary" type="button"> -> </button>
+                        </span>
+                        <span class="input-group-btn">
+                            <input class="hide" id="fileinput" type="file" />
+                            <button @click="upload_to_folder" class="btn btn-default" type="button">上传文件</button>
+                        </span>
+                    </div>
+                    <table class="table table-striped col-sm-12">
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>时间</th>
+                                <th>大小</th>
+                                <th>属性</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(fileinfo, index) in dirs">
+                                <td @click="click_to_folder(index)" style="cursor:pointer">{{ fileinfo.name }}</td>
+                                <td>{{ fileinfo.mtime }}</td>
+                                <td>{{ fileinfo.size | filter_format_file_size }}</td>
+                                <td>{{ fileinfo.perm }}</td>
+                                <td>
+                                    <button @click="delfile(index)" class="image-button bg-color-darken fg-color-white"><img src="/static/img/del.png"/></button>
+                                </td>
+                                <!--createfolder新建文件夹待写-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--虚拟终端标签页-->
+                <div class="tab-pane fade" id="vterm">
+                    <div class="input-group">
+                        <span class="input-group-addon"> {{ path }} </span>
+                        <input type="text" class="form-control" v-model="command" @keyup.enter="execute_command" />
+                        <span class="input-group-btn">
+                            <button @click="execute_command" class="btn btn-primary" type="button"> 执行 </button>
+                        </span>
+                    </div>
+                    <pre>
+                        {{ result }}
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+
+    </div>
+    <script>
+        Vue.filter('filter_format_file_size', function (value) {
+            if (value < 1024) {
+                return value + 'Byte';
+            } else if (value >= 1024) {
+                return (value/1024).toFixed(1) + 'kB';
+            } else {
+                return (value/1024/1024).toFixed(1) + 'MB';
+            }
+        });
+
+        var shell_list = new Vue({
+            el: '#shell',
+            data: {
+                shelllist : [],
+            },
+            created: function() {
+                this.showshells();
+            },
+            methods: {
+                showshells: function () {
+                    var _self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/showshells',
+                        success: function (data) {
+                            _self.shelllist = data["shelllist"];
+                        }
+                    });
+                },
+                delshell: function (index) {
+                    shellinfo = this.shelllist[index];
+                    var _self = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/delshell',
+                        data: {
+                            id: shellinfo.id
+                        },
+                        success: function (index) {
+                            _self.shelllist.splice(index, 1);
+                        }
+                    });
+                },
+                show_fmanager: function (index) {
+                    shellinfo = this.shelllist[index];
+                    document.getElementById('tabfmanager').click();
+                    file_manager.show_file_list(shellinfo);
+                },
+                show_vterm: function (index) {
+                    shellinfo = this.shelllist[index];
+                    document.getElementById('tabvterm').click();
+                    vterm.init_vterm(shellinfo);
+                }
+            }
+        });
+
+        var shell_add = new Vue({
+            el: '#shelladdpost',
+            data: {
+                shelladdurl: '',
+                shelladdpwd: '',
+                addtypename: '',
+                addpluginname: '',
+                addcodingname: '',
+                plugins: [],
+                codings: [],
+            },
+            created: function() {
+                this.get_plugin_list();
+                this.get_coding_list();
+            },
+            methods: {
+                post_add_shell: function () {
+                    var _self = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/addshell',
+                        data: {
+                            url: _self.shelladdurl,
+                            pwd: _self.shelladdpwd,
+                            plugin: _self.addpluginname,
+                            method: _self.addtypename,
+                            coding: _self.addcodingname,
+                        },
+                        success: function (data) {
+                            shell_list.showshells();
+                        }
+                    });
+                },
+                get_plugin_list: function () {
+                // 获取插件列表
+                    var _self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/getpluginlist',
+                        success: function (data) {
+                            _self.plugins = data['plugins'];
+                        }
+                    });
+                },
+                get_coding_list: function () {
+                // 获取支持编码列表
+                    var _self = this;
+                    $.ajax({
+                        type: 'GET',
+                        url: '/getcodinglist',
+                        success: function (data) {
+                            _self.codings = data['coding'];
+                        }
+                    });
+                }
+            }
+        });
+        
+        var file_manager = new Vue({
+            el: '#fmanager',
+            data: {
+                folderPath: '',
+                drivers: [],
+                systemInfo: '',
+                dirs: [],
+                shellinfo: {},
+            },
+            methods: {
+                get_data: function (data) {
+                    if (this.folderPath === '') this.folderPath = data['sysinfo']['current_dir'];
+                    this.drivers = data['sysinfo']['drivers'];
+                    this.systemInfo = data['sysinfo']['system_info'];
+                    this.dirs = data['filelist']['dirs'];
+                },
+                show_file_list: function(shellinfo, path='') {
+                // 展示指定shell的指定文件夹下的文件
+                    this.shellinfo = shellinfo;
+                    var _self = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/getfilelist',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        data: {
+                            shellid: shellinfo['id'],
+                            path: path.replace(/\\/g,'\\\\'),
+                        },
+                        success: function (data) {
+                            _self.get_data(data);
+                        }
+                    });
+                },
+                path_to_folder: function () {
+                // 根据路径显示文件夹下文件
+                    this.show_file_list(this.shellinfo, this.folderPath);
+                },
+                click_to_folder: function (index) {
+                // 点击文件夹跳转到具体文件夹
+                    var filename = this.dirs[index]['name'];
+                    if (filename.indexOf('/') !== -1) {
+                        if (filename === '../')
+                            this.folderPath = get_parent_path(this.folderPath);
+                        else if (filename === './')
+                            this.folderPath = this.folderPath;
+                        else if (this.folderPath.indexOf('/') !== -1)
+                            this.folderPath += '/'+filename.replace('/','');
+                        else if (this.folderPath.indexOf('\\') !== -1)
+                            this.folderPath += '\\'+filename.replace('/','');
+
+                        this.path_to_folder();
+                    }
+                },
+                upload_to_folder: function () {
+                // 往指定文件夹上传文件
+                    document.getElementById('fileinput').click();
+                    var _self = this;
+                    document.getElementById('fileinput').onchange = function () {
+                        var formData = new FormData();
+                        formData.append('file', $('#fileinput')[0].files[0]);
+                        formData.append('path', _self.folderPath);
+                        formData.append('shellid', _self.shellinfo['id']);
+                        $.ajax({
+                            url: '/uploadfile',
+                            type: 'POST',
+                            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                            cache: false,
+                            data: formData,
+                            processData: false,
+                            contentType: false
+                        }).done(function(res) {
+                            alert('上传成功');
+                            _self.path_to_folder();
+                        }).fail(function(res) {
+                            alert('上传失败');
+                        });
+                    }
+                },
+                delfile: function (index) {
+                //删除文件
+                    var filename = this.dirs[index]['name'];
+                    var _self = this;
+                    $.ajax({
+                        url: '/delfile',
+                        type: 'POST',
+                        data: {
+                            shellid : _self.shellinfo['id'],
+                            filename: filename,
+                            path: _self.folderPath,
+                        },
+                        success: function () {
+                            _self.dirs.splice(index, 1);
+                        }
+                    })
+                },
+                createfolder: function (index) {
+
+                }
+            }
+        });
+
+        var vterm = new Vue({
+            el: '#vterm',
+            data: {
+                shell: {},
+                path: '',
+                result: '',
+                command: 'netstat -an',
+            },
+            methods: {
+                init_vterm: function (shell) {
+                    this.shell = shell;
+                    this.execute_command();
+                },
+                execute_command: function () {
+                    var _self = this;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/command',
+                        data: {
+                            shellid: _self.shell['id'],
+                            command: _self.command,
+                            path: _self.path,
+                        },
+                        success: function (data) {
+                            _self.result = data['result'];
+                            _self.path = data['command_dir'];
+                        }
+                    });
+                },
+
+            },
+        });
+
+        // get the path of parent folder
+        var get_parent_path = function (path) {
+            if (path[-1] === '/' || path[-1] === '\\')
+                path = path.slice(0, -1);
+            if (path.indexOf(':\\'))
+                return path.slice(0, path.lastIndexOf('\\'));
+            return path.slice(0, path.lastIndexOf('/'));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+urllib3
+PySocks
+pycrypto
+pyopenssl
+pefile
+prettytable

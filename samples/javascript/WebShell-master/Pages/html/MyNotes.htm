@@ -1,0 +1,160 @@
+﻿{% extends "base.htm" %}
+
+{% block title %}My Notes  {% endblock %}
+{% block content %}
+
+<script type="text/javascript" src="js/jquery-ui/jquery.ui.accordion.js"></script>
+<script type="text/javascript" src="js/jquery-ui/jquery.ui.dialog.js"></script>
+<script type="text/javascript" src="js/jquery-ui/jquery.ui.position.js"></script>
+<script type="text/javascript" src="js/jquery-ui/jquery.effects.core.js"></script>
+<script type="text/javascript" src="js/jquery-ui/jquery.effects.fade.js"></script>
+<script type="text/javascript" src="../../ui/jquery.ui.resizable.js"></script>
+<script language="javascript" src="ckeditor/ckeditor.js" type="text/javascript"></script>
+
+<br></br>
+ <div>
+		<font size="6" style="color:#CC0404" >
+		Web
+		</font>
+		<font size="6" style="color:#004276">
+		Note,
+		</font>
+		<font size="5" style="font-weight:bold">[My Notes]</font>
+ </div>
+ <br></br>
+ <br></br>
+<div id="notes" >
+</div>
+
+<div id="edit-note" title="Edit Note" style="width:100%">
+{% include 'html/NoteForm.htm' %}
+<script type="text/javascript">
+	var editor = CKEDITOR.replace('NoteText');
+	$("#noteForm").css({ width: "100%" });
+</script>
+</div>
+<div id="dialog-confirm" title="Delete note?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These item will be permanently deleted and cannot be recovered. Are you sure?</p>
+</div>
+
+<script type="text/javascript">
+	//Edit note modal dialog
+	$("#edit-note").dialog({
+		autoOpen: false,
+		height: 625,
+		width: 800,
+		show: 'fade',
+		hide: 'fade',
+		modal: true
+	});
+	$.fx.speeds._default = 500;
+	///////////////////////////////////
+//Get Notes
+	var notes = '{{Notes}}';
+	notes = jQuery.parseJSON(notes);
+	$.each(notes.items, function (k, v) {
+		//var link = '<div style="background-color:RGB(240,240,240);"><p style="color:blue;text-decoration:underline">' + v.title + ',  ' + '<a href="#">[Edit]</a></p>';
+		var link = '<h3><a href="#">' + v.title + '</a></h3>';
+		$("#notes").append(link);
+		while (v.content.indexOf("&#34;") > -1) {
+			v.content = v.content.replace('&#34;', '"');
+		}
+		var content = '<div class="btn">' + v.content + '<span id="toolbar" style="padding:0px;">';
+		content += '<button onclick="EditNote(' + v.id + ')" style="font-size:8pt;">Edit</button>';
+		content += '<button onclick="DeleteNote('+v.id +')" style="font-size:8pt;">Delete</button></span></div>';
+		$("#notes").append(content);
+	});
+
+
+$("#notes").accordion();
+//////////////////////////////////////
+
+// Functions
+
+		function EditNote(id) {
+		    var url = '{{AjaxUrlEdit}}';
+			url += '?id=' + id;
+			$('#edit-note').dialog('open');
+			$('#edit-note').dialog({ title:'Loading...'});
+			$.ajax({
+				url: url,
+				dataType: "json",
+				success: function (data) {
+					$("#NoteId").val(data.id);
+					$("#Title").val(data.title);
+					while (data.content.indexOf("&#34;") > -1) {
+						data.content = data.content.replace('&#34;', '"');
+					}
+					CKEDITOR.instances['NoteText'].setData(data.content);
+					$('#edit-note').dialog({ title: data.title });
+				},
+				error: function () {
+					alert('Ajax, data loading error');
+				}
+			});
+		}
+
+		var deleteId;
+		function DeleteNote(id) {
+		    deleteId = id;
+		    $('#dialog-confirm').dialog('open');
+		}
+
+		$("#dialog-confirm").dialog({
+		    autoOpen: false,
+		    resizable: false,
+		    height: 140,
+		    modal: true,
+		    buttons: {
+		        'Delete item': function () {
+		            var data = 'NoteId=' + deleteId;
+		            $.ajax({
+		                type: 'POST',
+		                url: '{{AjaxUrlDelete}}',
+		                data: data,
+		                success: function (data) {
+		                    // refresh page
+		                    //TODO: remove element only
+		                    location.reload(true);
+		                },
+		                error: function () {
+		                    alert('error when delete the item!');
+		                }
+		            });
+		        },
+		        Cancel: function () {
+		            $(this).dialog('close');
+		        }
+		    }
+		});
+
+		$('#btnSubmit1').click(function () {
+
+			$('#Note').val(CKEDITOR.instances['NoteText'].getData());
+
+			$.ajax({
+				type: 'POST',
+				url: '{{AjaxUrlEdit}}',
+				data: $("#AddNoteForm").serialize(),
+				success: function (data) {
+					// refresh page
+					//TODO: refresh element only
+					location.reload(true);
+				},
+				error: function () {
+					alert('error when saving new changes!');
+				}
+			});
+
+			return false;
+		});
+
+		
+
+////////////////////////////////
+</script>
+
+{% endblock %}
+{% block footer %}{% endblock %}
+
+

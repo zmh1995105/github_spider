@@ -1,0 +1,28 @@
+{
+  "name": "vfs-wsh",
+  "description": "Webshell vfs implementation",
+  "tags": [
+    "webshell",
+    "wsh",
+    "vfs"
+  ],
+  "version": "0.1.0",
+  "author": {
+    "name": "Webshell Team",
+    "email": "team@webshell.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:webshell/vfs-wsh.git"
+  },
+  "dependencies": {
+    "wsh": "git://github.com/webshell/webshell-node-sdk.git",
+    "bufferstream": "~0.5.1"
+  },
+  "bugs": "https://github.com/webshell/vfs-wsh/issues",
+  "engines": [
+    "node >= 0.2.0"
+  ],
+  "main": "vfs-wsh.js",
+  "_id": "vfs-wsh@0.1.0"
+}

@@ -1,0 +1,59 @@
+/*
+	OS X - CSS.
+
+	This example is used to demonstrate WebShell.
+*/
+
+body {
+	background: transparent;
+	margin: 0;
+	padding: 0;
+}
+
+.menu {
+	background-color: #f6f6f6;
+	position: fixed;
+	width: 100%;
+	top: 0;
+}
+
+.menu .row {
+	max-height: 45px;
+	height: 40px;
+	overflow: hidden;
+	vertical-align: center;
+}
+
+.menu .row .item {
+	max-width: 33%;
+	width: 30%;
+	display: inline;
+	vertical-align: center;
+}
+
+.left {
+	/*position: absolute;*/
+	float: left;
+    /*left: 0px;*/
+    vertical-align: center;
+}
+
+.center {
+	/*position: absolute;*/
+	float: center;
+	/*right: 50%;*/
+	vertical-align: center;
+}
+
+.right {
+	/*position: absolute;*/
+	float: right;
+    /*right: 0px;*/
+    vertical-align: center;
+}
+
+.content {
+	margin-top: 50px;
+	width: 100%;
+	height: 100%
+}

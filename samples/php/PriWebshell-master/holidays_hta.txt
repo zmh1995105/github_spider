@@ -1,0 +1,1263 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Holidays Calculator</title>
+<HTA:APPLICATION
+	APPLICATIONNAME="Holidays Calculator"
+	ID="Holidays"
+	VERSION="3.12"
+	BORDER="thin"
+	INNERBORDER="no"
+	SCROLL="no"
+	SINGLEINSTANCE="yes"
+	WINDOWSTATE="maximize"/>
+
+<style type="text/css">
+.Group
+{
+	border: 1px solid gray;
+	padding: 12px 25px 12px 25px;
+}
+
+a
+{
+	color: blue;
+}
+
+body
+{
+	color: white;
+	background-color: #00FFFF;
+	font-family: arial, sans-serif;
+	font-size: 12pt;
+	margin: 0;
+	padding: 10px;
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0, StartColorStr='#0080FF', EndColorStr='#00FFFF')"
+}
+
+input.Button
+{
+	width: 10em;
+	height: 2em;
+}
+
+table
+{
+	border: 0 none;
+	width: 90%;
+}
+
+td.Content
+{
+	width: 35%;
+}
+
+td.Control
+{
+	width: 20%;
+	text-align: right;
+}
+
+td.Spacer
+{
+	width: 5%;
+}
+</style>
+
+</head>
+
+<script language="VBScript">
+
+Option Explicit
+
+Dim blnUpdate
+Dim intLocale, intUpdateSize, intVerMsgSize, intWindowHeight, intWindowWidth
+Dim objCaptions, objIE, objSettings
+Dim strArguments, strCmdLine, strScriptName
+
+Const CopyRights = "©"
+
+Const ForAppending = 8
+Const ForReading   = 1
+Const ForWriting   = 2
+
+Const TristateFalse      =  0
+Const TristateMixed      = -2
+Const TristateTrue       = -1
+Const TristateUseDefault = -2
+
+Set objIE = CreateObject( "InternetExplorer.Application" )
+
+blnUpdate       = False
+intLocale       =    0
+intUpdateSize   =    0
+intVerMsgSize   =    0
+intWindowHeight =  680
+intWindowWidth  = 1024
+strScriptName   = Self.location.pathname
+strCmdLine      = Holidays.CommandLine
+If Left( strCmdLine, 1 ) = Chr(34) Then
+	strArguments = Trim( Mid( strCmdLine, Len( strScriptName ) + 3 ) )
+Else
+	strArguments = Trim( Mid( strCmdLine, Len( strScriptName ) + 1 ) )
+End If
+
+
+' Use variables for captions, to allow easy translation
+Set objCaptions = CreateObject( "Scripting.Dictionary" )
+objCaptions.Add "Ascension", "Ascension"
+objCaptions.Add "BlameSomeoneElseDay", "Blame Someone Else Day"
+objCaptions.Add "Christmas", "Christmas"
+objCaptions.Add "ColumbusDay", "Columbus Day"
+objCaptions.Add "Copy", "Copy"
+objCaptions.Add "Copied", "Copied"
+objCaptions.Add "Download", "Download"
+objCaptions.Add "Easter", "Easter"
+objCaptions.Add "GoodFriday", "Good Friday"
+objCaptions.Add "GroundhogDay", "Groundhog Day"
+objCaptions.Add "Halloween", "Halloween"
+objCaptions.Add "HideNotification", "Hide Notification"
+objCaptions.Add "NewYearsDay", "New Year's Day"
+objCaptions.Add "Pentecost", "Pentecost"
+objCaptions.Add "Sint Maarten", "Sint Maarten"
+objCaptions.Add "Sinterklaas", "Sinterklaas"
+objCaptions.Add "StPatricksDay", "Saint Patrick's Day"
+objCaptions.Add "Thanksgiving", "Thanksgiving"
+objCaptions.Add "UpdateNow", "Update Now"
+objCaptions.Add "Year", "Year"
+
+' Use variables for settings, to allow easy customization
+Set objSettings = CreateObject( "Scripting.Dictionary" )
+objSettings.Add "AutoUpdate", 0
+objSettings.Add "Language", ""
+
+
+Function BlameSomeoneElseDay( intYear )
+	' Find the first Friday the 13th of the specified year: that is Blame Someone Else Day
+	Dim blnFound, datDate, i, intWeekDay, strDate
+
+	BlameSomeoneElseDay = "N/A"
+
+	blnFound = False
+
+	For i = 1 To 12
+		strDate = "13 " & MonthName( i ) & " " & intYear
+		datDate = CDate( strDate )
+		intWeekDay = DatePart( "w", datDate, vbSunday )
+		If intWeekDay = 6 Then
+			If blnFound = False Then
+				blnFound = True
+				BlameSomeoneElseDay = CDate( datDate )
+			End If
+		End If
+	Next
+End Function
+
+
+Sub CheckUpdate( )
+	Dim lenLatestVer, strCurrentVer, strLatestver, strQuote, wshShell
+
+	On Error Resume Next
+	
+	' Change mouse pointer to hourglass while checking for update
+	Document.Body.Style.Cursor = "wait"
+
+	strCurrentVer = Left( Holidays.Version, 4 )
+	' Read the latest version info from the web
+	strLatestVer  = WGet( "http://www.robvanderwoude.com/updates/holidays.txt" )
+
+	' Retry once, after clearing the IE cache, if the versions don't match
+	If strCurrentVer <> strLatestver Then
+		' Clear the IE cache
+		Set wshShell = CreateObject( "WScript.Shell" )
+		wshShell.Run "RUNDll32.EXE InetCpl.cpl,ClearMyTracksByProcess 8", 7, True
+		Set wshShell = Nothing
+		' Try again, read the latest version info from the web
+		strLatestver = WGet( "http://www.robvanderwoude.com/updates/holidays.txt" )
+	End If
+
+	lenLatestVer  = Len( strLatestVer )
+	If lenLatestVer = 4 Then
+		If objSettings.Item( "AutoUpdate" ) = 1 Then
+			Update
+		Else
+			If strLatestVer < strCurrentVer Then
+				blnUpdate                    = True
+				UpdateBlock.style.display    = "block"
+				UpdateGroup.style.border     = "1px solid yellow"
+				UpdateNotification.InnerHTML = "You seem to be using a pre-release version (" & Holidays.Version & ") of Holidays.hta. The latest stable release is " & strLatestVer & "."
+			End If
+			If strLatestVer > strCurrentVer Then
+				blnUpdate                    = True
+				UpdateBlock.style.display    = "block"
+				UpdateGroup.style.border     = "1px solid red"
+				UpdateNotification.InnerHTML = "You are using version " & Holidays.Version & " of Holidays.hta. The latest stable release is " & strLatestVer & "."
+			End If
+		End If
+	End If
+
+	' Change mouse pointer back to default
+	Document.Body.Style.Cursor = "default"
+
+	On Error Goto 0
+End Sub
+
+
+Sub Copy2Clipboard( )
+	Dim strCopy
+	strCopy = """" & objCaptions.Item( "Year" ) _
+	        & """,""" & MyYear0.InnerHTML       _
+	        & """,""" & MyYear1.Value           _
+	        & """,""" & MyYear2.InnerHTML       _
+	        & """" & vbCrLf & """"              _
+	        & NewYearsDayName.InnerHTML         _
+	        & """,""" & NewYearsDay0.Value      _
+	        & """,""" & NewYearsDay1.Value      _
+	        & """,""" & NewYearsDay2.Value      _
+	        & """" & vbCrLf & """"              _
+	        & GroundhogDayName.InnerHTML        _
+	        & """,""" & GroundhogDay0.Value     _
+	        & """,""" & GroundhogDay1.Value     _
+	        & """,""" & GroundhogDay2.Value     _
+	        & """" & vbCrLf & """"              _
+	        & BlameSomeoneElseDayName.InnerHTML _
+	        & """,""" & BSED0.Value             _
+	        & """,""" & BSED1.Value             _
+	        & """,""" & BSED2.Value             _
+	        & """" & vbCrLf & """"              _
+	        & EasterName.InnerHTML              _
+	        & """,""" & Easter0.Value           _
+	        & """,""" & Easter1.Value           _
+	        & """,""" & Easter2.Value           _
+	        & """" & vbCrLf & """"              _
+	        & AscensionName.InnerHTML           _
+	        & """,""" & Ascension0.Value        _
+	        & """,""" & Ascension1.Value        _
+	        & """,""" & Ascension2.Value        _
+	        & """" & vbCrLf & """"              _
+	        & PentecostName.InnerHTML           _
+	        & """,""" & Pentecost0.Value        _
+	        & """,""" & Pentecost1.Value        _
+	        & """,""" & Pentecost2.Value        _
+	        & """" & vbCrLf & """"              _
+	        & ColumbusDayName.InnerHTML         _
+	        & """,""" & ColumbusDay0.Value      _
+	        & """,""" & ColumbusDay1.Value      _
+	        & """,""" & ColumbusDay2.Value      _
+	        & """" & vbCrLf & """"              _
+	        & HalloweenName.InnerHTML           _
+	        & """,""" & Halloween0.Value        _
+	        & """,""" & Halloween1.Value        _
+	        & """,""" & Halloween2.Value        _
+	        & """" & vbCrLf & """"              _
+	        & SintMaartenName.InnerHTML         _
+	        & """,""" & SintMaarten0.Value      _
+	        & """,""" & SintMaarten1.Value      _
+	        & """,""" & SintMaarten2.Value      _
+	        & """" & vbCrLf & """"              _
+	        & StPatricksDayName.InnerHTML       _
+	        & """,""" & StPatricksDay0.Value    _
+	        & """,""" & StPatricksDay1.Value    _
+	        & """,""" & StPatricksDay2.Value    _
+	        & """" & vbCrLf & """"              _
+	        & ThanksgivingName.InnerHTML        _
+	        & """,""" & Thanksgiving0.Value     _
+	        & """,""" & Thanksgiving1.Value     _
+	        & """,""" & Thanksgiving2.Value     _
+	        & """" & vbCrLf & """"              _
+	        & SinterklaasName.InnerHTML         _
+	        & """,""" & Sinterklaas0.Value      _
+	        & """,""" & Sinterklaas1.Value      _
+	        & """,""" & Sinterklaas2.Value      _
+	        & """" & vbCrLf & """"              _
+	        & ChristmasName.InnerHTML           _
+	        & """,""" & Christmas0.Value        _
+	        & """,""" & Christmas1.Value        _
+	        & """,""" & Christmas2.Value        _
+	        & """" & vbCrLf
+	Document.ParentWindow.ClipboardData.SetData "text", strCopy
+	If Not Err Then
+		Button_Copy.Value = objCaptions.Item( "Copied" )
+	End If
+End Sub
+
+
+Function Easter( intYear )
+	Dim D, DD, E, ED, EM, G, L, P, PP, PPP, S, X
+
+	' Calculate Easter Day using the instructions found at Simon Kershaw's "KEEPING THE FEAST":
+	' http://www.oremus.org/liturgy/etc/ktf/app/easter.html
+	' Variable names match the ones found at that page.
+
+	G   = ( intYear Mod 19 ) + 1
+	S   = ( ( intYear - 1600 ) \ 100 ) - ( ( intYear - 1600 ) \ 400 )
+	L   = ( ( ( intYear - 1400 ) \ 100 ) * 8 ) \ 25
+	PP  = ( 30003 - 11 * G + S - L ) Mod 30
+	Select Case PP
+		Case 28
+			If G > 11 Then P = 27
+		Case 29
+			P = 28
+		Case Else
+			P = PP
+	End Select
+	D   = ( intYear + ( intYear \ 4 ) - ( intYear \ 100 ) + ( intYear \ 400 )) Mod 7
+	DD  = ( 8 - D ) Mod 7
+	PPP = ( 70003 + P ) Mod 7
+	X   = (( 70004 - D - P ) Mod 7 ) + 1
+	E   = P + X
+	If E < 11 Then
+		ED = E + 21
+		EM = MonthName( 3 )
+	Else
+		ED = E - 10
+		EM = MonthName( 4 )
+	End If
+	' Return the result
+	Easter = CDate( ED & " " & EM & " " & intYear )
+End Function
+
+
+Sub HandleYearChange()
+	Dim datBSED0, datBSED1, datBSED2, datEaster0, datEaster1, datEaster2, datThanks0, datThanks1, datThanks2, intThanks0, intThanks1, intThanks2, strThanks0, strThanks1, strThanks2
+
+	MyYear0.InnerHTML   = MyYear1.Value - 1
+	MyYear2.InnerHTML   = MyYear1.Value + 1
+
+	NewYearsDay0.Value  = FormatDateTime( "1 " & MonthName( 1 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	NewYearsDay1.Value  = FormatDateTime( "1 " & MonthName( 1 ) & " " & MyYear1.Value,     vbLongDate )
+	NewYearsDay2.Value  = FormatDateTime( "1 " & MonthName( 1 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	GroundhogDay0.Value = FormatDateTime( "2 " & MonthName( 2 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	GroundhogDay1.Value = FormatDateTime( "2 " & MonthName( 2 ) & " " & MyYear1.Value,     vbLongDate )
+	GroundhogDay2.Value = FormatDateTime( "2 " & MonthName( 2 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	StPatricksDay0.Value = FormatDateTime( "17 " & MonthName( 3 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	StPatricksDay1.Value = FormatDateTime( "17 " & MonthName( 3 ) & " " & MyYear1.Value,     vbLongDate )
+	StPatricksDay2.Value = FormatDateTime( "17 " & MonthName( 3 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	datEaster0             = Easter( MyYear0.InnerHTML )
+	datEaster1             = Easter( MyYear1.Value     )
+	datEaster2             = Easter( MyYear2.InnerHTML )
+
+	GoodFriday0.Value      = FormatDateTime( DateAdd( "d", -2, datEaster0 ), vbLongDate )
+	GoodFriday1.Value      = FormatDateTime( DateAdd( "d", -2, datEaster1 ), vbLongDate )
+	GoodFriday2.Value      = FormatDateTime( DateAdd( "d", -2, datEaster2 ), vbLongDate )
+
+	Easter0.Value          = FormatDateTime( datEaster0, vbLongDate )
+	Easter1.Value          = FormatDateTime( datEaster1, vbLongDate )
+	Easter2.Value          = FormatDateTime( datEaster2, vbLongDate )
+
+	Ascension0.Value       = FormatDateTime( DateAdd( "d", 39, datEaster0 ), vbLongDate )
+	Ascension1.Value       = FormatDateTime( DateAdd( "d", 39, datEaster1 ), vbLongDate )
+	Ascension2.Value       = FormatDateTime( DateAdd( "d", 39, datEaster2 ), vbLongDate )
+
+	Pentecost0.Value       = FormatDateTime( DateAdd( "d", 49, datEaster0 ), vbLongDate )
+	Pentecost1.Value       = FormatDateTime( DateAdd( "d", 49, datEaster1 ), vbLongDate )
+	Pentecost2.Value       = FormatDateTime( DateAdd( "d", 49, datEaster2 ), vbLongDate )
+
+	datBSED0               = BlameSomeoneElseDay( MyYear0.InnerHTML )
+	datBSED1               = BlameSomeoneElseDay( MyYear1.Value     )
+	datBSED2               = BlameSomeoneElseDay( MyYear2.InnerHTML )
+
+	BSED0.Value            = FormatDateTime( datBSED0, vbLongDate )
+	BSED1.Value            = FormatDateTime( datBSED1, vbLongDate )
+	BSED2.Value            = FormatDateTime( datBSED2, vbLongDate )
+
+	' Canada: second Monday of October
+	intThanks0             = 16 - Weekday( CDate( CStr( MyYear1.Value - 1 ) & "-10-01" ), vbMonday )
+	intThanks1             = 16 - Weekday( CDate( CStr( MyYear1.Value     ) & "-10-01" ), vbMonday )
+	intThanks2             = 16 - Weekday( CDate( CStr( MyYear1.Value + 1 ) & "-10-01" ), vbMonday )
+
+	If intThanks0 > 14 Then intThanks0 = intThanks0 - 7
+	If intThanks1 > 14 Then intThanks1 = intThanks1 - 7
+	If intThanks2 > 14 Then intThanks2 = intThanks2 - 7
+
+	datThanks0             = CDate( CStr( MyYear1.Value - 1 ) & "-10-" & CStr( intThanks0 ) )
+	datThanks1             = CDate( CStr( MyYear1.Value     ) & "-10-" & CStr( intThanks1 ) )
+	datThanks2             = CDate( CStr( MyYear1.Value + 1 ) & "-10-" & CStr( intThanks2 ) )
+
+	ColumbusDay0.Value     = FormatDateTime( datThanks0, vbLongDate )
+	ColumbusDay1.Value     = FormatDateTime( datThanks1, vbLongDate )
+	ColumbusDay2.Value     = FormatDateTime( datThanks2, vbLongDate )
+
+	Halloween0.Value       = FormatDateTime( "31 " & MonthName( 10 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	Halloween1.Value       = FormatDateTime( "31 " & MonthName( 10 ) & " " & MyYear1.Value,     vbLongDate )
+	Halloween2.Value       = FormatDateTime( "31 " & MonthName( 10 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	SintMaarten0.Value     = FormatDateTime( "11 " & MonthName( 11 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	SintMaarten1.Value     = FormatDateTime( "11 " & MonthName( 11 ) & " " & MyYear1.Value,     vbLongDate )
+	SintMaarten2.Value     = FormatDateTime( "11 " & MonthName( 11 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	' USA: fourth Thursday of November
+	intThanks0             = 30 - Weekday( CDate( CStr( MyYear1.Value - 1 ) & "-11-01" ), vbThursday )
+	intThanks1             = 30 - Weekday( CDate( CStr( MyYear1.Value     ) & "-11-01" ), vbThursday )
+	intThanks2             = 30 - Weekday( CDate( CStr( MyYear1.Value + 1 ) & "-11-01" ), vbThursday )
+
+	If intThanks0 > 28 Then intThanks0 = intThanks0 - 7
+	If intThanks1 > 28 Then intThanks1 = intThanks1 - 7
+	If intThanks2 > 28 Then intThanks2 = intThanks2 - 7
+
+	datThanks0             = CDate( CStr( MyYear1.Value - 1 ) & "-11-" & CStr( intThanks0 ) )
+	datThanks1             = CDate( CStr( MyYear1.Value     ) & "-11-" & CStr( intThanks1 ) )
+	datThanks2             = CDate( CStr( MyYear1.Value + 1 ) & "-11-" & CStr( intThanks2 ) )
+
+	Thanksgiving0.Value    = FormatDateTime( datThanks0, vbLongDate )
+	Thanksgiving1.Value    = FormatDateTime( datThanks1, vbLongDate )
+	Thanksgiving2.Value    = FormatDateTime( datThanks2, vbLongDate )
+
+	Sinterklaas0.Value     = FormatDateTime( "5 " & MonthName( 12 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	Sinterklaas1.Value     = FormatDateTime( "5 " & MonthName( 12 ) & " " & MyYear1.Value,     vbLongDate )
+	Sinterklaas2.Value     = FormatDateTime( "5 " & MonthName( 12 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	Christmas0.Value       = FormatDateTime( "25 " & MonthName( 12 ) & " " & MyYear0.InnerHTML, vbLongDate )
+	Christmas1.Value       = FormatDateTime( "25 " & MonthName( 12 ) & " " & MyYear1.Value,     vbLongDate )
+	Christmas2.Value       = FormatDateTime( "25 " & MonthName( 12 ) & " " & MyYear2.InnerHTML, vbLongDate )
+
+	Button_Copy.Value      = objCaptions.Item( "Copy" )
+End Sub
+
+
+Sub HelpMsg( )
+	Dim strHTML
+	strHTML = "<p><strong>Holidays Calculator,  Version " & Holidays.Version & "</strong>\n" _
+	        & "This program calculates the dates of several western holidays.\n\n" _
+	        & "<strong>Usage</strong>\n\n" _
+	        & "The only interaction required is the choice of the year(s) to display.\n" _
+	        & "The program will then display the dates for a selection of holidays for the year before, the selected year, and the year after that.\n\n" _
+	        & "Click <input type=""button"" style=""width: 10em; height: 2em; vertical-align: middle"" value=""" & objCaptions.Item( "Copy" ) & """> to copy the results to the clipboard (comma delimited).\n\n" _
+	        & "<strong>Program Updates</strong>\n\n" _
+	        & "This program automatically checks for updates.\n" _
+	        & "If an update is available, a notification area will pop up at the top of the window.\n" _
+	        & "Click <input type=""button"" style=""width: 10em; height: 2em; vertical-align: middle"" value=""" & objCaptions.Item( "Download" ) & """> to navigate to the program's download page.\n" _
+	        & "Click <input type=""button"" style=""width: 10em; height: 2em; vertical-align: middle"" value=""" & objCaptions.Item( "UpdateNow" ) & """> to update the program ""on-the-fly"" (after a prompt for confirmation).\n" _
+	        & "A backup of the current file will be made before the update, allowing a roll-back if necessary.\n" _
+	        & "If AutoUpdate is enabled, the program is updated ""on-the-fly"" without <em>any</em> notification (see the chapter ""Customization"" for more details).\n\n" _
+	        & "Click <input type=""button"" style=""width: 10em; height: 2em; vertical-align: middle"" value=""" & objCaptions.Item( "HideNotification" )& """> to move the notification out of sight.\n" _
+	        & "Unless you update the program, the notification will reappear next time the program is started.\n\n" _
+	        & "<strong id=""Customization"">Customization</strong>\n\n" _
+	        & "You may use a configuration file named Holidays.cfg, to customize the window size, default input and output languages and number of simultaneous translations.\n" _
+	        & "Holidays.cfg is an ANSI encoded (or ""ASCII"") plain text file, located in Holidays.hta's parent folder.\n" _
+	        & "Examine the default settings shown below to find out what you can customize and how:</p>"
+	strHTML = Replace( strHTML, "\n\n", "</p>" & vbCrLf & vbCrLf & "<p>" )
+	strHTML = Replace( strHTML, "\n", "<br>" & vbCrLf ) _
+	        & "<pre>AutoUpdate=0\n" _
+	        & "Language=en\n</pre>\n"
+	strHTML = Replace( strHTML, "\n", vbCrLf ) _
+	        & "<strong>Note:</strong> <code>AutoUpdate=1</code> will update the HTA to the latest version without <em>any</em> user interaction.\n\n" _
+	        & "Besides the program settings, you can also customize (translate) the captions (holiday names) and button labels.\n" _
+	        & "This requires an ANSI encoded (or ""ASCII"") plain text file named Holidays.<em>lang</em>, located in Holidays.hta's parent folder, where <em>lang</em> is the language code specified by <code>ConfigLanguage</code> in Holidays.cfg (e.g. <code>en</code>).\n" _
+	        & "Unicode or extended ASCII characters in all text except button labels must be escaped (e.g. <code>&amp;Uuml;</code> for <code>&Uuml;</code>).\n" _
+	        & "You may have to experiment with code page settings when using extended ASCII characters in translated <em>button</em> labels.\n\n" _
+	        & "The values at the right of the equal sign are the text as displayed in the program window.\n" _
+	        & "You can translate the captions and labels, or modify them in any way you like.\n" _
+	        & "Examine Holidays.en, shown below, to figure out what you can customize and how:</p>"
+	strHTML = Replace( strHTML, "\n\n", "</p>" & vbCrLf & vbCrLf & "<p>" )
+	strHTML = Replace( strHTML, "\n", "<br>" & vbCrLf ) _
+	        & "<pre>Ascension=Ascension\n" _
+	        & "BlameSomeoneElseDay=Blame Someone Else Day\n" _
+	        & "Christmas=Christmas\n" _
+	        & "ColumbusDay=Columbus Day\n" _
+	        & "Copy=Copy\n" _
+	        & "Copied=Copied\n" _
+	        & "Download=Download\n" _
+	        & "Easter=Easter\n" _
+	        & "GoodFriday=Good Friday\n" _
+	        & "GroundhogDay=Groundhog Day\n" _
+	        & "Halloween=Halloween\n" _
+	        & "HideNotification=Hide Notification\n" _
+	        & "NewYearsDay=New Year's Day\n" _
+	        & "Pentecost=Pentecost\n" _
+	        & "Sinterklaas=Sinterklaas\n" _
+	        & "SintMaarten=Sint Maarten\n" _
+	        & "StPatricksDay=Saint Patrick's Day\n" _
+	        & "Thanksgiving=Thanksgiving\n" _
+	        & "UpdateNow=Update Now\n" _
+	        & "Year=Year</pre>\n"
+	strHTML = Replace( strHTML, "\n", vbCrLf ) _
+	        & "<strong>Note:</strong> All <em>values</em> (except <code>Copy</code> and <code>Copied</code>, which are <em>button</em> labels) must be HTML escaped, e.g. <code>Year=A&amp;ntilde;o</code> instead of <code>Year=A&ntilde;o</code>.\n\n" _
+	        & "Change one setting at a time and examine the effect.\n" _
+	        & "If the result is a complete mess, just delete Holidays.cfg (and optionally Holidays.<em>lang</em>) to restore the default settings.\n\n" _
+	        & "If you like this program, why not show your appreciation by making a donation?\n" _
+	        & "Click <input type=""button"" style=""width: 10em; height: 2em; vertical-align: middle"" value=""Donate"" onclick=""window.open('http://www.robvanderwoude.com/donate.php')""> or navigate to <a href=""http://www.robvanderwoude.com/donate.php"">http://www.robvanderwoude.com/donate.php</a>\n\n" _
+	        & "&copy; Rob van der Woude 2006 - 2013\n" _
+	        & "<a href=""http://www.robvanderwoude.com/holidays.php"">http://www.robvanderwoude.com/holidays.php</a></p>"
+	strHTML = Replace( strHTML, "\n\n", "</p>" & vbCrLf & vbCrLf & "<p>" )
+	strHTML = Replace( strHTML, "\n", "<br>" & vbCrLf )
+
+	On Error Resume Next
+	objIE.Navigate "about:blank"
+	If Err Then
+		Set objIE = CreateObject( "InternetExplorer.Application" )
+		objIE.Navigate "about:blank"
+	End If
+	On Error Goto 0
+	objIE.Width  = intWindowWidth
+	objIE.Height = intWindowHeight + intUpdateSize
+	objIE.Left   = Int( ( window.screen.width  - objIE.Width  ) / 2 ) + 30
+	objIE.Top    = Int( ( window.screen.height - objIE.Height ) / 2 ) + 30
+	objIE.StatusBar  = False
+	objIE.AddressBar = False
+	objIE.MenuBar    = False
+	objIE.ToolBar    = False
+	objIE.Document.Title = "Help for Holidays " & Holidays.Version & ", ® Rob van der Woude 2011"
+	objIE.Document.Body.style.fontFamily = "arial,sans-serif"
+	objIE.Document.Body.InnerHTML = strHTML
+	objIE.Visible = 1
+End Sub
+
+
+Sub LoadConfig( )
+	Dim blnError
+	Dim i
+	Dim objCaptionsFile, objFSO, objNewOption, objSettingsFile
+	Dim strBaseName, strCaptionsFile, strKey, strLine, strSettingsFile, strValue
+
+	blnError = False
+
+	' Find the full path of this HTA
+	strBaseName = Left( Self.location.pathname, Len( Self.location.pathname ) - 4 )
+
+	' Check if it is accompanied by a config file
+	strSettingsFile = strBaseName & ".cfg"
+	Set objFSO = CreateObject( "Scripting.FileSystemObject" )
+	With objFSO
+		If .FileExists( strSettingsFile ) Then
+			Set objSettingsFile = .OpenTextFile( strSettingsFile, ForReading, TristateFalse )
+			While Not objSettingsFile.AtEndOfStream
+				strLine = objSettingsFile.ReadLine( )
+				strKey   = Trim( Left( strLine, InStr( strLine, "=" ) - 1 ) )
+				strValue = Trim( Mid( strLine, InStr( strLine, "=" ) + 1 ) )
+				Select Case strKey
+					Case "AutoUpdate", "Language"
+						objSettings.Item( strKey ) = strValue
+					Case Else
+						If Left( strKey, 1 ) <> ";" Then blnError = True
+				End Select
+			Wend
+			objSettingsFile.Close
+			Set objSettingsFile = Nothing
+
+			If Not blnError Then
+				If objSettings.Item( "Language" ) <> "" Then
+					strCaptionsFile = strBaseName & "." & objSettings.Item( "Language" )
+					If .FileExists( strCaptionsFile ) Then
+						Set objCaptionsFile = .OpenTextFile( strCaptionsFile, ForReading, TristateFalse )
+						While Not objCaptionsFile.AtEndOfStream
+							strLine = objCaptionsFile.ReadLine( )
+							strKey = Trim( Left( strLine, InStr( strLine, "=" ) - 1 ) )
+							strValue = Trim( Mid( strLine, InStr( strLine, "=" ) + 1 ) )
+							Select Case strKey
+								Case "Ascension", "BlameSomeoneElseDay", "Christmas", "ColumbusDay", "Copy", "Copied", "Download", "Easter", "GoodFriday", "GroundhogDay", "Halloween", "HideNotification", "NewYearsDay", "Pentecost", "SintMaarten", "Sinterklaas", "Thanksgiving", "UpdateNow", "Year"
+									objCaptions.Item( strKey ) = strValue
+								Case Else
+									If Left( strKey, 1 ) <> ";" Then blnError = True
+							End Select
+						Wend
+						objCaptionsFile.Close
+						Set objCaptionsFile = Nothing
+					End If
+				End If
+			End If
+		End If
+	End With
+	Set objFSO = Nothing
+End Sub
+
+
+Sub Locale( )
+	' Translate holiday names based on current locale,
+	' as returned by the GetLocale( ) function:
+	'
+	' Afrikaans                                1078
+	' Albanian                                 1052
+	' Arabic - Algeria                         5121
+	' Arabic - Bahrain                        15361
+	' Arabic - Egypt                           3073
+	' Arabic - Iraq                            2049
+	' Arabic - Jordan                         11265
+	' Arabic - Kuwait                         13313
+	' Arabic - Lebanon                        12289
+	' Arabic - Libya                           4097
+	' Arabic - Morocco                         6145
+	' Arabic - Oman                            8193
+	' Arabic - Qatar                          16385
+	' Arabic - Saudi Arabia                    1025
+	' Arabic - Syria                          10241
+	' Arabic - Tunisia                         7169
+	' Arabic - United Arab Emirates           14337
+	' Arabic - Yemen                           9217
+	' Armenian                                 1067
+	' Azeri - Cyrillic                         2092
+	' Azeri - Latin                            1068
+	' Basque                                   1069
+	' Belarusian                               1059
+	' Bulgarian                                1026
+	' Catalan                                  1027
+	' Chinese - China                          2052
+	' Chinese - Hong Kong S.A.R.               3076
+	' Chinese - Macau S.A.R.                   5124
+	' Chinese - Singapore                      4100
+	' Chinese - Taiwan                         1028
+	' Croatian                                 1050
+	' Czech                                    1029
+	' Danish                                   1030
+	' Dutch - Belgium                          2067
+	' Dutch - The Netherlands                  1043
+	' English - Australia                      3081
+	' English - Belize                        10249
+	' English - Canada                         4105
+	' English - Carribbean                     9225
+	' English - Ireland                        6153
+	' English - Jamaica                        8201
+	' English - New Zealand                    5129
+	' English - Phillippines                  13321
+	' English - South Africa                   7177
+	' English - Trinidad                      11273
+	' English - United Kingdom                 2057
+	' English - United States                  1033
+	' Estonian                                 1061
+	' Faroese                                  1080
+	' Farsi                                    1065
+	' Finnish                                  1035
+	' French - Belgium                         2060
+	' French - Canada                          3084
+	' French - France                          1036
+	' French - Luxembourg                      5132
+	' French - Switzerland                     4108
+	' Macedonian                               1071
+	' Gaelic - Ireland                         2108
+	' Gaelic - Scotland                        1084
+	' German - Austria                         3079
+	' German - Germany                         1031
+	' German - Liechtenstein                   5127
+	' German - Luxembourg                      4103
+	' German - Switzerland                     2055
+	' Greek                                    1032
+	' Hebrew                                   1037
+	' Hindi                                    1081
+	' Hungarian                                1038
+	' Icelandic                                1039
+	' Indonesian                               1057
+	' Italian - Italy                          1040
+	' Italian - Switzerland                    2064
+	' Japanese                                 1041
+	' Korean                                   1042
+	' Latvian                                  1062
+	' Lithuanian                               1063
+	' Malay - Brunei                           2110
+	' Malay - Malaysia                         1086
+	' Maltese                                  1082
+	' Marathi                                  1102
+	' Norwegian - Bokmål                       1044
+	' Norwegian - Nynorsk                      2068
+	' Polish                                   1045
+	' Portuguese - Brazil                      1046
+	' Portuguese - Portugal                    2070
+	' Raeto-Romance                            1047
+	' Romanian - Moldova                       2072
+	' Romanian - Romania                       1048
+	' Russian - Moldova                        2073
+	' Russian                                  1049
+	' Sanskrit                                 1103
+	' Serbian - Cyrillic                       3098
+	' Serbian - Latin                          2074
+	' Setsuana                                 1074
+	' Slovak                                   1051
+	' Slovenian                                1060
+	' Sorbian                                  1070
+	' Spanish - Argentina                     11274
+	' Spanish - Bolivia                       16394
+	' Spanish - Chile                         13322
+	' Spanish - Colombia                       9226
+	' Spanish - Costa Rica                     5130
+	' Spanish - Dominican Republic             7178
+	' Spanish - Ecuador                       12298
+	' Spanish - El Salvador                   17418
+	' Spanish - Guatemala                      4106
+	' Spanish - Honduras                      18442
+	' Spanish - Mexico                         2058
+	' Spanish - Nicaragua                     19466
+	' Spanish - Panama                         6154
+	' Spanish - Paraguay                      15370
+	' Spanish - Peru                          10250
+	' Spanish - Puerto Rico                   20490
+	' Spanish - Spain                          1034
+	' Spanish - Uruguay                       14346
+	' Spanish - Venezuela                      8202
+	' Sutu                                     1072
+	' Swahili                                  1089
+	' Swedish - Finland                        2077
+	' Swedish - Sweden                         1053
+	' Tamil                                    1097
+	' Tatar                                    1092
+	' Thai                                     1054
+	' Tsonga                                   1073
+	' Turkish                                  1055
+	' Ukrainian                                1058
+	' Urdu                                     1056
+	' Uzbek - Cyrillic                         2115
+	' Uzbek - Latin                            1091
+	' Vietnamese                               1066
+	' Xhosa                                    1076
+	' Yiddish                                  1085
+	' Zulu                                     1077
+
+	If intLocale = 0 Then intLocale = GetLocale( )
+	Select Case intLocale
+		Case 1031, 2055, 3079, 4103, 5127 ' German (Germany, Switzerland, Austria, Luxembourg, Liechtenstein)
+			objCaptions.Item( "Copy" )        = "Kopieren"
+			objCaptions.Item( "Copied" )      = "Kopiert"
+			objCaptions.Item( "Year" )        = "Jahr"
+			objCaptions.Item( "NewYearsDay" ) = "Neujahrstag"
+			objCaptions.Item( "GoodFriday" )  = "Karfreitag"
+			objCaptions.Item( "Easter" )      = "Ostern"
+			objCaptions.Item( "Ascension" )   = "Himmelfahrt"
+			objCaptions.Item( "Pentecost" )   = "Pfingsten"
+			objCaptions.Item( "Christmas" )   = "Weihnachten"
+			objCaptions.Item( "Halloween" )   = "Reformationstag (DE), Halloween"
+			objCaptions.Item( "Sinterklaas" ) = "Nikolaus"
+			objCaptions.Item( "SintMaarten" ) = "Sankt Martin"
+		Case 1036, 2060, 3084, 4108, 5132 ' French (France, Belgium, Canada, Switzerland, Luxembourg)
+			objCaptions.Item( "Copy" )        = "Copier"
+			objCaptions.Item( "Copied" )      = "Copié"
+			objCaptions.Item( "Year" )        = "Ann&eacute;e"
+			objCaptions.Item( "NewYearsDay" ) = "Jour de l'an"
+			objCaptions.Item( "GoodFriday" )  = "Vendredi Saint"
+			objCaptions.Item( "Easter" )      = "P&acirc;ques"
+			objCaptions.Item( "Ascension" )   = "Ascension"
+			objCaptions.Item( "Pentecost" )   = "Pentec&ocirc;te"
+			objCaptions.Item( "Christmas" )   = "No&euml;l"
+		Case 1040, 2046 ' Italian
+			objCaptions.Item( "Copy" )        = "Copiare"
+			objCaptions.Item( "Copied" )      = "Copiati"
+			objCaptions.Item( "Year" )        = "Anno"
+			objCaptions.Item( "NewYearsDay" ) = "Capodanno"
+			objCaptions.Item( "GoodFriday" )  = "Venerd&igrave; Santo"
+			objCaptions.Item( "Easter" )      = "Pasqua"
+			objCaptions.Item( "Ascension" )   = "Ascensione"
+			objCaptions.Item( "Pentecost" )   = "Pentecoste"
+			objCaptions.Item( "Christmas" )   = "Natale"
+		Case 1043, 2067 ' Dutch (Netherlands, Belgium)
+			objCaptions.Item( "Copy" )        = "Kopiëren"
+			objCaptions.Item( "Copied" )      = "Gekopieerd"
+			objCaptions.Item( "Year" )        = "Jaar"
+			objCaptions.Item( "NewYearsDay" ) = "Nieuwjaarsdag"
+			objCaptions.Item( "GoodFriday" )  = "Goede Vrijdag"
+			objCaptions.Item( "Easter" )      = "Pasen"
+			objCaptions.Item( "Ascension" )   = "Hemelvaart"
+			objCaptions.Item( "Pentecost" )   = "Pinksteren"
+			objCaptions.Item( "Sinterklaas" ) = "Sinterklaas"
+			objCaptions.Item( "SintMaarten" ) = "Sint Maarten"
+			objCaptions.Item( "Christmas" )   = "Kerst"
+		Case 1046, 2070 ' Portuguese
+			objCaptions.Item( "Copy" )        = "Copiar"
+			objCaptions.Item( "Copied" )      = "Copiado"
+			objCaptions.Item( "Year" )        = "Ano"
+			objCaptions.Item( "NewYearsDay" ) = "Ano Novo"
+			objCaptions.Item( "GoodFriday" )  = "Sexta-feira da Paix&atilde;o"
+			objCaptions.Item( "Easter" )      = "P&aacute;scoa"
+			objCaptions.Item( "Ascension" )   = "Dia da Ascens&atilde;o "
+			objCaptions.Item( "Pentecost" )   = "Pentecostes"
+			objCaptions.Item( "Christmas" )   = "Natal"
+		Case 1034, 2058, 4106, 5130, 6154, 7178, 8202, 9226, 10250, 11274, 12298, 13322, 14346, 15370, 16394, 17418, 18442, 19466, 20490 ' Spanish
+			objCaptions.Item( "Copy" )        = "Copiar"
+			objCaptions.Item( "Copied" )      = "Copiado"
+			objCaptions.Item( "Year" )        = "A&ntilde;o"
+			objCaptions.Item( "NewYearsDay" ) = "A&ntilde;o Nuevo"
+			objCaptions.Item( "GoodFriday" )  = "Viernes Santo"
+			objCaptions.Item( "Easter" )      = "Domingo de Resurrecci&oacute;n"
+			objCaptions.Item( "Ascension" )   = "Ascensi&oacute;n"
+			objCaptions.Item( "Pentecost" )   = "Pentecost&eacute;s"
+			objCaptions.Item( "Christmas" )   = "Navidad"
+		Case Else ' Default: English
+			objCaptions.Item( "Copy" )        = "Copy"
+			objCaptions.Item( "Copied" )      = "Copied"
+			objCaptions.Item( "Year" )        = "Year"
+			objCaptions.Item( "NewYearsDay" ) = "New Year's Day"
+			objCaptions.Item( "GoodFriday" )  = "Good Friday"
+			objCaptions.Item( "Easter" )      = "Easter"
+			objCaptions.Item( "Ascension" )   = "Ascension"
+			objCaptions.Item( "Pentecost" )   = "Pentecost"
+			objCaptions.Item( "Christmas" )   = "Christmas"
+	End Select
+
+	' If config and translations files exist, the values from the translation file will prevail
+	LoadConfig
+
+	Button_Copy.Value                   = objCaptions.Item( "Copy" )
+	Button_Download.Value               = objCaptions.Item( "Download" )
+	Button_HideUpdateNotification.Value = objCaptions.Item( "HideNotification" )
+	Button_Update.Value                 = objCaptions.Item( "UpdateNow" )
+	AscensionName.InnerHTML             = objCaptions.Item( "Ascension" )
+	BlameSomeoneElseDayName.InnerHTML   = objCaptions.Item( "BlameSomeoneElseDay" )
+	ChristmasName.InnerHTML             = objCaptions.Item( "Christmas" )
+	ColumbusDayName.InnerHTML           = objCaptions.Item( "ColumbusDay" ) & " (USA)<br>" & objCaptions.Item( "Thanksgiving" ) & " (CAN)"
+	EasterName.InnerHTML                = objCaptions.Item( "Easter" )
+	GoodFridayName.InnerHTML            = objCaptions.Item( "GoodFriday" )
+	GroundhogDayName.InnerHTML          = objCaptions.Item( "GroundhogDay" )
+	HalloweenName.InnerHTML             = objCaptions.Item( "Halloween" )
+	NewYearsDayName.InnerHTML           = objCaptions.Item( "NewYearsDay" )
+	PentecostName.InnerHTML             = objCaptions.Item( "Pentecost" )
+	SinterklaasName.InnerHTML           = objCaptions.Item( "Sinterklaas" )
+	SintMaartenName.InnerHTML           = objCaptions.Item( "SintMaarten" )
+	StPatricksDayName.InnerHTML         = objCaptions.Item( "StPatricksDay" )
+	ThanksgivingName.InnerHTML          = objCaptions.Item( "Thanksgiving" )
+End Sub
+
+
+Sub RestoreWindowSize( )
+	If blnUpdate Then
+		intUpdateSize = 200
+	Else
+		intUpdateSize = 0
+	End If
+	' Disabled error handling to prevent an error message but no error when the window is resized by doubleclicking the title bar
+	On Error Resume Next
+	WindowSize intWindowWidth, intWindowHeight + intUpdateSize
+	On Error Goto 0
+End Sub
+
+
+Sub Sleep( seconds )
+	Dim wshShell, strCmd
+	On Error Resume Next
+	Set wshShell = CreateObject( "Wscript.Shell" )
+	strCmd = "%COMSPEC% /C (PING -n " & seconds & " 127.0.0.1 >NUL 2>&1 || PING -n " & seconds & " ::1 >NUL 2>&1)"
+	wshShell.Run strCmd, 0, 1
+	Set wshShell = Nothing
+	On Error Goto 0
+End Sub
+
+
+Sub Update( )
+	Dim blnAccess, blnCreate, blnOverwrite
+	Dim objFSO, objHTAFile, objShell
+	Dim strHTAFile
+
+	blnCreate = True
+	blnOverwrite = True
+	strHTAFile = Self.location.pathname
+	Set objFSO   = CreateObject( "Scripting.FileSystemObject" )
+	On Error Resume Next
+	With objFSO
+		Set objHTAFile = .GetFile( strHTAFile )
+		objHTAFile.Copy Left( strHTAFile, Len( strHTAFile ) - 4 ) & ".bak." & CStr( 10000 * Year( Now ) + 100 * Month( Now ) + Day( Now ) ) & CStr( 10000 * Hour( Now ) + 100 * Minute( Now ) + Second( Now ) ), blnOverwrite
+		If Err Then
+			blnAccess = False
+		Else
+			blnAccess = True
+		End If
+		Set objHTAFile = Nothing
+		WGetSource
+		Self.location.reload( True )
+	End With
+	On Error Goto 0
+	Set objFSO   = Nothing
+	' If we could not access the HTA to update it, we will retry with elevated privileges
+	If Not blnAccess Then
+		If InStr( Holidays.CommandLine, " /Update" ) Then
+			MsgBox "Update failed, no access."
+		Else
+			If OSVersion > 599 Then
+				Set objShell = CreateObject( "Shell.Application" )
+				objShell.ShellExecute Holidays.CommandLine & " /Update", "", "runas", 1
+				Set objShell = Nothing
+			Else
+				MsgBox "Update failed, no access."
+			End If
+		End If
+	End If
+End Sub
+
+
+' Read the entire web page
+Function WGet( myURL )
+	Dim objHTTP
+	WGet = "--Not Found: " & myURL & "--"
+	Set objHTTP = CreateObject( "WinHttp.WinHttpRequest.5.1" )
+	objHTTP.Open "GET", myURL
+	objHTTP.Send
+	If objHTTP.Status = 200 Then
+		WGet = objHTTP.ResponseText
+	Else
+		WGet = "--Not found (" & objHTTP.Status & ") " & myURL & "--"
+	End If
+	Set objHTTP = Nothing
+End Function
+
+
+' Read the HTA source code from the web page and overwrite this HTA itself
+Sub WGetSource(  )
+	Dim objADODB, objFSO, objIE, objRE, objSelf
+	Dim strHTA, strNewText, strText, strURL
+
+	Const adTypeBinary          = 1
+	Const adTypeText            = 2
+	Const adSaveCreateNotExist  = 1
+	Const adSaveCreateOverWrite = 2
+	
+	strURL = "http://www.robvanderwoude.com/holidays_hta_src.php"
+	strHTA = Self.location.pathname
+
+	Set objADODB = CreateObject( "ADODB.Stream" )
+	Set objFSO   = CreateObject( "Scripting.FileSystemObject" )
+	Set objIE    = CreateObject( "InternetExplorer.Application" )
+	Set objRE    = New RegExp
+
+	With objIE
+		.Navigate strURL
+		.Visible = False
+		Do While .Busy
+			Sleep 1
+		Loop
+		strText = .Document.Body.InnerText
+		Do While .Busy
+			Sleep 1
+		Loop
+		.Quit
+	End With
+
+	' Trim only HTA source code from the web page
+	objRE.Global = True
+	objRE.IgnoreCase = False
+	' The patterns for the HTML begin and end tags must be "masked" to prevent them from replacing themselves
+	objRE.Pattern = "^.*<ht" & "ml>"
+	strText = objRE.Replace( strText, "<ht" & "ml>" )
+	objRE.Pattern = "</ht" & "ml>(.|[\n\r.])*"
+	strText = objRE.Replace( strText, "</ht" & "ml>" )
+
+	' Use ADODB stream to convert to and save as ASCII
+	With objADODB
+		.Open
+		.Type = adTypeText
+		.CharSet = "us-ascii"
+		.WriteText strText
+		.SaveToFile strHTA, adSaveCreateOverWrite
+		.Close
+	End With
+
+	With objFSO
+		' Reread the saved ASCII file
+		Set objSelf = .OpenTextFile( strHTA, ForReading, False, TristateFalse )
+		strText = objSelf.ReadAll
+		objSelf.Close
+		Set objSelf = Nothing
+
+		' Correct copyright symbols
+		strText = Replace( strText, "Const CopyRights = """ & "C""", "Const CopyRights = ""©""" )
+		objRE.Global = True
+		objRE.IgnoreCase = True
+		objRE.Pattern = "((\.title|strText) =.*?)"", [C<] Rob van der Woude"
+		strText = objRE.Replace( strText, "$1"", " & CopyRights & " Rob van der Woude" )
+		
+		' Correct extended ASCII in button labels, and incorrect "ae" and "oe" translations
+		objRE.Pattern = vbTab & vbTab & "Case 1036, 2060, 3084, 4108, 5132 ' French \(France, Belgium, Canada, Switzerland, Luxembourg\)" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""Copy"" \)        = ""Copier""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""Copied"" \)      = ""Copi."""
+		strNewText    = vbTab & vbTab & "Case 1036, 2060, 3084, 4108, 5132 ' French (France, Belgium, Canada, Switzerland, Luxembourg)" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""Copy"" )        = ""Copier""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""Copied"" )      = ""Copié"""
+		strText = objRE.Replace( strText, strNewText )
+		objRE.Pattern = vbTab & vbTab & "Case 1043, 2067 ' Dutch \(Netherlands, Belgium\)" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""Copy"" \)        = ""Kopi.ren""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""Copied"" \)      = ""Gekopieerd""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""Year"" \)        = ""Jaar""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""NewYearsDay"" \) = ""Nieuwjaarsdag""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions\.Item\( ""GoodFriday"" \)  = ""G.{1,2}de Vrijdag"""
+		strNewText    = vbTab & vbTab & "Case 1043, 2067 ' Dutch (Netherlands, Belgium)" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""Copy"" )        = ""Kopiëren""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""Copied"" )      = ""Gekopieerd""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""Year"" )        = ""Jaar""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""NewYearsDay"" ) = ""Nieuwjaarsdag""" & vbCrLf _
+		              & vbTab & vbTab & vbTab & "objCaptions.Item( ""GoodFriday"" )  = ""Goede Vrijdag"""
+		strText = objRE.Replace( strText, strNewText )
+		objRE.Pattern = "' Far.{1,2}se\s+1080"
+		strNewText    = "' Faroese                                  1080"
+		strText = objRE.Replace( strText, strNewText )
+		objRE.Pattern = "' G.lic - "
+		strNewText    = "' Gaelic - "
+		strText = objRE.Replace( strText, strNewText )
+		objRE.Pattern = "' Norwegian - Bokm.l"
+		strNewText    = "' Norwegian" & " - Bokmål"
+		strText = objRE.Replace( strText, strNewText )
+		objRE.Pattern = "' R.{1,2}to-Romance"
+		strNewText    = "' Raeto-Romance"
+		strText = objRE.Replace( strText, strNewText )
+
+		' Save the corrected ASCII file
+		Set objSelf = .OpenTextFile( strHTA, ForWriting, False, TristateFalse )
+		objSelf.Write strText
+		objSelf.Close
+		Set objSelf = Nothing
+	End With
+
+	Set objADODB = Nothing
+	Set objFSO   = Nothing
+	Set objIE    = Nothing
+	Set objRE    = Nothing
+End Sub
+
+
+Sub Window_Onload( )
+	AppName.InnerHTML    = Holidays.ApplicationName
+	AppVersion.InnerHTML = Holidays.Version
+	window.document.title = "Holidays Calculator " & Holidays.Version & ", © 2006 - 2013 Rob van der Woude"
+	If InStr( UCase( strArguments ), "/LANG:DE" ) Then IntLocale = 1031
+	If InStr( UCase( strArguments ), "/LANG:EN" ) Then IntLocale = 1033
+	If InStr( UCase( strArguments ), "/LANG:FR" ) Then IntLocale = 1036
+	If InStr( UCase( strArguments ), "/LANG:IT" ) Then IntLocale = 1040
+	If InStr( UCase( strArguments ), "/LANG:NL" ) Then IntLocale = 1043
+	If InStr( UCase( strArguments ), "/LANG:PT" ) Then IntLocale = 1046
+	If InStr( UCase( strArguments ), "/LANG:SP" ) Then IntLocale = 1034
+	RestoreWindowSize
+	CheckUpdate
+	RestoreWindowSize
+	Locale
+	MyYear1.Value = Year( Now )
+	HandleYearChange
+End Sub
+
+
+Sub Window_OnUnload( )
+	On Error Resume Next
+	objIE.Quit
+	Set objIE = Nothing
+	On Error Goto 0
+End Sub
+
+
+Sub WindowSize( intWidth, intHeight )
+	On Error Resume Next
+	Dim posWidth, posHeight
+	If intWidth  > window.screen.width  Then intWidth  = window.screen.width
+	If intHeight > window.screen.height Then intHeight = window.screen.height
+	posWidth  = ( window.screen.width  - intWidth  ) / 2
+	posHeight = ( window.screen.height - intHeight ) / 2
+	If posWidth  < 0 Then posWidth  = 0
+	If posHeight < 0 Then posHeight = 0
+	window.resizeTo intWidth, intHeight
+	window.moveTo posWidth, posHeight
+	On Error GoTo 0
+End Sub
+
+
+Sub OnClick_ButtonDownload( )
+	window.open "http://www.robvanderwoude.com/holidays.php"
+End Sub
+
+
+Sub OnClick_ButtonHideUpdateNotification( )
+	blnUpdate                 = False
+	UpdateBlock.style.display = "none"
+	RestoreWindowSize
+End Sub
+
+
+Sub OnClick_ButtonUpdate( )
+	Dim strMsg, strTitle
+
+	Const vbCancel = 2
+	Const vbYes    = 6
+	Const vbNo     = 7
+
+	If Left( Holidays.Version, 1 ) = "0" Then strQuote = Chr(34)
+	strMsg   = "You are about to update the running Holidays program to its latest stable release." & vbCrLf _
+	         & "A copy of the program will be saved, allowing a roll-back if necessary."  & vbCrLf  & vbCrLf _
+	         & "Do you want to update now?"
+	strTitle = "Confirm Update"
+	If MsgBox( strMsg, vbYesNoCancel, strTitle ) = vbYes Then Update
+End Sub
+</script>
+
+<body onresize="RestoreWindowSize" onhelp="HelpMsg">
+
+<div align="Center">
+
+<div id="UpdateBlock" style="display: none;">
+
+<h3 id="Label_Update">Update</h3>
+
+<div id="UpdateGroup" class="Group">
+
+<table>
+<tr>
+	<td id="UpdateNotification" colspan="5">&nbsp;</td>
+</tr>
+<tr>
+	<td colspan="5">&nbsp;</td>
+</tr>
+<tr>
+	<td class="Content"><input type="button" class="Button" name="Button_Update" id="Button_Update" value="Update Now" onclick="OnClick_ButtonUpdate"></td>
+	<td class="Spacer">&nbsp;</td>
+	<td class="Content"><input type="button" class="Button" name="Button_Download" id="Button_Download" value="Download" onclick="OnClick_ButtonDownload"></td>
+	<td class="Spacer">&nbsp;</td>
+	<td class="Control"><input type="button" class="Button" name="Button_HideUpdateNotification" id="Button_HideUpdateNotification" value="Hide Notification" onclick="OnClick_ButtonHideUpdateNotification"></td>
+</tr>
+</table>
+
+</div>
+
+<p>&nbsp;</p>
+
+</div>
+
+
+<table border="0" cellspacing="5">
+<tr>
+    <td><input type="button" class="Button" id="Button_Copy" value="Clipboard" onclick="Copy2Clipboard()"></td>
+    <th><span id="MyYear0">2010</span></th>
+    <th><select onchange="HandleYearChange()" name="MyYear1">
+        <option value="2000">2000</option>
+        <option value="2001">2001</option>
+        <option value="2002">2002</option>
+        <option value="2003">2003</option>
+        <option value="2004">2004</option>
+        <option value="2005">2005</option>
+        <option value="2006">2006</option>
+        <option value="2007">2007</option>
+        <option value="2008">2008</option>
+        <option value="2009">2009</option>
+        <option value="2010">2010</option>
+        <option value="2011">2011</option>
+        <option value="2012">2012</option>
+        <option value="2013">2013</option>
+        <option value="2014">2014</option>
+        <option value="2015">2015</option>
+        <option value="2016">2016</option>
+        <option value="2017">2017</option>
+        <option value="2018">2018</option>
+        <option value="2019">2019</option>
+        <option value="2020">2020</option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+        <option value="2027">2027</option>
+        <option value="2028">2028</option>
+        <option value="2029">2029</option>
+        <option value="2030">2030</option>
+        <option value="2031">2031</option>
+        <option value="2032">2032</option>
+        <option value="2033">2033</option>
+        <option value="2034">2034</option>
+        <option value="2035">2035</option>
+        <option value="2036">2036</option>
+        <option value="2037">2037</option>
+        <option value="2038">2038</option>
+        <option value="2039">2039</option>
+        <option value="2040">2040</option>
+        <option value="2041">2041</option>
+        <option value="2042">2042</option>
+        <option value="2043">2043</option>
+        <option value="2044">2044</option>
+        <option value="2045">2045</option>
+        <option value="2046">2046</option>
+        <option value="2047">2047</option>
+        <option value="2048">2048</option>
+        <option value="2049">2049</option>
+        <option value="2050">2050</option>
+        </select></th>
+    <th><span id="MyYear2">2012</span></th>
+</tr>
+<tr>
+    <TD colspan="4">&nbsp;</td>
+</tr>
+<tr>
+    <td><span id="NewYearsDayName" style="white-space: nowrap;">New Year's Day</span>:</td>
+    <td><input type="text" size="30" readonly name="NewYearsDay0"></td>
+    <td><input type="text" size="30" readonly name="NewYearsDay1"></td>
+    <td><input type="text" size="30" readonly name="NewYearsDay2"></td>
+</tr>
+<tr>
+    <td style="white-space: nowrap;"><span id="GroundhogDayName">Groundhog Day</span> (USA/CAN):</td>
+    <td><input type="text" size="30" readonly name="GroundhogDay0"></td>
+    <td><input type="text" size="30" readonly name="GroundhogDay1"></td>
+    <td><input type="text" size="30" readonly name="GroundhogDay2"></td>
+</tr>
+<tr>
+    <td><span id="StPatricksDayName" style="white-space: nowrap;">Saint Patrick's Day</span> (IE):</td>
+    <td><input type="text" size="30" readonly name="StPatricksDay0"></td>
+    <td><input type="text" size="30" readonly name="StPatricksDay1"></td>
+    <td><input type="text" size="30" readonly name="StPatricksDay2"></td>
+</tr>
+<tr>
+    <td><span id="GoodFridayName" style="white-space: nowrap;">Good Friday</span>:</td>
+    <td><input type="text" size="30" readonly name="GoodFriday0"></td>
+    <td><input type="text" size="30" readonly name="GoodFriday1"></td>
+    <td><input type="text" size="30" readonly name="GoodFriday2"></td>
+</tr>
+<tr>
+    <td><span id="EasterName" style="white-space: nowrap;">Easter</span>:</td>
+    <td><input type="text" size="30" readonly name="Easter0"></td>
+    <td><input type="text" size="30" readonly name="Easter1"></td>
+    <td><input type="text" size="30" readonly name="Easter2"></td>
+</tr>
+<tr>
+    <td><span id="AscensionName" style="white-space: nowrap;">Ascension</span>:</td>
+    <td><input type="text" size="30" readonly name="Ascension0"></td>
+    <td><input type="text" size="30" readonly name="Ascension1"></td>
+    <td><input type="text" size="30" readonly name="Ascension2"></td>
+</tr>
+<tr>
+    <td><span id="PentecostName" style="white-space: nowrap;">Pentecost</span>:</td>
+    <td><input type="text" size="30" readonly name="Pentecost0"></td>
+    <td><input type="text" size="30" readonly name="Pentecost1"></td>
+    <td><input type="text" size="30" readonly name="Pentecost2"></td>
+</tr>
+<tr>
+    <td style="white-space: nowrap;"><span id="BlameSomeoneElseDayName">Blame Someone Else Day</span> (USA):</td>
+    <td><input type="text" size="30" readonly name="BSED0"></td>
+    <td><input type="text" size="30" readonly name="BSED1"></td>
+    <td><input type="text" size="30" readonly name="BSED2"></td>
+</tr>
+<tr>
+    <td><span id="ColumbusDayName" style="white-space: nowrap;">Columbus day (USA) / Thanksgiving (CAN)</span>:</td>
+    <td><input type="text" size="30" readonly name="ColumbusDay0"></td>
+    <td><input type="text" size="30" readonly name="ColumbusDay1"></td>
+    <td><input type="text" size="30" readonly name="ColumbusDay2"></td>
+</tr>
+<tr>
+    <td><span id="HalloweenName" style="white-space: nowrap;">Halloween</span>:</td>
+    <td><input type="text" size="30" readonly name="Halloween0"></td>
+    <td><input type="text" size="30" readonly name="Halloween1"></td>
+    <td><input type="text" size="30" readonly name="Halloween2"></td>
+</tr>
+<tr>
+    <td><span id="SintMaartenName" style="white-space: nowrap;">Sint Maarten</span> (NL/BE/DE):</td>
+    <td><input type="text" size="30" readonly name="SintMaarten0"></td>
+    <td><input type="text" size="30" readonly name="SintMaarten1"></td>
+    <td><input type="text" size="30" readonly name="SintMaarten2"></td>
+</tr>
+<tr>
+    <td><span id="ThanksgivingName" style="white-space: nowrap;">Thanksgiving</span> (USA):</td>
+    <td><input type="text" size="30" readonly name="Thanksgiving0"></td>
+    <td><input type="text" size="30" readonly name="Thanksgiving1"></td>
+    <td><input type="text" size="30" readonly name="Thanksgiving2"></td>
+</tr>
+<tr>
+    <td><span id="SinterklaasName" style="white-space: nowrap;">Sinterklaas</span> (NL/BE/DE):</td>
+    <td><input type="text" size="30" readonly name="Sinterklaas0"></td>
+    <td><input type="text" size="30" readonly name="Sinterklaas1"></td>
+    <td><input type="text" size="30" readonly name="Sinterklaas2"></td>
+</tr>
+<tr>
+    <td><span id="ChristmasName" style="white-space: nowrap;">Christmas</span>:</td>
+    <td><input type="text" size="30" readonly name="Christmas0"></td>
+    <td><input type="text" size="30" readonly name="Christmas1"></td>
+    <td><input type="text" size="30" readonly name="Christmas2"></td>
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p><b><span id="AppName">Application Name</span>,&nbsp; Version <span id="AppVersion">0.00</span><br>
+<span style="font-size: 80%;">&copy; 2006 - 2013 Rob van der Woude<br>
+<a href="http://www.robvanderwoude.com/holidays.php" target="_blank"><span style="color: blue;">http://www.robvanderwoude.com/holidays.php</span></a></span></b></p>
+
+</div>
+
+</body>
+</html>

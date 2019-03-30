@@ -1,0 +1,30 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\home\\controller\\login_check.js"
+    ],
+    "names": [
+        "indexAction",
+        "username",
+        "post",
+        "password",
+        "think",
+        "md5",
+        "user",
+        "model",
+        "userList",
+        "userData",
+        "isEmpty",
+        "addUser",
+        "findUser",
+        "userInfo",
+        "fail",
+        "session",
+        "success"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;;;;;;;;;AAEA;;;;;;;;;;;;;;qBAGQA,W;;;;;;;AACAC,oC,GAAW,KAAKC,IAAL,CAAU,UAAV,C;AACXC,oC,GAAWC,MAAMC,GAAN,CAAU,KAAKH,IAAL,CAAU,UAAV,CAAV,C;AACXI,gC,GAAO,KAAKC,KAAL,CAAW,MAAX,C;;mCACUD,KAAKE,QAAL,E;;;AAAjBC,oC;;iCACDL,MAAMM,OAAN,CAAcD,QAAd,C;;;;;AACCH,iCAAKK,OAAL,CAAa;AACTV,0CAAUA,QADD;AAETE,0CAAUA;AAFD,6BAAb;;;;;;mCAKqBG,KAAKM,QAAL,CAAc;AAC/BX,0CAAUA,QADqB;AAE/BE,0CAAUA;AAFqB,6BAAd,C;;;AAAjBU,oC;;AAIJ,gCAAGT,MAAMM,OAAN,CAAcG,QAAd,CAAH,EAA2B;AACvB,qCAAKC,IAAL,CAAU,CAAV,EAAY,SAAZ,EAAsB,sBAAtB;AACH;;;;mCAEC,KAAKC,OAAL,CAAa,UAAb,EAAwB;AAC1Bd,0CAAUA,QADgB;AAE1BE,0CAAUA;AAFgB,6BAAxB,C;;;6DAIC,KAAKa,OAAL,CAAa,CAAb,EAAe,MAAf,EAAsB,IAAtB,C",
+    "file": "..\\..\\..\\src\\home\\controller\\login_check.js",
+    "sourcesContent": [
+        "'use strict';\r\n\r\nimport Base from './base.js';\r\n\r\nexport default class extends Base {\r\n  async indexAction(){\r\n    let username = this.post('username');\r\n    let password = think.md5(this.post('password'));\r\n    let user = this.model(\"user\");\r\n    let userData = await user.userList();\r\n    if(think.isEmpty(userData)){\r\n        user.addUser({\r\n            username: username,\r\n            password: password\r\n        })\r\n    }else{\r\n        let userInfo = await user.findUser({\r\n            username: username,\r\n            password: password\r\n        });\r\n        if(think.isEmpty(userInfo)){\r\n            this.fail(1,\"用户或密码错误\",\"username or password\");\r\n        }\r\n    }\r\n    await this.session('userInfo',{\r\n        username: username,\r\n        password: password\r\n    });\r\n    return this.success(0,\"登陆成功\",null);\r\n  }\r\n}"
+    ]
+}

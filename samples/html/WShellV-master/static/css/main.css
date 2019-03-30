@@ -1,0 +1,82 @@
+body,html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+} 
+
+.header {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1em;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    letter-spacing: 0.05em;
+}
+
+.header h1 {
+    font-size: 300%;
+    font-weight: 100;
+    margin: 0;
+}
+
+ .header h2 {
+    font-size: 125%;
+    font-weight: 100;
+    line-height: 1.5;
+    margin: 0;
+    color: #666;
+    letter-spacing: -0.02em;
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1em;
+
+    max-height: 70%;
+}
+
+.container .shell-list {
+    overflow: auto;
+}
+
+.container .shell-list .shell-list-header {
+    font-size: 100%;
+    font-weight: 100;
+    line-height: 2.0;
+    background: #c0c0c0;
+}
+
+.container .shell-info {
+    overflow-y: auto;
+    text-align: left;
+}
+
+.container .shell-info .shell-info-tab {
+    font-size: 100%;
+    font-weight: 100;
+    line-height: 2.0;
+    background: #d49999;
+}
+
+td button {
+    height: 27px;
+}
+
+img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+div.toolbar {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1em;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+    letter-spacing: 0.05em;
+}

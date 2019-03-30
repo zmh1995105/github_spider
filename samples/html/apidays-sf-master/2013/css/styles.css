@@ -1,0 +1,786 @@
+@import url("reset.css");
+
+body{
+	color: #333;
+	background: #e6e6e6;
+	font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+.inside{
+	width: 996px;
+	margin: 0 auto;
+	position: relative;
+}
+
+
+header inside{
+	position: relative;
+}
+header nav{
+	width: 736px;
+	padding: 35px 0 0 260px;
+	background: #e6e6e6 url(img/bg_nav.png) top no-repeat;	
+	height: 35px;
+	position: fixed;
+	z-index: 10;
+	top:0;
+}
+ul.nav_p li{
+	text-transform: uppercase;
+	float: left;
+	margin-right: 15px;
+}
+ul.nav_p li a{
+	font-size: 20px;
+	color: #333;
+	font-weight: 300;
+}
+ul.nav_p li.current a,
+ul.nav_p li a:hover{
+	color: #3ca2c0;
+}
+
+a:hover, a:link, a:visited, a:active{
+	color: #3ca2c0;
+}
+
+/**************************  MAIN CONTENT  ****************/
+
+.sleft{
+	width: 215px;
+	float: left;
+}
+
+.main{
+	width: 780px;
+	float: right;
+}
+
+.pad{
+	padding: 0 43px;
+}
+
+.hr{
+	background: url(img/bg_hr.png) no-repeat;
+	height: 3px;
+	margin: 10px 0;
+}
+
+.sponsors-logo{
+	margin-top: 10px;
+	text-align:center;
+}
+
+.sponsors-logo img:first-child{
+	margin-top:0;
+}
+
+.sponsors-logo img {
+	max-width: 185px;
+	max-height: 80px;
+}
+
+.sponsors-logo .dot {
+	margin:3px 0;
+	display: block;
+	margin-left: 50%;
+}
+
+.sponsors-logo .dot:last-child {
+	margin-bottom:0;
+}
+
+.sponsors-logo .powered {
+	display:block;
+	margin-top:5px;
+	color:#3ca2c0;
+	font-size:21px;
+	font-weight:300;
+}
+
+/****************  section Home  *************/
+
+.section{
+	padding: 70px 0 30px 0;
+}
+
+.section .fil{
+	padding-top: 40px;
+	background: url(img/filet.png) top no-repeat;
+}
+.section.home h1{
+	font-size: 40px;
+	line-height: 40px;
+	margin-bottom: 12px;
+	font-weight: 200;
+	text-align: justify;
+	text-transform: uppercase;
+}
+.section.home h1 span.be{
+	font-size: 67px;
+	line-height: 50px;
+	color: #3ca2c0;
+}
+.section.home h1 span.te{
+	font-size: 44px;
+	text-align: justify;
+	display: block;
+	line-height: 42px;
+	
+}
+.section.home h1 span.ne{
+	font-size: 80px;
+	line-height: 65px;
+	color: #3ca2c0;
+	
+}
+
+
+.section.home h2{
+	font-size: 31px;
+	line-height: 36px;
+	color: #3ca2c0;
+	font-weight: 300;
+	text-transform: uppercase;
+}
+.section.home h2 span{
+	display: block;
+	font-weight: 200;
+	color: #333;
+}
+
+.groupeButton{
+	padding: 20px 0;
+	margin-left: 200px;
+}
+a.button{
+	display: inline-block;
+	font-size: 25px;	
+	font-weight: 300;
+	height: 37px;
+	color: #fff;
+	padding: 13px 40px 0 80px;
+	text-transform: uppercase;
+}
+
+a.register{
+	color: #333;
+	background: url(img/Bt_Register.png) top left no-repeat;
+}
+a.register:hover{
+	color: #fff;
+	background: url(img/Bt_Register.png) bottom left no-repeat;
+}
+a.apply_kn{
+	background: url(img/keynote_closed.png) top left no-repeat;
+}
+
+
+.section.home a.button{
+	float: left;
+}
+.section.home a.register{
+	margin-right: 40px;
+	margin-left: 0px;
+}
+
+.register {
+	margin-left: 100px;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+
+.container_register {
+	padding-top: 20px;
+}
+
+.section.home p{
+	font-size: 20px;
+	line-height: 24px;
+	font-weight: 200;
+	margin-bottom: 20px;
+}
+.section.home p.p2{
+	font-size: 25px;
+	line-height: 28px;
+	font-weight: 300;
+}
+
+/************************ section program  ***************************/
+
+.section.program{
+	font-size: 20px;
+	line-height: 30px;
+	font-weight: 300;
+}
+
+.section.program .rub{
+	font-size: 50px;
+}
+.section.program .ico_program{
+	background: url(img/ico_program.png) no-repeat;
+}
+.section.program .ico_workshop{
+	background: url(img/ico_workshop.png) no-repeat;
+}
+.section.program ul{
+	margin-bottom: 30px;
+}
+.section.program li{
+	margin-bottom: 10px;
+	width: 100%;
+}
+/*.section.program li .date{
+	font-size: 23px;
+	display: inline-block;
+	font-weight: 400;
+	margin-right: 5px;
+}*/
+.section.program li .date{
+	font-size: 23px;
+	display: block;
+	font-weight: 400;
+	margin-bottom: 3px;
+}
+
+/****** SF particularities ******/
+#day1 ul li{
+	display:inline-block;
+	margin-right: 60px;
+}
+
+#day1 ul li:last-child{
+	margin-right:0;
+}
+
+#day2 #arrow p, #day3 #arrow p {
+	position:absolute;
+	left: 81px;
+	top: 30px;
+	text-align: left;
+	font-size: 22px;
+	font-weight:300;
+	color: #fff;
+	width:65%;
+}
+
+#day2 p.timing, #day3 p.timing {
+	float:left;
+	margin-left:50px;
+	font-weight:400;
+	font-size:22px;
+}
+
+#day2 .timing:first-child, #day3 .timing:first-child {
+	margin-left:20px;
+}
+
+#day3 {
+	margin-top:40px;
+}
+
+#arrow {
+	background: url('/images/arrow.png') no-repeat;
+	background-size:270px 115px;
+	position:relative;
+	float:left;
+	width: 270px;
+	height: 115px;
+	margin-left:-45px;
+	margin-bottom:15px;
+	margin-top:0;
+}
+
+#arrow:first-child {
+	margin-left:0;
+}
+
+.theme p{
+	vertical-align:middle;
+	padding-left: 30px;
+	margin-bottom:10px;
+	width: 140px;
+}
+
+ul.theme {
+	list-style-type: none;
+	margin-top: 12px;
+	margin-right: 45px;
+	float:left;
+
+}
+
+ul.theme li
+{
+	background-image: url('/images/theme.png');
+	background-repeat: no-repeat;
+	background-position: 0px 6px;
+	background-size:17px 17px;
+	padding-left: 30px;
+}
+
+/************************ section Speakers  ***************************/
+
+.section.speakers{
+	font-size: 20px;
+	line-height: 22px;
+	font-weight: 300;
+}
+
+.section.speakers .ico_proud{
+	background: url(img/ico_proud.png) no-repeat;
+}
+.section.speakers .rub{
+	font-size: 30px;
+	line-height: 32px;
+	margin-bottom: 20px;
+	padding-top: 18px;
+}
+
+
+.list_speaker ul{
+	float: right;
+	width: 1005px;
+}
+.list_speaker li{
+	float: left;
+	margin-left: 20px;
+	margin-bottom: 20px;
+	width: 181px;
+	height: 292px;
+	background: url(img/itemPerso.png) no-repeat;
+	position: relative;
+	text-align: center;
+}
+.list_speaker li:first{
+	margin-left: 0;
+}
+.list_speaker li img{
+	width: 140px;
+	padding-top: 7px;
+}
+.list_speaker li .desc{
+	width: 169px;
+	height: 280px;
+	padding: 6px;
+	top:0;
+	left: 0;
+	position: absolute;
+	background: url(img/itemPerso.png) no-repeat;
+	z-index: 1;
+}
+
+.list_speaker li .desc h4.name{
+	margin: 170px 0 10px 0;
+	font-size: 22px;
+	font-weight: 400;
+	color: #3ca2c0;
+	text-transform: uppercase;
+	background: url(img/bg_name.png) no-repeat bottom center;
+	padding-bottom: 15px;
+}
+
+.list_speaker li .desc span{
+	display: block;
+}
+.list_speaker li .desc .job{
+	font-size: 17px;
+	margin-bottom: 10px;
+}
+
+.list_speaker li .desc .society{
+	background: #e6e6e6;
+	padding: 5px 0;
+	font-size: 18px;
+	font-weight: 400;
+}
+
+#more {
+	float: left;
+	vertical-align: middle;
+	margin-left: 20px;
+	width: 181px;
+	text-align: center;
+	padding-top: 145px;
+}
+
+/************************ section Organizers  ***************************/
+
+.section.organizers{
+	background: #fff;
+	font-size: 20px;
+	line-height: 23px;
+	font-weight: 300;
+}
+.section.organizers ul{
+	margin-left: -4px;
+}
+.section.organizers li{
+	float: left;
+	width: 375px;
+	margin-right: 25px;
+}
+.section.organizers li.last{
+	margin: 0;
+}
+.logo_organizers{
+	margin-bottom: 20px;
+}
+
+.section.organizers h3{
+	font-size: 25px;
+	line-height: 26px;
+	font-weight: 400;
+	margin-bottom: 20px;
+	text-transform: uppercase;
+}
+
+.section.organizers p{
+	color: #666;
+}
+
+/********************* section Partners *******************************/
+
+.section.partners {
+	background: #fff;
+}
+
+.section.partners .ico_partners{
+	background: url(img/ico_partners.png) no-repeat;
+}
+
+.section.partners .ico_startup_partners{
+	background: url(img/ico_StarUp_partners.png) no-repeat;
+	margin-top: 20px;
+}
+
+.section.partners .ico_business_partners{
+	background: url(img/ico_Business_Sonspors.png) no-repeat;
+	margin-top: 20px;
+}
+.section.partners .ico_media{
+	margin-top: 20px;
+	background: url(img/ico_media.png) no-repeat;
+	
+}
+
+.section.partners .rub{
+	font-size: 30px;
+	line-height: 32px;
+	margin-bottom: 20px;
+	padding-top: 18px;
+}
+
+.section.partners .logo{
+	width: 181px;
+	float: left;
+	margin-left: 20px;
+	margin-right: 20px;
+	border: 0.1em solid #e6e6e6;
+	border-top:none;
+}
+.section.partners .int{
+	width: 500px;
+	float: left;
+	margin-right: 20px;
+	font-size: 20px;
+	line-height: 23px;
+	font-weight: 300;
+}
+.section.partners .int h5{
+	font-weight: 300;
+	font-size: 25px;
+	margin-bottom: 5px;
+	text-transform: uppercase;
+}
+
+.section.partners ul{
+	margin-left: 20px;
+	padding: 0;
+}
+.section.partners li{
+	float: left;
+	margin-right: 7px;
+	/*padding-bottom: 10px;*/
+	border: 0.1em solid #e6e6e6;
+	border-top: none;
+}
+
+.partners p {
+	color: #666;
+}
+
+/********************* section pratical *******************************/
+
+.section.pratical{
+	background: #fff;
+
+	font-weight: 300;
+}
+
+.section.pratical .rub{
+	font-size: 30px;
+	line-height: 32px;
+	margin-bottom: 20px;
+	padding-top: 18px;
+	font-size: 50px;
+	text-transform: uppercase;
+}
+.section.pratical .ico_when{
+	background: url(img/ico_when.png) no-repeat;
+	
+}
+
+.section.pratical .ico_howto{
+	background: url(img/ico_howto.png) no-repeat;
+}
+
+.section.pratical .address{
+	width: 320px;
+	float: left;
+	margin-left: 40px;
+	font-weight: 300;
+}
+.section.pratical .address h5{
+	font-size: 25px;
+	font-weight: 400;
+}
+
+.section.pratical .anyQ{
+	float: right;
+	padding: 5px;
+	font-size: 25px;
+	width: 315px;
+	background: #3a9cb8;
+	color: #fff;
+	margin-bottom: 10px;
+}
+.section.pratical .anyQ h5{
+	font-size: 50px;
+	font-weight: 200;
+	margin-bottom: 10px;
+}
+.section.pratical .anyQ a{
+	display: block;
+	color: #3a9cb8;
+	background: #fff url(img/ico_contact.png) no-repeat;
+	font-size: 25px;	
+	font-weight: 400;
+	min-height: 50px;
+	padding-left: 50px;
+	
+	margin-top: 10px;
+}
+
+.section.pratical .anyQ a span{
+	display: block;
+	padding: 15px ;
+	border-left: 1px solid #3a9cb8;
+}
+.section.pratical .map{
+	width: 985px;
+	height: 600px;
+	margin: 30px 0;
+	background: url(img/bg_map.png) no-repeat;
+	position: relative;
+}
+
+
+
+.marker{
+	position: absolute;
+	background: url(img/bg_point_map.png) no-repeat bottom center;
+	padding: 10px 15px 20px 15px;
+	text-align: center;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 300;
+	text-transform: uppercase;	
+}
+
+span.tram{
+	width: 20px;
+	height: 21px;
+	display: block;
+	float: left;
+	background: url(img/ico_tram.png) no-repeat;
+	margin-right: 5px;
+	margin-top: -3px;
+}
+span.bus{
+	width: 20px;
+	height: 21px;
+	display: block;
+	float: left;
+	background: url(img/ico_bus.png) no-repeat;
+	margin-right: 5px;
+	margin-top: -3px;
+}
+span.metro{
+	width: 20px;
+	height: 21px;
+	display: block;
+	float: left;
+	background: url(img/ico_metro.png) no-repeat;
+	margin-right: 5px;
+	margin-top: -3px;
+}
+.marker1{
+	top:46px;
+	left: 275px;
+}
+.marker2{
+	top:5px;
+	left: 673px;
+}
+.marker3{
+	bottom:47px;
+	left: 275px;
+}
+.marker4{
+	bottom:30px;
+	left: 555px;
+}
+.markerS{
+	position: absolute;
+	width: 350px;
+	height: 211px;
+	background: url(img/marker_s.png) no-repeat;
+	bottom:110px;
+	left: 500px;
+	font-size: 19px;
+	line-height: 24px;
+	
+}
+.markerS h5{
+	text-transform: uppercase;
+	margin-bottom: 2px;
+	color: #3a9cb8;
+	font-size: 22px;
+}
+.markerS .int{
+	padding: 10px;	
+}
+
+
+
+.section.pratical ul{
+	line-height: 25px;333
+	margin-left: 40px;
+}
+.section.pratical .type{
+	display: block;
+	font-weight: 400;
+	font-size: 25px;
+}
+/*******************  FOOTER  ******************************/
+
+.footer{
+	background: #4c4c4c;
+}
+.footerT{
+	background: #333;
+	padding: 15px 0;
+}
+.footerT a.button{
+	float: right;
+}
+
+.footerT a.apply_kn{
+	margin-left: 280px;
+}
+
+.footer p{
+	text-align: center;
+}
+
+.footer .mentions{
+	font-size: 40px;
+	color: #fff;
+	text-align: center;
+	background: #3ca2c0;	
+	padding: 15px 0;
+	text-transform: uppercase;
+	font-weight: 200;
+}
+.footer .mentions span{
+	font-size: 25px;
+	color: #90def5;
+	font-weight: 300;
+}
+
+/*** STYLE  ***/
+
+.pleft{
+	width: 210px;
+	float: left;
+	margin-top: -38px;
+}
+.ico{
+	margin-left: 65px;
+}
+
+.rub{
+	padding-left: 62px;
+	min-height: 50px;
+	color: #3ca2c0;
+	padding-top: 19px;
+	font-weight: 200;
+	margin-bottom: 20px;
+	margin-left: -20px;
+}
+span.colr{
+	color: #3ca2c0;
+}
+span.size26{
+	font-size: 26px;
+}
+.clear{
+	clear: both;
+}
+
+
+/******************* paperJS icones *******/
+
+#draw{
+	position: fixed;
+	z-index: 0;
+}
+.iconMove{
+	display: none;
+}
+
+/* Print styles */
+@media print {
+
+}
+
+/* Media queries */
+
+@media (max-width: 1100px) {
+
+}
+
+@media (max-width: 980px) {
+
+}
+
+@media (max-width: 480px) {
+
+}
+
+div.poweredby {
+	float : right;
+}
+}
+
+
+a.button.videos{
+	padding: 13px 40px 0 80px;
+}
+
+a.videos{
+	color: #ffffff;
+	background: url(img/BT_Apply.png) top left no-repeat;
+}
+

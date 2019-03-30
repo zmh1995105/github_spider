@@ -1,0 +1,75 @@
+<?= $this->response; ?>
+<?= $this->renderTabs($this->tabs); ?>
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    Nimbusec Webhosting Security
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <ul class="tools-list">
+                <li class="tools-item">
+                    <a class="tool-block" href="<?= $this->e->escapeHtml($this->buy_url); ?>" target="_blank">
+                        <span class="tool-icon">
+                            <img src="/theme/icons/32/plesk/traffic-history.png"/>
+                        </span>
+                        <span class="tool-name"><?= $this->lmsg("licence.view.title"); ?></span>
+                        <span class="tool-info">
+                            <?= $this->lmsg("licence.view.description"); ?>
+                        </span>
+                    </a>
+                </li>
+                <li class="tools-item">
+                    <a class="tool-block" href="<?= $this->h->url('view', 'setup'); ?>">
+                        <span class="tool-icon">
+                            <img src="/theme/icons/32/plesk/install.png"/>
+                        </span>
+                        <span class="tool-name"><?= $this->lmsg("licence.view.credentials"); ?></span>
+                        <span class="tool-info">
+                            <?= $this->lmsg("licence.view.credentials.description"); ?>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+            <div>
+                Nimbusec detects malware, defacements and blacklisting. With its extensive API and multi-user framework<br/> 
+                Nimbusec is fully integrated into your Plesk infrastructure and can even be offered as value added security<br/> 
+                service. 
+                <br/><br/>
+                Attractive re-selling programs for web hosters including white-labeling are available.<br/> 
+                Nimbusec's SPAM Shell, 0-Day root shell and CMS version detection capability protect your IP reputation,<br/> 
+                decrease unwanted traffic and reduce server load. 
+                <br/><br/>
+                As a hosting provider you can support your customers
+                with pro-active help and use Nimbusec to remove malware infections fast. 
+                <br/>
+                Please note, that if you already own API credentials, you can switch to the <a href="<?= $this->h->url('view', 'setup'); ?>">setup panel</a> 
+                and begin the installation.
+                <br/><br/>
+                Find out more at <a href="https://nimbusec.com/en/" target="_blank">https://nimbusec.com/en/</a>
+            </div>
+
+            <div class="extension-overview__section extension-overview__section--screenshots">
+                <div class="extension-overview__screenshots">
+                    <a href="<?= $this->base_url; ?>/screenshots/1.png" target="_blank">
+                        <img src="<?= $this->base_url; ?>/screenshots/1.png">
+                    </a>
+                    <a href="<?= $this->base_url; ?>/screenshots/2.png" target="_blank">
+                        <img src="<?= $this->base_url; ?>/screenshots/2.png">
+                    </a>
+                    <a href="<?= $this->base_url; ?>/screenshots/3.png" target="_blank">
+                        <img src="<?= $this->base_url; ?>/screenshots/3.png">
+                    </a>
+                    <a href="<?= $this->base_url; ?>/screenshots/4.png" target="_blank">
+                        <img src="<?= $this->base_url; ?>/screenshots/4.png">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

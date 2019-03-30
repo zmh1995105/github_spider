@@ -1,0 +1,53 @@
+{
+  "name": "novahot",
+  "version": "1.1.0",
+  "description": "A webshell framework for penetration testers.",
+  "homepage": "https://github.com/chrisallenlane/novahot",
+  "author": {
+    "name": "Chris Allen Lane",
+    "email": "chris@chris-allen-lane.com"
+  },
+  "scripts": {
+    "lint": "jshint app test",
+    "test": "tape 'test/*.js' | faucet"
+  },
+  "jshintConfig": {
+    "esnext": true,
+    "expr": true,
+    "laxbreak": true
+  },
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "docopt": "^0.6.2",
+    "lodash": "4.17.10",
+    "md5-file": "^4.0.0",
+    "mime-types": "^2.1.19",
+    "mkdirp": "^0.5.1",
+    "rc": "^1.2.8",
+    "request": "^2.88.0",
+    "shellwords": "^0.1.1",
+    "shelly": "0.0.3",
+    "tmp": "0.0.33"
+  },
+  "devDependencies": {
+    "faucet": "0.0.1",
+    "jshint": "2.9.6",
+    "tape": "^4.9.1"
+  },
+  "keywords": [
+    "penetration-testing",
+    "security",
+    "webshell"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrisallenlane/novahot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/chrisallenlane/novahot/issues"
+  },
+  "bin": {
+    "novahot": "./app/index.js"
+  },
+  "main": "./app/index.js"
+}

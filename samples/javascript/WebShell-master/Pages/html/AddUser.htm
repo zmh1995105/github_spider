@@ -1,0 +1,87 @@
+﻿{% extends "base.htm" %}
+
+{% block title %}User registration  {% endblock %}
+{% block content %}
+<br></br>
+ <div>
+		<font size="6" style="color:#CC0404" >
+		Web
+		</font>
+		<font size="6" style="color:#004276">
+		Note,
+		</font>
+		<font size="5" style="font-weight:bold">[New User]</font>
+ </div>
+ <br></br>
+<script language="javascript" type="text/javascript">
+	$().ready(function () {
+
+		$("#AddUserForm").validate({
+			rules: {
+				Email: {
+					required: true,
+					email: true
+				},
+				Password: {
+					required: true,
+					minlength: 6
+				},
+				cpassword: {
+					required: true,
+					minlength: 6,
+					equalTo: "#Password"
+				}
+			},
+			messages: {
+				password: {
+					required: "Please provide a password",
+					minlength: "Your password must be at least 5 characters long"
+				},
+				confirm_password: {
+					required: "Please provide a password",
+					minlength: "Your password must be at least 5 characters long",
+					equalTo: "Please enter the same password as above"
+				},
+				email: "Please enter a valid email address"
+			}
+		});
+	});
+</script>
+
+<style type="text/css">
+form.AddUserForm label.error, label.error{  color: red; font-style: italic}
+</style>
+<form id="AddUserForm" method="post" action="" >
+	<table id="userTable" class="btn" style="width:100%">
+		<thead>
+		<tr>
+		<th style="width:15%;"></th>
+		<thstyle="width:85%;"></th>
+		</tr>
+		</thead>
+		<tr>
+			<td>Email:</td>
+			<td><input id="Email" name="Email" type="text" />  
+			</td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td>
+			<input type="password" id="Password" name="Password" />
+			</td>
+		</tr>
+		<tr>
+			<td>Confirm Password:</td>
+			<td>
+			<input type="password" id="cpassword" name="cpassword" />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" ><input id="btnSave" type="submit" value="Register" /> 
+			</td>
+		</tr>
+	</table>
+</form>
+{% endblock %}
+{% block footer %}{% endblock %}
+

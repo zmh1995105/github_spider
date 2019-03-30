@@ -1,0 +1,20 @@
+﻿<Properties StartupConfiguration="{12D9F199-AE8B-4F05-B006-76A14144963C}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MVCShell/Views/Home/Index.cshtml">
+    <Files>
+      <File FileName="MVCShell/Controllers/HomeController.cs" Line="28" Column="10" />
+      <File FileName="MVCShell/Views/Home/Index.cshtml" Line="10" Column="1" />
+      <File FileName="MVCShell/Views/_ViewStart.cshtml" Line="1" Column="1" />
+      <File FileName="MVCShell/Views/_ViewImports.cshtml" Line="1" Column="1" />
+      <File FileName="MVCShell/Views/Shared/_Layout.cshtml" Line="36" Column="65" />
+      <File FileName="MVCShell/Views/Home/Shell.cshtml" Line="12" Column="39" />
+      <File FileName="MVCShell/Views/Home/Contact.cshtml" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.MVCShell PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
+    <script>
+
+        $(function () {
+
+
+            $('#login').submit(function (e) {
+                e.preventDefault();
+                $.post('/login', {
+                    username: $('username').val(),
+                    password: $('password').val()
+                }).done(function (result) {
+                    var socket = io.connect('http://localhost:3000', {
+                        'query': 'token=' + result.token
+                    });
+                    localStorage.setItem('token', result.token);
+                    console.log(result.token);
+                    window.location.href = '/';
+
+                });
+            });
+        });
+
+
+    </script>
+</head>
+<body>
+<form action="/login" id="login" method="Post">
+    <input type="text" name="username">
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+
+</body>
+</html>

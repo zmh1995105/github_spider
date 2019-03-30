@@ -1,0 +1,34 @@
+web:
+#  build: .
+  image: mean
+  container_name: web
+  links:
+   - db
+  ports:
+   - "3000:3000"
+  environment:
+   NODE_ENV: development
+  volumes:
+   - .:/home/mean
+  working_dir: /home/mean
+  command: nodemon server.js
+db:
+  image: mongo
+  container_name: mongo
+  ports:
+   - "27017:27017"
+import:
+  image: mean
+  container_name: import
+  links:
+   - db
+  volumes:
+   - .:/home/mean
+  working_dir: /home/mean
+  command: node data.js
+mongoshell:
+  image: mongo
+  container_name: mongoshell
+  links:
+   - db
+  command: bash -c "mongo $$DB_PORT_27017_TCP_ADDR"

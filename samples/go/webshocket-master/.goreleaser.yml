@@ -1,0 +1,30 @@
+before:
+  hooks:
+builds:
+- 
+  main: ./main.go
+  binary: ws
+  env:
+    - CGO_ENABLED=0
+  goos:
+    - darwin
+    - linux
+    - windows
+  goarch:
+    - amd64
+    - 386
+    - arm
+    - arm64
+  ignore:
+    - goos: darwin
+      goarch: 386
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'

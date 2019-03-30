@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+    <h1>Log Scanner</h1>
+    <form method="post" action="{{ url_for('log_scanner_page.upload') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label>Upload Log File (*.zip/*.log):</label>
+            <label class="custom-file">
+                <input class="custom-file-input" type="file" name="log_file">
+                <span class="custom-file-control"></span>
+            </label>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+{% endblock %}

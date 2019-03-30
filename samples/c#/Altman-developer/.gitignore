@@ -1,0 +1,11 @@
+*.orig
+*.user
+*.pidb
+*.userprefs
+*.suo
+*.pdb
+bin/
+obj/
+/Build
+Source/packages
+Source/UnitTest/

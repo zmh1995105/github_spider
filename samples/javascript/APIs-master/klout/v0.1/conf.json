@@ -1,0 +1,27 @@
+{
+  "displayName":"Klout",
+  "icon":"",
+  "base_url":"http://api.klout.com/v2/",
+  "default_auth":"manual",
+  "auth":{
+    "none":{
+      "request":{
+        "format":"json"
+      }
+    },
+    "manual":{
+      "request":{
+        "format":"json",
+        "get":{
+          "key":"{key}"
+        }
+      },
+      "parameters":[
+        {
+          "name":"key",
+          "type":"string"
+        }
+      ]
+    }
+  }
+}

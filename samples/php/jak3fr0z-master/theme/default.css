@@ -1,0 +1,368 @@
+@font-face {
+    font-family:'cousineregular';
+    
+    font-weight: normal;
+    font-style: normal;
+
+}
+*{
+	font-family:cousineregular;
+	margin:0;
+	padding:0;
+	border:0;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+	font-size:11px;
+	font-weight:normal;
+}
+input:focus, select:focus, textarea:focus, button:focus{
+	outline:none;
+}
+html, body{
+	width:100%;
+	height:100%;
+	color:#999999;
+}
+body{
+	background:#333333;
+}
+a{
+	text-decoration:none;
+	color:#999999;
+}
+a:hover{
+	cursor:pointer;
+}
+p{
+	padding:8px 0;
+}
+img{
+	vertical-align:middle;
+}
+table{
+	width:100%;
+}
+table td, table th{
+	vertical-align:middle;
+	padding:4px;
+}
+textarea, input, select{
+	background:#222222;
+	padding:8px;
+	border-radius:8px;
+	color:#999999;
+}
+textarea{
+	resize:vertical;
+	width:100%;
+	height:300px;
+	min-height:300px;
+	max-width:100%;
+	min-width:100%;
+}
+hr{
+	margin:8px 0;
+	border-bottom:1px dashed #222222;
+}
+video{
+	width:50%;
+	background:#222222;
+	border-radius:8px;
+}
+h1, h2{
+	background:#222222;
+	border-radius:8px;
+	text-align:center;
+	padding:8px;
+	margin-bottom:8px;
+}
+pre, #viewFilecontent{
+	word-break:break-all;
+	word-wrap:break-word;
+}
+pre{
+	white-space:pre-wrap;	
+}
+#jak3fr0z{
+	cursor:pointer;
+}
+#header{
+	width:100%;
+	position:fixed;
+}
+#headerNav{
+	padding:6px 8px 2px 8px;
+	background:#23AD3F;
+}
+#headerNav img{
+	margin:0 4px;
+}
+#headerNav a{
+	color:#f0f0f0;
+}
+#menu{
+	background:#BDCCB7;
+	height:20px;
+}
+#menu .menuitem{
+	padding:5px 12px 0px 12px;
+	float:left;
+	height:20px;
+	background:#BDCCB7;
+	color:#000000;
+	cursor:pointer;
+}
+#menu .menuitem:hover, #menu .menuitemSelected{
+	background:#333333;
+	color:#999999;
+}
+#menu .menuitemSelected{
+	background:#333333;
+}
+#basicInfo{
+	width:100%;
+	padding:8px;
+	border-bottom:1px solid #222222;
+}
+#content{
+	width:100%;
+	height:100%;
+	padding:48px 4px 10px 4px;
+}
+#content .menucontent{
+	clear:both;
+	display:none;
+	padding:8px;
+}
+#overlay{
+	position:fixed;
+	top:0px;
+	left:0px;
+	width:100%;
+	height:100%;
+	display:none;
+}
+#loading{
+	width:64px;
+	height:64px;
+	background:#000000;
+	border-radius:32px 0 32px 0;
+	margin:auto;
+	vertical-align:middle;
+	box-shadow:0 0 16px #000;
+}
+#ulDragNDrop{
+	padding:32px 0;
+	text-align:center;
+	background:#222222;
+	border-radius:8px;
+}
+#form{
+	display:none;
+}
+.box{
+	min-width:50%;
+	border:1px solid #222222;
+	padding:8px 8px 0 8px;
+	border-radius:8px;
+	position:fixed;
+	background:#111111;
+	opacity:1;
+	box-shadow:1px 1px 25px #150f0f;
+	opacity:0.98;
+}
+.boxtitle{
+	background:#444444;
+	color:#aaaaaa;
+	border-radius:8px;
+	text-align:center;
+	cursor:pointer;
+}
+.boxtitle a, .boxtitle a:hover{
+	color:#aaaaaa;
+}
+.boxcontent{
+	padding:2px 0 2px 0;
+}
+.boxresult{
+	padding:4px 10px 6px 10px;
+	border-top:1px solid #222222;
+	margin-top:4px;
+	text-align:center;
+}
+.boxtbl{
+	border:1px solid #222222;
+	border-radius:8px;
+	padding-bottom:8px;
+}
+.boxtbl td{
+	vertical-align:middle;
+	padding:8px 15px;
+	border-bottom:1px dashed #222222;
+}
+.boxtbl input, .boxtbl select, .boxtbl .button{
+	width:100%;
+}
+.boxlabel{
+	text-align: center;
+	border-bottom:1px solid #222222;
+	padding-bottom:8px;
+}
+.boxclose{
+	background:#222222;
+	border-radius:3px;
+	margin-right:8px;
+	margin-top:-2px;
+	padding:2px 8px;
+	cursor:pointer;
+}
+.strong{
+	color:#23AD3F;
+}
+.weak{
+	color:#666666;
+}
+.button{
+	min-width:120px;
+	width:120px;
+	margin:2px 0;
+	background:#222222;
+	color:#999999;
+	padding:8px;
+	border-radius:8px;
+	display:block;
+	text-align:center;
+	float:left;
+	cursor:pointer;
+}
+.button:hover, #ulDragNDrop:hover{
+	box-shadow:1px 1px 5px #2a2a2a;
+	background:#2a2a2a;
+}
+.floatLeft{
+	float:left;
+}
+.floatRight{
+	float:right;
+}
+.colFit{
+	width:1px;
+    white-space:nowrap;
+}
+.colSpan{
+	width:100%;
+}
+.border{
+	border:1px solid #222222;
+	border-radius:8px;
+	padding:8px;
+}
+.borderbottom{
+	border-bottom:1px dashed #222222;
+}
+.borderright{
+	border-right:1px dashed #222222;
+}
+.borderleft{
+	border-left:1px dashed #222222;
+}
+.hr td{
+	border-bottom:1px dashed #222222;
+}
+.cBox, .cBoxAll{
+	width:10px;
+	height:10px;
+	border:1px solid #23AD3F;
+	border-radius:5px;
+	margin:auto;
+	float:left;
+	margin:2px 6px;
+	cursor:pointer;
+}
+.cBoxSelected{
+	background:#23AD3F;
+}
+.action, .actionfolder, .actiondot{
+	cursor:pointer;
+}
+.phpError{
+	padding:8px;
+	margin:8px 0;
+	text-align:center;
+}
+.dataView td, .dataView th, #viewFile td{
+	vertical-align:top;
+	text-align:center;
+	border-bottom:1px dashed #222222;
+}
+.dataView th{
+	border-bottom:none;
+}
+.dataView tbody tr:hover{
+	background:#222222;
+}
+.dataView th{
+	background:#222222;
+	vertical-align:middle;
+}
+.dataView tfoot td{
+	vertical-align:middle;
+}
+.dataView .col-cbox{
+	width:20px;
+}
+.dataView .col-name, .dataView tr>td:nth-child(2){
+	text-align:left;
+}
+.dataView .col-size, .dataView tr>td:nth-child(3){
+	width:80px;
+	text-align:left;
+}
+.dataView .col-owner{
+	width:140px;
+	min-width:140px;
+}
+.dataView .col-perms{
+	width:80px;
+}
+.dataView .col-modified{
+	width:170px;
+}
+.sortable th{
+	cursor:pointer;
+}
+#viewFile td{
+	text-align:left;
+}
+#viewFilecontent{
+	padding:8px;
+	border:1px solid #222222;
+	border-radius:8px;
+}
+#terminalPrompt td{
+	padding:0;
+}
+#terminalInput{
+	background:none;
+	padding:0;
+	width:100%;
+}
+#evalAdditional{
+	display:none;
+}
+.hl_default{
+	color:#408494;
+}
+.hl_keyword{
+	color:#999999;
+}
+.hl_string{
+	color:#8EB9D1;
+}
+.hl_html{
+	color:#aaaaaa;
+}
+.hl_comment{
+	color:#FF7000;
+}

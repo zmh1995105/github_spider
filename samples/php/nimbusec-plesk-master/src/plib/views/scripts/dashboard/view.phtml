@@ -1,0 +1,710 @@
+<div id="response">
+    <?= $this->response; ?>
+</div>
+<?= $this->renderTabs($this->tabs); ?>
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("dashboard.view.title"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <div style="margin-bottom: 15px;">
+                <?= $this->lmsg("dashboard.view.description"); ?>
+            </div>
+
+            <?php if (pm_ProductInfo::isUnix()): ?>
+                <div class="title">
+                    <div class="title-area">
+                        <h3>
+                            <?= $this->lmsg("dashboard.view.mass_quarantine"); ?>
+                        </h3>
+                    </div>
+                </div>
+                <div class="content" style="margin-bottom: 15px;">
+                    <div style="margin-bottom: 15px;">
+                        <?= $this->lmsg("dashboard.view.mass_quarantine.description"); ?>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field-name">
+                            <?= $this->lmsg("dashboard.view.mass_quarantine"); ?>
+                        </div>
+                    
+                        <div class="field-value">
+                            
+                            <div style="display: inline-block; margin-right: 15px;">
+                                <a id="bulk-quarantine" style="color: #353535;">
+                                    <i class="mdi mdi-bug"></i>
+                                    <span class="button-text">    
+                                        <span>
+                                            <?= $this->lmsg("dashboard.view.quarantine"); ?>
+                                        </span>
+                                    </span>
+                                    <span class="button-loading" style="display: none;">
+                                        <span style="margin-right: 5px;">
+                                            Please Wait <img style="margin-left: 5px; margin-right: 5px; width: 16px; height: 16px;" src="/theme/icons/16/plesk/indicator.gif">
+                                        </span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="title">
+                    <div class="title-area">
+                        <h3>
+                            <?= $this->lmsg("dashboard.view.automatic_quarantine.title"); ?>
+                        </h3>
+                    </div>
+                </div>
+                <div class="content" style="margin-bottom: 15px;">
+                    <div style="margin-bottom: 15px;">
+                    </div>
+
+                    <div class="msg-box msg-warning">
+                        <div class="msg-content">
+                            <span>
+                                <div>
+                                    <?= $this->lmsg("dashboard.view.disclaimer"); ?>
+                                </div>
+                                <div id="confirmation">
+
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="field-name">
+                            <?= $this->lmsg("dashboard.view.automatic_quarantine"); ?>
+                        </div>
+
+                        <div class="field-value">
+                            <form method="post" action="<?= $this->h->url('schedule-quarantine', 'dashboard'); ?>">
+                                <input name="action" value="scheduleQuarantine" type="hidden"/>
+                                <span style="margin-right: 2px;">
+                                    <span>
+                                        <?= $this->lmsg("msg.issues.none"); ?>
+                                    </span>
+                                    <input type="checkbox" name="quarantine-state[]" value="1" <?php if ($this->quarantine_state == "1"): ?> checked="checked" <?php endif; ?>/>
+                                    <span style="color: #303030;">|</span>
+                                </span>
+                                <span style="margin-right: 2px;">
+                                    <i class="mdi mdi-checkbox-blank-circle" style="color: #fdd835"></i>
+                                    <span>
+                                        <?= $this->lmsg("msg.issues.yellow"); ?>
+                                    </span>
+                                    <input type="checkbox" name="quarantine-state[]" value="3" <?php if (in_array($this->quarantine_state, ["3", "9"])): ?> checked="checked" <?php endif; ?>/>
+                                    <span style="color: #303030;">|</span>
+                                </span>
+                                <span style="margin-right: 2px;">
+                                    <i class="mdi mdi-checkbox-blank-circle" style="color: #f44336"></i>
+                                    <span>
+                                        <?= $this->lmsg("msg.issues.red") ?>
+                                    </span>
+                                    <input type="checkbox" name="quarantine-state[]" value="6" <?php if (in_array($this->quarantine_state, ["6", "9"])): ?> checked="checked" <?php endif; ?>/>
+                                </span>
+                                <span id="btn-send" class="btn action" style="margin-left: 5px;">
+                                    <span class="submit-button" sender>
+                                        <?= $this->lmsg("dashboard.view.apply"); ?>
+                                    </span>
+                                </span>
+                                <span class="hint">
+                                    <?= $this->lmsg("dashboard.view.automatic_quarantine.hint"); ?>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            <?php endif; ?>
+                
+            <div class="title">
+                <div class="title-area">
+                    <h3>
+                        <?= $this->lmsg("dashboard.view.issues"); ?>
+                    </h3>
+                </div>
+            </div>
+            <div class="content" style="margin-bottom: 15px;">
+                <div>
+                <?= $this->lmsg("dashboard.view.issues.description"); ?>
+                </div>
+            </div>
+            
+            <?php if (count($this->infected) === 0): ?>
+                <div>
+                    <span>
+                        <h5>
+                            <?= $this->lmsg("dashboard.view.no_issues"); ?>
+                            <img style="width: 16px; height: 16px;" src="/theme/icons/16/plesk/on.png">
+                        </h5>
+                    </span>
+                </div>
+            <?php else: ?>
+
+                
+                <div style="margin-bottom: 15px;">
+                    <span style="margin-right: 5px;">
+                        <strong><?= $this->lmsg("dashboard.view.sort"); ?></strong>
+                    </span>
+                    <span style="margin-right: 5px;">
+                        <a id="sort-issues-severity">
+                            <?= $this->lmsg("dashboard.view.sort.severity"); ?>
+                        </a>
+                    </span>
+                    <?php if (pm_ProductInfo::isUnix()): ?>
+                        <span style="margin-right: 5px;">|</span>
+                        <span style="margin-right: 5px;">
+                            <a id="sort-issues-noissues">
+                                <?= $this->lmsg("dashboard.view.sort.no_issues"); ?>
+                            </a>
+                        </span>
+                        <span style="margin-right: 5px;">|</span>
+                        <span style="margin-right: 5px;">
+                            <a id="sort-issues-quarantined">
+                                <?= $this->lmsg("dashboard.view.sort.no_quarantined"); ?>
+                            </a>
+                        </span>
+                    <?php endif; ?>
+                </div>
+
+                <div id="domains-panel">
+                    <?php foreach ($this->infected as $infected): ?>
+                        <div id="domain-panel" class="panel panel-collapsible p-promo panel-collapsed">
+                            <div class="panel-wrap">
+
+                                <!-- heading -->
+                                <div class="panel-heading">
+                                    <div class="panel-heading-wrap">
+                                        <span class="panel-control">
+                                            <input id="domain-severity" type="hidden" value="0"/>
+                                            <input id="domain-issues" type="hidden" value="0"/>
+                                            <input id="domain-quarantined" type="hidden" value="0"/>
+                                        </span>
+                                        <div class="panel-heading-name">
+                                            <span style="margin-right: 5px">
+                                                <i id="bubble" class="mdi mdi-checkbox-blank-circle" style="color: #bbb;"></i>
+                                                <i id="bubble" class="mdi mdi-checkbox-blank-circle" style="color: #bbb;"></i>
+                                            </span>
+                                            <span id="title">
+                                                <?= $infected["name"]; ?>
+                                            </span>
+                                            <span class="subtitle" style="margin-left: 5px;">
+                                                <span class="panel-heading-loading" style="display: none; font-size: 13px;">
+                                                    <span style="margin-right: 5px;">
+                                                        (Please Wait <img style="margin-left: 5px; margin-right: 5px; width: 16px; height: 16px;" src="/theme/icons/16/plesk/indicator.gif">)
+                                                    </span>
+                                                </span>
+                                                <span id="additional" style="font-size: 13px;">
+                                                </span>
+                                            </span>
+                                            <input type="hidden" id="domain-id" value="<?= $infected['id']; ?>"/>
+                                            <input type="hidden" id="domain-name" value="<?= $infected['name']; ?>"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- content -->
+                                <div class="panel-content">
+                                    <div class="panel-content-wrap">
+                                        <div class="panel-content-meta"></div>
+                                        <div class="panel-content-issue">
+                                            <span class="panel-content-loading" style="display: none; font-size: 13px;">
+                                                <span style="margin-right: 5px;">
+                                                    <?= $this->lmsg("dashboard.view.issues.loading"); ?>
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // clean up localstorage key
+    localStorage.removeItem("disclaimer");
+
+    var sendForm = function (element) {
+
+        setLoadingMdi(element);
+        element.closest("form").submit();
+    }
+
+    var setLoading = function (toggle) {
+        
+        // hide button
+        toggle.style.display = "None";
+
+        // disable parent
+        var parent = toggle.parentNode;
+        parent.classList.toggle("disabled");
+
+        // rotating loading spinner
+        var spinner = document.createElement("span");
+        spinner.classList.toggle("wait");
+        spinner.appendChild(document.createTextNode("Please wait"));
+
+        parent.appendChild(spinner);
+    }
+
+    var setLoadingMdi = function (toggle) {
+
+        var replacement = document.createElement("span");
+        replacement.innerHTML = toggle.innerHTML;
+
+        // enable button loading animation
+        replacement.querySelector(".button-text").style.display = "None";
+        replacement.querySelector(".button-loading").style.display = "";
+        toggle.parentNode.insertBefore(replacement, toggle.nextSibling);
+
+        toggle.style.display = "None";
+    }
+
+    var removeLoading = function (toggle) {
+        
+        // show button
+        toggle.style.display = "";
+
+        // enable parent
+        var parent = toggle.parentNode;
+        parent.classList.toggle("disabled");
+        
+        // remove loading spinner
+        toggle.nextElementSibling.remove();
+    }
+
+    var removeLoadingMdi = function (toggle) {
+
+        // show button
+        toggle.style.display = "";
+
+        // remove replacement
+        toggle.nextElementSibling.remove();
+    }
+
+    var sortIssuesBySeverity = function () {
+        var domains = Array.from(document.querySelectorAll("#domain-panel"));
+
+        var sorting_order = localStorage.getItem("domains_sorted_severity");
+        if (sorting_order === null) {
+            sorting_order = "descending";
+        }
+
+        domains.sort(function(a, b) {
+            if (sorting_order == "ascending") {
+                return parseInt(a.querySelector("#domain-severity").value) - parseInt(b.querySelector("#domain-severity").value);
+            }
+
+            return parseInt(b.querySelector("#domain-severity").value) - parseInt(a.querySelector("#domain-severity").value);
+        });
+
+        var domains_panel = document.querySelector("#domains-panel");
+        domains_panel.innerHTML = "";
+
+        domains.forEach(function(domain) {
+            domains_panel.append(domain); 
+        });
+
+        if (localStorage.getItem("domains_sorted_severity") === "descending") {
+            localStorage.setItem("domains_sorted_severity", "ascending");
+        } else {
+            localStorage.setItem("domains_sorted_severity", "descending");
+        }
+    }
+
+    var sortIssuesByNumberOfIssues = function () {
+        var domains = Array.from(document.querySelectorAll("#domain-panel"));
+
+        var sorting_order = localStorage.getItem("domains_sorted_issues");
+        if (sorting_order === null) {
+            sorting_order = "descending";
+        }
+
+        domains.sort(function(a, b) {
+            if (sorting_order == "ascending") {
+                return parseInt(a.querySelector("#domain-issues").value) - parseInt(b.querySelector("#domain-issues").value);
+            }
+
+            return parseInt(b.querySelector("#domain-issues").value) - parseInt(a.querySelector("#domain-issues").value);
+        });
+
+        var domains_panel = document.querySelector("#domains-panel");
+        domains_panel.innerHTML = "";
+
+        domains.forEach(function(domain) {
+            domains_panel.append(domain); 
+        });
+
+        if (localStorage.getItem("domains_sorted_issues") === "descending") {
+            localStorage.setItem("domains_sorted_issues", "ascending");
+        } else {
+            localStorage.setItem("domains_sorted_issues", "descending");
+        }
+    }
+
+    var sortIssuesByNumberOfQuarantined = function () {
+        var domains = Array.from(document.querySelectorAll("#domain-panel"));
+
+        var sorting_order = localStorage.getItem("domains_sorted_quarantined");
+        if (sorting_order === null) {
+            sorting_order = "descending";
+        }
+
+        domains.sort(function(a, b) {
+            if (sorting_order == "ascending") {
+                return parseInt(a.querySelector("#domain-quarantined").value) - parseInt(b.querySelector("#domain-quarantined").value);
+            }
+
+            return parseInt(b.querySelector("#domain-quarantined").value) - parseInt(a.querySelector("#domain-quarantined").value);
+        });
+
+        var domains_panel = document.querySelector("#domains-panel");
+        domains_panel.innerHTML = "";
+
+        domains.forEach(function(domain) {
+            domains_panel.append(domain); 
+        });
+
+        if (localStorage.getItem("domains_sorted_quarantined") === "descending") {
+            localStorage.setItem("domains_sorted_quarantined", "ascending");
+        } else {
+            localStorage.setItem("domains_sorted_quarantined", "descending");
+        }
+    }
+
+    var hasParent = function (child, parentSelector) {
+        
+        // iterate over all parents
+        for (; child && child !== document; child = child.parentNode) {
+
+            if (child.matches(parentSelector)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    var eventHandler = function (event) {
+
+        // get the clicked element
+        var toggle = event.target;
+
+        // get the nodename
+        var nodeName = toggle.nodeName.toLowerCase();
+
+        // expanding issue panel
+        if (hasParent(toggle, ".panel-heading")) { 
+
+            // open panel only if necessary
+            if (nodeName == "input" || nodeName == "a") {
+                return;
+            }
+
+            // exclude the action links for moving to quarantine
+            // and false positive 
+            if (hasParent(toggle, "#moveToQuarantine") || hasParent(toggle, "#falsePositive")) {
+                return;
+            }
+
+            toggle.closest(".panel").classList.toggle("panel-collapsed");
+            toggle.closest(".panel").classList.toggle("panel-expanded");
+        }
+
+        // bulk quarantine action
+        if (hasParent(toggle, "#bulk-quarantine")) {
+
+            // get parent for setting animation
+            var parent = toggle.closest("#bulk-quarantine");
+
+            // set loading
+            setLoadingMdi(parent);
+
+            // filter issue which are checked
+            var issues = Array.from(document.querySelectorAll("input[id^='issue-']")).filter(function (issue) { 
+                return issue.checked; 
+            });
+
+            var payload = [];
+
+            // append information of each issue to the payload
+            issues.forEach(function (issue) {
+                
+                // navigate top
+                var heading = issue.closest(".panel-heading");
+
+                // get quarantine form
+                var form = heading.querySelectorAll("form")[1];
+
+                payload.push({
+                    domain: form.elements.domain.value,
+                    file: form.elements.file.value
+                });
+            });
+
+            // send ajax request
+            var form = new FormData();
+            form.append("action", "bulk-quarantine");
+            form.append("issues", JSON.stringify(payload));
+            
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function(){ 
+
+                var response = JSON.parse(xhr.responseText);
+                    
+                // something went wrong
+                if (response.hasOwnProperty("error")) {
+                    document.getElementById("response").innerHTML = response.error;
+                    removeLoadingMdi(parent);
+                    return;
+                }
+
+                document.getElementById("response").innerHTML = response.html;
+                window.location.reload(true);
+            }
+
+            xhr.open ("POST", "<?= $this->h->url('bulk-quarantine', 'dashboard'); ?>", false);
+            xhr.send (form);
+        }
+
+        if (nodeName === "span") {
+            
+            // for the apply button
+            if (toggle.hasAttribute("sender")) {
+
+                // skip disabled
+                if (toggle.parentNode.classList.contains("disabled")) {
+                    return;
+                }
+
+                // init loading
+                setLoading(toggle);
+
+                // check whether the disclaimer has been accepted
+                var disclaimer = localStorage.getItem("disclaimer");
+                if (disclaimer === null) {
+
+                    // remove confirmation element
+                    var confirmation = document.getElementById("confirmation");
+                    while (confirmation.firstChild) {
+                        confirmation.removeChild(confirmation.firstChild);
+                    }
+
+                    // create confirmation element
+                    // parent node
+                    var disclaimerParent = document.createElement("span");
+
+                    // confirmation message
+                    var message = document.createTextNode("<?= $this->lmsg('dashboard.view.disclaimer.accept'); ?>");
+
+                    // confirmation checkbox
+                    var checkbox = document.createElement("input");
+                    checkbox.type = "checkbox";
+
+                    checkbox.addEventListener("change", function() {
+
+                        // when previously unset
+                        if (localStorage.getItem("disclaimer") === null) {
+                            localStorage.setItem("disclaimer", "true");
+                        } else {
+                            localStorage.removeItem("disclaimer");
+                        }
+                        
+                        // enable button
+                        toggle.parentNode.classList.toggle("disabled");
+                    });
+
+                    // append to DOM
+                    disclaimerParent.appendChild(checkbox);
+                    disclaimerParent.appendChild(message);
+                    confirmation.appendChild(disclaimerParent);
+
+                    // remove animation but disable the button
+                    removeLoading(toggle);
+                    toggle.parentNode.classList.toggle("disabled");
+
+                } else {
+
+                    // submit form
+                    toggle.closest("form").submit();
+                }
+            }
+        }
+        
+        if (nodeName === "a") {
+
+            // expanding source code in issue panel
+            if (hasParent(toggle, ".source-code")) {
+
+                // querying from parent element
+                var panel = toggle.parentElement.querySelector(".source-code-panel");
+                var icon = toggle.parentElement.querySelector(".source-code-icon");
+
+                panel.classList.toggle("panel-collapsed");
+                panel.classList.toggle("panel-expanded");
+
+                icon.classList.toggle("mdi-arrow-down-drop-circle");
+                icon.classList.toggle("mdi-arrow-up-drop-circle");
+            }
+
+            // selecting and (un)checking issues by domain
+            if (toggle.id.startsWith("issue-link-")) {
+
+                // split between e.g issue-link-test.com
+                var parts = toggle.id.split("-");
+
+                var domain = parts[parts.length - 1];
+
+                // select the checked state of the first issue
+                var checked = document.querySelector("[id='issue-" + domain + "']").checked;
+
+                // apply to all
+                document.querySelectorAll("[id='issue-" + domain + "']").forEach(function(issue) { 
+                    issue.checked = !checked; 
+                });
+            }
+
+            // sort issues
+            if (toggle.id === "sort-issues-severity") {
+                sortIssuesBySeverity();
+            }
+
+            if (toggle.id === "sort-issues-noissues") {
+                sortIssuesByNumberOfIssues();
+            }
+
+            if (toggle.id === "sort-issues-quarantined") {
+                sortIssuesByNumberOfQuarantined();
+            }
+        }
+    };
+
+    document.addEventListener("click", eventHandler);
+
+    // load issue information
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        var colors = ["#bbb", "#fdd835", "#f44336"];
+
+        // query issue metadata
+        document.querySelectorAll("#domain-panel").forEach(function(panel) {
+
+            panel.querySelector(".panel-heading-loading").style.display = "";
+
+            // for each domain, send a request asking for meta information and the issues
+            var form = new FormData();
+            form.append("action", "fetch-metadata");
+            form.append("domain_id", panel.querySelector("#domain-id").value);
+            form.append("domain_name", panel.querySelector("#domain-name").value);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function(){ 
+
+                var response;
+                try {
+                    response = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    console.log("Invalid JSON: ", xhr.responseText);
+                    return;
+                }
+                    
+                // something went wrong
+                if (response.hasOwnProperty("error")) {
+                    console.log(response.error);
+                    return;
+                }
+
+                panel.querySelector(".panel-heading-loading").style.display = "None";
+
+                // update threat bubbles
+                var bubbles = panel.querySelectorAll("#bubble");
+                switch (response.max_severity) {
+                    case 1:
+                    case 2:
+                        bubbles[0].style.color = colors[1];
+                        break;
+                    case 3:
+                        bubbles[1].style.color = colors[2];
+                        break;
+                }
+
+                // add information
+                panel.querySelector("#additional").innerHTML = "(in quarantine/issues: " + response.quarantined_cnt + "/" + response.issues_cnt + ")";
+                
+                // panel for metadata
+                panel.querySelector(".panel-content-meta").innerHTML = response.panel;
+
+                // set hidden fields for js
+                panel.querySelector("#domain-severity").value = response.max_severity;
+                panel.querySelector("#domain-issues").value = response.issues_cnt;
+                panel.querySelector("#domain-quarantined").value = response.quarantined_cnt;
+            }
+
+            xhr.open ("POST", "<?= $this->h->url('fetch-metadata', 'dashboard'); ?>");
+            xhr.send (form);
+        });    
+
+        // query issues
+        document.querySelectorAll("#domain-panel").forEach(function(panel) {
+
+            panel.querySelector(".panel-content-loading").style.display = "";
+
+            // for each domain, send a request asking for meta information and the issues
+            var form = new FormData();
+            form.append("action", "fetch-issue");
+            form.append("domain_id", panel.querySelector("#domain-id").value);
+            form.append("domain_name", panel.querySelector("#domain-name").value);
+            
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function(){ 
+
+                var response;
+                try {
+                    response = JSON.parse(xhr.responseText);
+                } catch (e) {
+                    console.log("Invalid JSON: ", xhr.responseText);
+                    return;
+                }
+                    
+                // something went wrong
+                if (response.hasOwnProperty("error")) {
+                    console.log(response.error);
+                    return;
+                }
+
+                panel.querySelector(".panel-content-loading").style.display = "None";
+
+                var panel_content = panel.querySelector(".panel-content-issue");
+                panel_content.innerHTML = "";
+
+                if (response.issues.length == 0) {
+                    panel_content.innerHTML = "No issues found for your domain ";
+                    panel_content.innerHTML += "<span><img style='width: 16px; height: 16px;' src='/theme/icons/16/plesk/on.png'/></span>";
+                }
+
+                response.issues.forEach(function(issue) {
+                    panel_content.innerHTML += issue;
+                });
+            }
+
+            xhr.open ("POST", "<?= $this->h->url('fetch-issue', 'dashboard'); ?>");
+            xhr.send (form);
+        });
+    });
+
+</script>

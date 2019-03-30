@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>WebCLI</title>
+    <link href="src/icon.png" rel="shortcut icon">
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="src/style.css">
+    <script type="text/javascript" src="src/help.js"></script>
+    <script type="text/javascript" src="src/blowfish.js"></script>
+    <script type="text/javascript" src="src/shell.js"></script>
+    <script type="text/javascript" src="src/cli.js"></script>
+    <script type="text/javascript" src="src/key.js"></script>
+  </head>
+  <body>
+    <div id="terminal">
+      <div id="output">Konsti Shell \(°_°)/</div>
+      <div id="prompt">
+        <form id="prompt-in">
+            <span class="prompt-row" id="pr"><span class="prefix">[<span class="user">root</span>@<span id="host">localhost</span> <span id="dir">~</span>]</span><span class="ic" id="ic">$</span></span>
+            <input onblur="this.focus()" autocomplete="off" id="prompt-in-val" type="text" autofocus />
+        </script>
+      </div>
+    </div>
+    <script type="text/javascript">cli.init();</script>
+  </body>
+</html>

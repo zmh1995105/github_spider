@@ -1,0 +1,86 @@
+﻿{% extends "base.htm" %}
+
+{% block title %}User Login  {% endblock %}
+{% block content %}
+<br></br>
+ <div>
+		<font size="6" style="color:#CC0404" >
+		Web
+		</font>
+		<font size="6" style="color:#004276">
+		Note,
+		</font>
+		<font size="5" style="font-weight:bold">[Login]</font>
+ </div>
+ <br></br>
+ <br></br>
+<script language="javascript" type="text/javascript">
+	$().ready(function () {
+
+		$("#AddUserForm").validate({
+			rules: {
+					Email: {
+						required: true,
+						email: true
+					   },
+					Password:"required"
+				  },
+			messages: {
+				Password:"Please provide a password",
+				Email: "Please enter a valid email address"
+			}
+		});
+	});
+</script>
+
+<style type="text/css">
+form.AddUserForm label.error, label.error{  color: red; font-style: italic}
+</style>
+<div style="vertical-align:bottom;padding-left:30%">
+<form id="AddUserForm" method="post" action="" >
+	<table id="userTable" class="btn" style="width:100%">
+		<thead>
+		<tr>
+		<th style="width:15%;"></th>
+		<thstyle="width:85%;"></th>
+		</tr>
+		</thead>
+		<tr>
+			<td>Email:</td>
+			<td><input id="Email" name="Email" type="text" style="width:30%"/>  
+			</td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td>
+			<input type="password" id="Password" name="Password" style="width:30%"/>
+			<span id="LoginError" style="color:Red;">Invalid username or password. Please re-enter your user information.</span>
+			<script type="text/javascript">
+			    var lerror = "{{InvalidPwd}}";
+				if (lerror != "") {
+					$("#LoginError").show();
+				}
+				else {
+					$("#LoginError").hide();
+				}
+			</script>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			 
+			</td>
+			<td>
+			<input id="btnLogin" name="btnLogin" type="submit" value="Login" style="font-size:9pt;"/>&nbsp;
+			<a href="users/register" style="font-size:9pt">Sign UP</a>
+			</td>
+		</tr>
+	</table>
+</form>
+<br></br>
+<br></br>
+<br></br>
+</div>
+{% endblock %}
+{% block footer %}{% endblock %}
+

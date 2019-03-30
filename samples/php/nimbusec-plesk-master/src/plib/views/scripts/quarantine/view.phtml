@@ -1,0 +1,126 @@
+<div id="responses"></div>
+<?= $this->renderTabs($this->tabs); ?> 
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    Quarantine
+                </h3>
+            </div>
+        </div>
+
+        <div class="content">
+            <div style="margin-bottom: 20px;">
+                <div>
+                    <?= $this->lmsg("quarantine.view.description"); ?>
+                </div>
+
+                <div id="no-quarantined" style="display: None; margin-top: 15px;">
+                    <span>
+                        <?= $this->lmsg("quarantine.view.no_files_found"); ?>
+                    </span>
+                </div>
+            </div>
+
+            <div id="tree-view"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var updateHandler = function() {
+
+        // clean up
+        document.getElementById("responses").innerHTML = "";
+
+        // parse recieved response
+        var response = JSON.parse(this.responseText);
+
+        if (response.error) {
+            document.getElementById("responses").innerHTML = response.error;
+            return;
+        }
+
+        if (response.success) {
+            document.getElementById("responses").innerHTML = response.success;
+        }
+        
+        update(response);
+    }
+
+    function update(response) {
+        var container = document.getElementById("tree-view");
+        container.innerHTML = "";
+
+        if (response.files.length == 0) {
+            document.getElementById("no-quarantined").style.display = "";
+            return;
+        }
+
+        container.innerHTML = response.html;
+        setHandler();
+    }
+
+    function setHandler() {
+        var checkbox = document.getElementById("select-all");
+        if (checkbox != null) {
+            document.getElementById("select-all").addEventListener("click", function(event) {
+                var state = event.target.checked;
+
+                document.querySelectorAll("#select").forEach(function(checkbox) { 
+                    checkbox.checked = state;
+                });
+            });
+        }
+
+        document.querySelectorAll("#subpath").forEach(function(subpath) { 
+            subpath.addEventListener("click", function(triggered) {
+                request_wrapper(triggered.target.closest("#subpath").getAttribute("path"), "fetch", updateHandler, "<?= $this->h->url("fetch", "quarantine"); ?>");
+            });
+        });
+    }
+
+    // requests
+
+    window.addEventListener("load", function() {
+        var path = "<?= $this->root_path; ?>";
+        request_wrapper(path, "fetch", updateHandler, "<?= $this->h->url("fetch", "quarantine"); ?>");
+    });
+
+    function request_wrapper(path, action, handler, target) {
+        request(handler, {
+            "path": path,
+            "action": action
+        }, target);
+    }
+
+    function request(handler, payload, target) {
+        var form = new FormData();
+        
+        Object.keys(payload).forEach(function(key) {
+            form.append(key, payload[key]);
+        });
+        
+        var xhr = new XMLHttpRequest();
+        xhr.onload = handler;
+
+        xhr.open ("POST", target);
+        xhr.send (form);
+    }
+
+    function bulk_request(path, action, handler, target) {
+        var paths = Array.prototype.slice.call(document.querySelectorAll("#select")).filter((checkbox) =>  {
+            return checkbox.checked == true;
+        }).map((checkbox) => checkbox.nextElementSibling.getAttribute("path"));
+
+        request(handler, {
+            "path": path,
+            "paths": JSON.stringify(paths),
+            "action": action
+        }, target);
+    }
+
+</script>

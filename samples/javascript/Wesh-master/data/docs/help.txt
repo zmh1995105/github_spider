@@ -1,0 +1,10 @@
+Welcome to Wesh, the web shell.
+This shell gives you a handsome set of tools to be used.
+The default tools are:
+"ls" to list the content of a directory (see "help ls")
+"cd" to change the current directory (see "help cd")
+"less" to read a file (see "help less")
+"clear" to clear the console.
+To see the available applications, take a look at /apps/
+
+Have fun with this! :)

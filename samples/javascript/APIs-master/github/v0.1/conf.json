@@ -1,0 +1,51 @@
+{
+  "displayName":"github",
+  "icon":"/images/api/explorer/github1.png",
+  "base_url":"https://api.github.com/",
+  "default_auth":"oauth2",
+  "auth": {
+    "none": {},
+    "oauth2": {
+      "authorize": {
+        "url":"https://github.com/login/oauth/authorize",
+        "params": {
+          "client_id":"{client_id}",
+          "redirect_uri":"{_callback_url}",
+          "state":"{_callback_args}",
+          "scope":"{scope}"
+        }
+      },
+      "access_token": {
+        "url":"https://github.com/login/oauth/access_token",
+        "format":"url",
+        "field":"state",
+        "params":{
+          "client_id":"{client_id}",
+          "client_secret":"{client_secret}",
+          "redirect_uri":"{_callback_url}",
+          "code":"{_code}"
+        }
+      },
+      "request":{
+        "get":{
+          "access_token":"{_access_token}"
+        },
+        "format": "json"
+      },
+      "parameters":[
+        {
+          "name":"client_id",
+          "type":"string"
+        },
+        {
+          "name":"client_secret",
+          "type":"string"
+        },
+        {
+          "name":"scope",
+          "type":"string"
+        }
+      ]
+    }
+  }
+}

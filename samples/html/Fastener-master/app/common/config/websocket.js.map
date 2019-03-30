@@ -1,0 +1,23 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\config\\websocket.js"
+    ],
+    "names": [
+        "on",
+        "type",
+        "allow_origin",
+        "adp",
+        "undefined",
+        "path",
+        "messages",
+        "open",
+        "close",
+        "addsite"
+    ],
+    "mappings": ";;;kBAAe;AACXA,QAAI,IADO;AAEXC,UAAM,WAFK;AAGXC,kBAAc,EAHH;AAIXC,SAAKC,SAJM;AAKXC,UAAM,EALK;AAMXC,cAAU;AACNC,cAAM,mBADA;AAENC,eAAO,oBAFD;AAGNC,iBAAS;AAHH;AANC,C",
+    "file": "..\\..\\..\\src\\common\\config\\websocket.js",
+    "sourcesContent": [
+        "export default {\r\n    on: true,\r\n    type: 'socket.io',\r\n    allow_origin: '',\r\n    adp: undefined,\r\n    path: '',\r\n    messages: {\r\n        open: 'api/socketio/open',\r\n        close: 'api/socketio/close',\r\n        addsite: 'api/private/addsite',\r\n    }\r\n};"
+    ]
+}

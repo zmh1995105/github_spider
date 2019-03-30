@@ -1,0 +1,3 @@
+.cmd-example { display: inline-block; padding: 5px 8px; margin: 0 5px; border: 1px solid #ccc; border-radius: 4px; }
+.cmd-example:hover { border-color: #66afe9; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); text-decoration: none; }
+.cmd-example:after { content: '\21b5'; color: rgb(204, 204, 204); }

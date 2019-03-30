@@ -1,0 +1,23 @@
+2006PLUS
+│  Tree.txt			发行包目录树(本文件)
+│  2006P.asp			海阳2006+主文件(简体中文)
+│  2006P_BIG5.asp		海阳2006+主文件(繁体中文)
+│
+└─Tools			海阳2006+相关工具目录
+    │  ImgToASCII.exe		把图片塞进ASP文件的玩具
+    │  ToTransform.exe		C/S模式客户端转换工具
+    │  ToLoseWeight.exe	减肥工具
+    │
+    ├─Manager
+    │      2005.html		海阳2005客户端模板
+    │      2006.html		海阳2006客户端模板
+    │      2006P.html		海阳2006+客户端模板
+    │      DataBase.mdb	后门管理工具数据库
+    │      Manager.exe		海阳后门管理工具程序
+    │      Template.html	默认客户端模板
+    │
+    └─VBS
+            Encode.vbs		密码加密脚本
+            FileCuter.vbs	文件切割脚本
+            pack.vbs		客户端文件打包脚本
+            unpack.vbs		客户端文件解包脚本

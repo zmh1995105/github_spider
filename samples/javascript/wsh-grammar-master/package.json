@@ -1,0 +1,31 @@
+{
+  "name": "wsh-grammar",
+  "version": "1.0.0",
+  "description": "WebShell grammar definition, and parser.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/test.js",
+    "build-fixtures": "pegjs --trace index.pegjs; node cli.js test/fixture/inputs.txt > test/fixture/outputs.txt",
+    "build": "pegjs index.pegjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beakerbrowser/wsh-grammar.git"
+  },
+  "keywords": [
+    "wsh",
+    "grammar",
+    "parser"
+  ],
+  "author": "Paul Frazee <pfrazee@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/beakerbrowser/wsh-grammar/issues"
+  },
+  "homepage": "https://github.com/beakerbrowser/wsh-grammar#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "pegjs-backtrace": "^0.1.1",
+    "tape": "^4.6.2"
+  }
+}

@@ -1,0 +1,49 @@
+﻿{% extends "base.htm" %}
+
+{% block title %}Web Notes{% endblock %}
+{% block content %}
+<br></br>
+<div>
+    <div style="float:left;padding:0pt;">
+    <a href="" style="text-decoration:none">
+        <font size="6" style="color:#CC0404" >
+        Web
+        </font>
+        <font size="6" style="color:#004276">
+        Note
+        </font></a>
+    </div>
+    <div style="margin-left:140px;">
+         <form method="post" action="">
+            <div class="btn" style="padding:0pt;">
+                <span>
+                <input type="text" name="query" value={{Query}} style="width:30%;border-style:groove;border-color:#D8D8D8;height:23px;" />
+                </span>
+                <span>
+                <input name="search" value="Search" type="submit" style="font-size:10pt;"/>
+                </span>
+            </div>
+        </form>
+    </div>  
+</div>
+<br></br>
+<div id="notes" ></div>
+<script type="text/javascript">
+    var notes = '{{Notes}}';
+    notes = jQuery.parseJSON(notes);
+    $.each(notes.items, function (k, v) {
+        //var link = '<div style="background-color:RGB(240,240,240);"><p style="color:blue;text-decoration:underline">' + v.title + ',  ' + '<a href="#">[Edit]</a></p>';
+        var link = '<font style="color:blue;text-decoration:underline">' + v.title + '</font>';
+        $("#notes").append(link);
+        while (v.content.indexOf("&#34;") > -1) {
+            v.content = v.content.replace('&#34;', '"');
+        }
+        var content = '<div class="btn" style="padding:0pt 0pt 0pt 0pt;">' + v.content + '</div>';
+        $("#notes").append(content);
+    });
+</script>
+<br></br>
+
+{% endblock %}
+{% block footer %}{% endblock %}
+

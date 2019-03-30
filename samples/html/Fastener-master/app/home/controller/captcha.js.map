@@ -1,0 +1,27 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\home\\controller\\captcha.js"
+    ],
+    "names": [
+        "indexAction",
+        "isAjax",
+        "fail",
+        "http",
+        "captcha",
+        "create",
+        "size",
+        "noise",
+        "background",
+        "session",
+        "text",
+        "type",
+        "end",
+        "data"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;;;;;;;;;AAEA;;;;AACA;;;;;;;;;;;;;;AAEE;;;;qBAIQA,W;;;;;;;AACF,gCAAG,CAAC,KAAKC,MAAL,CAAY,MAAZ,CAAJ,EAAwB;AACpB,qCAAKC,IAAL,CAAU,CAAV,EAAY,SAAZ,EAAsB,IAAtB;AACH;AACGC,gC,GAAO,KAAKA,I;AACZC,mC,GAAU,qBAAWC,MAAX,CAAkB;AAC5BC,sCAAM,CADsB;AAE5BC,uCAAO,CAFqB;AAG5BC,4CAAY;AAHgB,6BAAlB,C;;mCAKR,KAAKC,OAAL,CAAa,SAAb,EAAuBL,QAAQM,IAA/B,C;;;AACNP,iCAAKQ,IAAL,CAAU,eAAV;AACAR,iCAAKS,GAAL,CAASR,QAAQS,IAAjB",
+    "file": "..\\..\\..\\src\\home\\controller\\captcha.js",
+    "sourcesContent": [
+        "'use strict';\r\n\r\nimport Base from './base.js';\r\nimport svgCaptcha from 'svg-captcha';\r\nexport default class extends Base {\r\n  /**\r\n   * index action\r\n   * @return {Promise} []\r\n   */\r\n    async indexAction(){\r\n        if(!this.isAjax('post')){\r\n            this.fail(1,'不支持此请求头',null)\r\n        }\r\n        let http = this.http;\r\n        let captcha = svgCaptcha.create({\r\n            size: 5,\r\n            noise: 8,\r\n            background: 'black' \r\n        });\r\n        await this.session('captcha',captcha.text);\r\n        http.type('image/svg+xml');\r\n        http.end(captcha.data);\r\n    }\r\n}"
+    ]
+}

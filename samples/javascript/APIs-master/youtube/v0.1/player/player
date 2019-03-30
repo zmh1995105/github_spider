@@ -1,0 +1,124 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+args = args || {};
+if (typeof args == 'string') {
+    args = {idVideo: args};
+}
+var url = 'http://www.youtube.com/v/' + (args.idVideo || 'g1BV7XTLUNg')
+
+jsClientApi({
+    name: "youtube.player",
+	data: {
+		url: url,
+		width: args.width,
+		height: args.height || '300',
+		params: {allowScriptAccess: "always", wmode: "Opaque"}
+	},
+	initialize: js(function(callback) {
+		$.getScript("http://webshell.local/lib/swfobject/swfobject.js", callback);
+	}),
+	loaded: js(function() {
+	}),
+	create: js(function(jsapi) {
+		swfobject.embedSWF(
+			this.data.url + '?version=3&f=videos&app=youtube_gdata&enablejsapi=1&playerapiid=player' + this.data.pid,
+			"ytapiplayer" + this.data.pid,
+			this.data.width || $('#ytapiplayer' + this.data.pid).width(),
+			this.data.height,
+			"8",
+			null,
+			null,
+			this.data.params,
+			{id: 'player' + this.data.pid }
+		);
+        this.player = document.getElementById("player" + this.data.pid);
+        var self = this;
+        setTimeout(function() {self.ready(jsapi)}, 700);
+        return false;
+	}),
+	ready: js(function(jsapi) {
+		jsapi.ready();
+	}),
+	interface: {
+		playVideo: js(function() {
+            this.player.playVideo();
+        }),
+        pauseVideo: js(function() {
+            this.player.pauseVideo();
+        }),
+        stopVideo: js(function() {
+            this.player.stopVideo();
+        }),
+        seekTo: js(function(seconds, allowSeekAhead) {
+            this.player.seekTo(seconds, allowSeekAhead);
+        }),
+        clearVideo: js(function() {
+            this.player.clearVideo();
+        }),
+        cue: js(function(url, startSeconds, suggestedQuality) {
+            if (url.substr(0, 7) == 'http://')
+                this.player.cueVideoByUrl(url, startSeconds, suggestedQuality)
+            else
+                this.player.cueVideoById(url, startSeconds, suggestedQuality)
+
+        }),
+        load: js(function(url, startSeconds, suggestedQuality) {
+            if (url.substr(0, 7) == 'http://')
+                this.player.loadVideoByUrl(url, startSeconds, suggestedQuality)
+            else
+                this.player.loadVideoById(url, startSeconds, suggestedQuality)
+        }),
+        loadPlaylist: js(function(playlist, index, startSeconds, suggestedQuality) {
+            this.player.loadPlaylist(playlist, index, startSeconds, suggestedQuality)
+        }),
+        cuePlaylist: js(function(playlist, index, startSeconds, suggestedQuality) {
+            this.player.cuePlaylist(playlist, index, startSeconds, suggestedQuality)
+        }),
+        nextVideo: js(function() {
+            this.player.nextVideo();
+        }),
+        previousVideo: js(function() {
+            this.player.previousVideo();
+        }),
+        playVideoAt: js(function(index) {
+            this.player.playVideoAt(index);
+        }),
+        mute: js(function() {
+            this.player.mute();
+        }),
+        unmute: js(function() {
+            this.player.unMute();
+        }),
+        setVolume: js(function(value) {
+            this.player.setVolume(value);
+        }),
+        setLoop: js(function(activate) {
+            this.player.setLoop(activate);
+        }),
+        setShuffle: js(function(activate) {
+            this.player.setShuffle(activate);
+
+        }),
+        setPlaybackQuality: js(function(quality) {
+            this.player.setPlaybackQuality(quality);
+        })
+	}
+}, {
+	view: '<div id="ytapiplayer<%= data.pid %>"></div>'
+});

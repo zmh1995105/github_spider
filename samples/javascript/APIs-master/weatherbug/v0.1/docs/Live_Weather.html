@@ -1,0 +1,266 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<body>
+ <div class="apicontainer">
+<div class="main api-profile">
+ <div class="constraint">
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">live.weather.stationid</span>
+</div>
+<div class="meta">
+<p>Returns detailed live weather conditions for the chosen location.</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Test console</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=UnitType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+UnitType= 0 ��� U.S. customary units (miles, ��F, etc...) [default]. UnitType= 1 ��� Metric system units (kms, ��C, etc...).</p>
+</div>
+<div class="name">
+<span class="parameter-name">UnitType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=OutputType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+OutputType= 0 ��� Returns the RSS with the XML embedded inside it starting with "<weather ns="aws">" [default]. OutputType= 1 ��� Returns pure xml beginning with "<weather ns="aws">".</p>
+</div>
+<div class="name">
+<span class="parameter-name">OutputType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=stationid placeholder="">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The StationId Call Format allows searching weather conditions for multiple stations (up to 5). Separate the station ids with a comma; no blank space.</p>
+</div>
+<div class="name">
+<span class="parameter-name">stationid</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">live.weather.zipcode</span>
+</div>
+<div class="meta">
+<p>Returns detailed live weather conditions for the chosen location.</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Test console</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=UnitType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+UnitType= 0 ��� U.S. customary units (miles, ��F, etc...) [default]. UnitType= 1 ��� Metric system units (kms, ��C, etc...).</p>
+</div>
+<div class="name">
+<span class="parameter-name">UnitType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=OutputType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+OutputType= 0 ��� Returns the RSS with the XML embedded inside it starting with "<weather ns="aws">" [default]. OutputType= 1 ��� Returns pure xml beginning with "<weather ns="aws">".</p>
+</div>
+<div class="name">
+<span class="parameter-name">OutputType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=zipCode placeholder="">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+5 digits designation for U.S. cities only.</p>
+</div>
+<div class="name">
+<span class="parameter-name">zipCode</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">live.weather.citycode</span>
+</div>
+<div class="meta">
+<p>Returns detailed live weather conditions for the chosen location.</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Test console</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=UnitType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+UnitType= 0 ��� U.S. customary units (miles, ��F, etc...) [default]. UnitType= 1 ��� Metric system units (kms, ��C, etc...).</p>
+</div>
+<div class="name">
+<span class="parameter-name">UnitType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=OutputType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+OutputType= 0 ��� Returns the RSS with the XML embedded inside it starting with "<weather ns="aws">" [default]. OutputType= 1 ��� Returns pure xml beginning with "<weather ns="aws">".</p>
+</div>
+<div class="name">
+<span class="parameter-name">OutputType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=cityCode placeholder="">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+5 digits designation for non-U.S. cities.</p>
+</div>
+<div class="name">
+<span class="parameter-name">cityCode</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">live.weather.lat.long</span>
+</div>
+<div class="meta">
+<p>Returns detailed live weather conditions for the chosen location.</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Test console</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=UnitType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+UnitType= 0 ��� U.S. customary units (miles, ��F, etc...) [default]. UnitType= 1 ��� Metric system units (kms, ��C, etc...).</p>
+</div>
+<div class="name">
+<span class="parameter-name">UnitType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=OutputType placeholder="0">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+OutputType= 0 ��� Returns the RSS with the XML embedded inside it starting with "<weather ns="aws">" [default]. OutputType= 1 ��� Returns pure xml beginning with "<weather ns="aws">".</p>
+</div>
+<div class="name">
+<span class="parameter-name">OutputType</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=lat placeholder="">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Location of a place north or south of the equator. Minimum value: -90. Maximum value: 90.</p>
+</div>
+<div class="name">
+<span class="parameter-name">lat</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+<input type="text" name=long placeholder="">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Location of a place east or west of the prime meridian. Minimum value -180. Maximum value: 180.</p>
+</div>
+<div class="name">
+<span class="parameter-name">long</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>

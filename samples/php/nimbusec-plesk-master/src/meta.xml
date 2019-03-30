@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<module>
+  <id>nimbusec-agent-integration</id>
+  <name>Nimbusec Webhosting Security</name>
+  <description>Nimbusec detects malware, defacements and blacklisting. With its extensive API and multi-user framework Nimbusec is fully integrated into your Plesk infrastructure and can even be offered as value added security service. Attractive re-selling programs for web hosters including white-labeling are available. Nimbusec's SPAM Shell, 0-Day root shell and CMS version detection capability protect your IP reputation, decrease unwanted traffic and reduce server load. As a hosting provider you can support your customers with pro-active help and use Nimbusec to remove malware infections fast. Find out more at https://nimbusec.com/en/</description>
+  <category>security</category>
+  <version>2.2</version>
+  <release>0</release>
+  <vendor>nimbusec</vendor>
+  <url>https://nimbusec.com</url>
+  <help_url>https://kb.nimbusec.com/Integrations/Plesk</help_url>
+  <buy_url>https://go.plesk.com/buy-plesk-ext/nimbusec-agent-integration</buy_url>
+  <support_url>https://kb.nimbusec.com/Integrations/Plesk</support_url>
+  <plesk_min_version>17.0</plesk_min_version>
+</module>

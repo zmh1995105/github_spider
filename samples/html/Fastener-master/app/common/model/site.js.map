@@ -1,0 +1,29 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\model\\site.js"
+    ],
+    "names": [
+        "init",
+        "args",
+        "tablePrefix",
+        "tableName",
+        "addSite",
+        "data",
+        "add",
+        "url",
+        "password",
+        "methods",
+        "checkSite",
+        "where",
+        "find",
+        "think",
+        "model",
+        "mongo"
+    ],
+    "mappings": "AAAA;AACA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAII;qBACAA,I,mBAAa;AAAA;;AAAA,0CAALC,IAAK;AAALA,gBAAK;AAAA;;AACT,8DAAMD,IAAN,kDAAcC,IAAd;AACA,aAAKC,WAAL,GAAmB,WAAnB;AACA,aAAKC,SAAL,GAAiB,MAAjB;AACH,K;;AAED;;;qBACMC,O;;gBAAQC,I,uEAAO,E;;;;;;mCACJ,KACRC,GADQ,CACJ;AACDC,qCAAKF,KAAKE,GADT;AAEDC,0CAAUH,KAAKG,QAFd;AAGDC,yCAASJ,KAAKI;AAHb,6BADI,C;;;;;;;;;;;;;;;;;;;;qBAOXC,S;;gBAAUL,I,uEAAO,E;;;;;;mCACN,KACRM,KADQ,CACF;AACHJ,qCAAKF,KAAKE,GADP;AAEHC,0CAAUH,KAAKG;AAFZ,6BADE,EAKRI,IALQ,E;;;;;;;;;;;;;;;;;;;;;EAlBQC,MAAMC,KAAN,CAAYC,K",
+    "file": "..\\..\\..\\src\\common\\model\\site.js",
+    "sourcesContent": [
+        "'use strict';\r\n/**\r\n * model\r\n */\r\nexport default class extends think.model.mongo {\r\n    //初始化\r\n    init(...args){\r\n        super.init(...args);\r\n        this.tablePrefix = 'fastener_';\r\n        this.tableName = 'site';\r\n    }\r\n\r\n    //添加站点\r\n    async addSite(data = {}){\r\n        return await this\r\n            .add({\r\n                url: data.url,\r\n                password: data.password,\r\n                methods: data.methods\r\n            })\r\n    }\r\n    async checkSite(data = {}){\r\n        return await this\r\n            .where({\r\n                url: data.url,\r\n                password: data.password\r\n            })\r\n            .find();\r\n    }\r\n}"
+    ]
+}

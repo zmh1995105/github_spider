@@ -1,0 +1,18 @@
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT DROP [0:0]
+
+-A INPUT -i lo -j ACCEPT
+-A OUTPUT -o lo -j ACCEPT
+
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+-A INPUT -m state --state NEW -m tcp -p tcp --dport {$SANDBOX_HTTPD_PORT} -j ACCEPT
+
+-A OUTPUT -p tcp -m state --state ESTABLISHED --sport 22 -j ACCEPT
+-A OUTPUT -p tcp -m state --state ESTABLISHED --sport {$SANDBOX_HTTPD_PORT} -j ACCEPT
+
+COMMIT

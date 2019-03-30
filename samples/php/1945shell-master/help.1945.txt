@@ -1,0 +1,74 @@
+ _  ___  _  _  ____       ____   ___  _ _____   | Author  : shutdown57
+/ |/ _ \| || || ___|_   _|___ \ / _ \/ |___  |  |  IndonesianPeople.shutdown57@gmail.com
+| | (_) | || ||___ \ \ / / __) | | | | |  / /   | Version :  2017
+| |\__, |__   _|__) \ V / / __/| |_| | | / /    | Codename: MerdekaAtoeMati
+|_|  /_/   |_||____/ \_/ |_____|\___/|_|/_/     | @Github : github.com/alintamvanz/1945shell
++------------------------------------------------------------------------------------------------+
+
+
+# Login / Auth #!
+Default password : "asukabeh" (tanpa tanda kutip) di enskripsi dalam MD5
+Default username : shutdown57
+Hidden login     : TRUE or FALSE pada variable "$hidden_login" , jika TRUE halaman login shell tersembunyi 
+Show Hidden login: Pada variable $loguri_1945 = "?login=1945" berarti halaman login ada di shell.php?login=1956  
+
+# FILEMANAGER #!
+- Rename
+- Edit
+- Delete
+- Dump Hex
+- Download
+- Newfile
+- New Directory
+	* Mass / Multi file selected
+	- Multi delete files/dir
+	- Multi copy files
+	- Multi Chmod files
+	- Multi Cut files
+
+
+# MENU BAR #!
+
+* Home   		: FileManager
+* Sec. Info		: Security Info tentang server
+* Command		: Memasukan perintah menggunakan fungsi, system , shell_exec , passthru , exec , jadi pastikan server memiliki fungsi tersebut
+* Upload		: Kelebihannya bisa upload file secara multiple
+* SQL			: Koneksi ke Database SQL secara manual menggunakan SQL Command
+* PHP			: Menjalankan PHP Code menggunakan fungsi Eval()
+* PS			: Mengetahui Proccess Status
+* String Tools 	: String tools berisi encode decode hash
+* Remote Shell 	: Bind Port , BackConnect 
+* Mail			: Mengirim email menggunakan fungsi mail() di php
+* Ransomeware   : Hati hati menggunakan tools ini.
+* Kuchiyose		: Memanggil script / webshell dari luar
+ - WSO 2.5		
+ - B374k 2.8
+ - indoXploit v2
+ - 1945 v1
+ - Ayana Shahab Priv8 Shell
+ - linuXcodev2017
+ - WebAdmin
+ - Mini-Shell
+ - NoName Shell
+ - ITSecTeam
+ - c99 shell
+ - r57 shell
+ - symlink mobile
+ - Symlink Sa 3.0
+ - Adminer
+* List tools   	: Daftar  tools tentang server dan webshell
+ - Get Config   
+ - Grab cPanel 	
+ - Jumping       
+ - Symlink
+ - *.jpg shell (.htacess)
+ - Stamped site
+ - SMTP Grabber
+ - RDP Tools
+ - Admin Finder
+ - Fake root
+ - Mass Deface
+ - Zone-H
+* CGI Shell    : CGI Menggunakan bahasa pemrograman Bash Shell Scripting
+* CGI Perl	   : CGI Menggunakan bahasa pemrograman Perl
+* About		   : tentang webshell ini

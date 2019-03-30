@@ -1,0 +1,250 @@
+<section id="display">
+
+	<p>Inside Webshell, we've added some builtins to make it possible. To call a builtin or an API, we always follow this interface : <code>builtin(args, options)</code> where both parameters are optional. In the <code>args</code> parameter, you configure the builtin/API you are calling. In the <code>options</code> parameter, you configure Webshell to set how it will be executed. Here is the complete list of all the builtins available on Webshell</p>
+
+	<h2>Display/debug builtins</h2>
+		
+		<div>
+			<h4>echo()</h4>
+			<p><pre class="prettyprint">echo(string or any)</pre></p>
+			<p>Push a view in the result stack which display the given argument as a <code>string</code>.</p>
+			<pre class="prettyprint">echo(5);
+//result: {_meta: { view: "42" }}</pre>
+42<br /><br />
+<pre class="prettyprint">echo("Hello World!!");
+//result: {_meta: { view: "Hello World!!"}}</pre>
+Hello World<br /><br />
+<pre class="prettyprint">echo({a: 55});
+//result: {_meta: { view: "[object Object]"}}</pre>
+[Object Object]<br /><br />
+		</div>
+		<br />
+		<div>
+			<h4>dump()</h4>
+			<p><pre class="prettyprint">dump(any)</pre></p>
+			<p>prettify the given argument.</p>
+			<pre class="prettyprint">dump(5);
+//result: {_meta: { view: "&lt;span style=\"color:#811F24\"&gt;5&lt;/span&gt;&lt;br/&gt;" }}</pre>
+<span style=\"color:#811F24\">5</span><br/>
+<pre class="prettyprint">dump("Hello World!!");
+//result: {_meta: { view: "&lt;span style=\"color:#0B6125\"&gt;&quot;Hello World!!&quot;&lt;/span&gt;&lt;br/&gt;"}}</pre>
+<span style=\"color:#0B6125\">&quot;Hello World!!&quot;</span><br/>
+<pre class="prettyprint">dump({a: "some text", b: 42});
+//result: {_meta: { view: "&lt;span style=\"color:#794938\"&gt;{&lt;/span&gt;&lt;br/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span style=\"color:#234A97\"&gt;a&lt;/span&gt;&lt;span style=\"color:#794938\"&gt;: &lt;/span&gt;&lt;span style=\"color:#0B6125\"&gt;&quot;some text&quot;&lt;/span&gt;,&lt;br/&gt;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span style=\"color:#234A97\"&gt;b&lt;/span&gt;&lt;span style=\"color:#794938\"&gt;: &lt;/span&gt;&lt;span style=\"color:#811F24\"&gt;42&lt;/span&gt;&lt;br/&gt;&lt;span style=\"color:#794938\"&gt;}&lt;/span&gt;&lt;br/&gt;</pre>
+<span style=\"color:#794938\">{</span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color:#234A97\">a</span><span style=\"color:#794938\">: </span><span style=\"color:#0B6125\">&quot;some text&quot;</span>,<br/>&nbsp;&nbsp;&nbsp;&nbsp;<span style=\"color:#234A97\">b</span><span style=\"color:#794938\">: </span><span style=\"color:#811F24\">42</span><br/><span style=\"color:#794938\">}</span><br/>
+		</div>
+</section><br /><br />
+<section id="http">
+	<h2>HTTP builtins</h2>
+	<div>
+		<h4>http()</h4>
+		<p><pre class="prettyprint">http({
+  url: (string),
+  provider: (optional string),
+  auth: (optional string),
+  follow: (optional boolean),
+  method: (optional boolean),
+  contenttype: (optional string),
+  headers: (optional object),
+  params: (optional string or object),
+  body: (optional string or object or path or buffer),
+  format: (optional string)
+})</pre></p>
+		<p>Executes a custom http request to the specified <code>url</code>. You can set a <code>provider</code> that can fill authentication headers and parameters.</p>
+		<ul>
+			<li><p><code>follow</code> is a boolean determining weather the request must follow redirections or not. (default <em>true</em>)</p></li>
+			<li><p><code>method</code> can be use to set a custom http verb (default <em>'GET'</em>)
+			<li><p><code>contenttype</code> allows you to set the type of the data passed in the http <code>body</code>.</p></li>
+			<li><p><code>headers</code> can be used to set your own request headers.</p></li>
+			<li><p><code>params</code> contains the GET parameters passed in the requested url.</p></li>
+			<li><p><code>body</code> contains the request's body for a suitable method. See examples below.</p></li>
+			<li><p><code>format</code> can be set to a supported mime type or to shortened types 'json', 'xml'. Set <em>'permissive_json'</em> for a non-strict JSON parser, or <em>'buffer'</em> to get the raw response into a buffer.</p></li>
+		</ul>
+		<p>This builtin returns a <strong>WebshellHttp</strong> that immediately starts the request, but waits for its result only if a field of that object is read.</p><p>Additionally, the builtin <code>infos</code> can be used to receive the requested information without waiting for the response.</p>
+	</div><br />
+
+	<div>
+		<h4>get()</h4>
+		<p><pre class="prettyprint">get({
+  url: (string),
+  ...http parameters...
+})</pre></p>
+		<p>Sends a GET HTTP request to a <code>url</code></p><ul><li><p><em>See builtin <code>http</code> for more infos about the parameters.</em></p>
+	</div><br />
+
+	<div>
+		<h4>post()</h4>
+		<p><pre class="prettyprint">post({
+  url: (string),
+  ...http parameters...
+})</pre></p>
+		<p>Sends a POST HTTP request to a <code>url</code></p><ul><li><p><em>See builtin <code>http</code> for more infos about the parameters.</em></p>
+	</div><br />
+
+	<div>
+		<h4>put()</h4>
+		<p><pre class="prettyprint">put({
+  url: (string),
+  ...http parameters...
+})</pre></p>
+		<p>Sends a PUT HTTP request to a <code>url</code></p><ul><li><p><em>See builtin <code>http</code> for more infos about the parameters.</em></p>
+	</div><br />
+
+	<div>
+		<h4>delete()</h4>
+		<p><pre class="prettyprint">delete({
+  url: (string),
+  ...http parameters...
+})</pre></p>
+		<p>Sends a DELETE HTTP request to a <code>url</code></p><ul><li><p><em>See builtin <code>http</code> for more infos about the parameters.</em></p>
+	</div><br />
+
+	<div>
+		<h4>patch()</h4>
+		<p><pre class="prettyprint">patch({
+  url: (string),
+  ...http parameters...
+})</pre></p>
+		<p>Sends a PATCH HTTP request to a <code>url</code></p><ul><li><p><em>See builtin <code>http</code> for more infos about the parameters.</em></p>
+	</div><br />
+	<div>
+		<h4>infos()</h4>
+		<p><pre class="prettyprint">infos({
+  obj: (WebshellHttp object)
+})</pre></p>
+		<p>Get request information of the WebshellHttp <code>obj</code> containing the following fields:</p>
+		<ul>
+			<li><code>url</code>, original requested url</li>
+			<li><code>fullurl</code>, expended requested url, useful when using the <code>provider</code> http parameter</p></li>
+		</ul>
+	</div>
+	<div>
+		<h4>Basic examples:</h4>
+		<p>Minimal request:<pre class="prettyprint">get('google.com')</pre>will use default parameters and default protocol "http"</p>
+		<p>Simple get request with parameters:<pre class="prettyprint">get({url:'mydomain.com',params:{myParam:42,otherParam:"a value"}})</pre></p>
+		<p>Simple post request:<pre class="prettyprint">post({url:'mydomain.com',body:{myBodyParam:24,otherBodyParam:"another value"}})</pre> will send a POST request with body fields in <code>application/x-www-form-urlencoded</code> default format</p>
+		<p>JSON post request and url parameters:<pre class="prettyprint">post({
+  url:'mydomain.com',
+  contenttype:'application/json', // set body encoding
+  params:{myParam:42,otherParam:"a value"}, // query parameters
+  body:{myBodyParam:24,otherBodyParam:"another value"}, // this object will be sent JSONified
+};
+		</pre></p>
+		<p>Send files from fs (in multipart/form-data):<pre class="prettyprint">post({
+  url: 'mydomain.com',
+  body: http.file({myfile:fs.path.to.file, myotherfile:fs.path.to.other.file})
+})</pre></p>
+		<p>Send a file from data or buffer (in multipart/form-data):<pre class="prettyprint">post({
+  url: 'mydomain.com',
+  body: http.file({myfile: {filename: 'x.jpg', body:myJpgBuffer}})
+})</pre></p>
+	</div>
+	<div>
+		<h4>Extended usage:</h4>
+		<p>Receive the response into a buffer:<pre class="prettyprint">get({url:'mydomain.com', format:'buffer'})</pre></p>
+		<p>Send a multipart/form-data request:<pre class="prettyprint">post({
+  url: 'mydomain.com',
+  body: http.multipart({a:'x',b:'y'}), // request's content-type will be auto-ajusted to "multipart/form-data"
+};</pre></p>
+		<p>Send a custom multipart/form-data request:<pre class="prettyprint">post({
+  url: 'mydomain.com',
+  body: http.multipart({a:{format:'json',body:myObject},b:{format:'json',body:fs('mycontent.json')}),
+};</pre>request's content-type will be auto-ajusted to "multipart/form-data" but parts will have json type</p>
+		<p>Send a multipart/mixed request (body field):<pre class="prettyprint">...body:http.multipart(['x', 'y'])...</pre></p>
+		<p>Send a multipart/mixed in a multipart/form-data (body field):<pre class="prettyprint">...body:http.multipart({a:['x', 'y']})...</pre></p>
+		<p>Send data and files from multipart/mixed in a multipart/form-data (body field):<pre class="prettyprint">...body:http.multipart({a: 'x', b:http.files([fs.path.to.file, fs.path.to.file2]) })</pre></p>
+	</div>
+</section><br /><br />
+<section id="fs">
+	<h2>File management builtins</h2>
+	<p>All scripts / APIs you store on webshell are in the File system of Webshell. You can access them, modify them, store new files and so on thanks the following builtins. The API Editor and all the Webshell platform is mainly based on these builtins. You can use this file system as a database or as a github repository directly executable on the cloud</p>
+	<div>
+		<h3>fs</h3>
+		<p>Manipulate path and execute files. fs is a proxy object so you can use it as a function or as an object: <code>fs('/bin/facebook/v0.1/facebook')</code> is the same thing than <code>fs.bin.facebook['v0.1'].facebook</code>, it returns the fullpath of the file (indeed a WebshellPath object representing a fullpath). You can note that you can chain folder using directly the name as an object or as an array. It's like a selector for execute/write/update a file.</p>
+
+	</div><br />
+	<div>
+		<h3>ls()</h3>
+		<p><pre class="prettyprint">ls(WebshellPath)</pre></p>
+		<p>List files and directories in the given <code>WebshellPath</code>.</p><p><em><code>ls</code> has a default view for display properly files and folders in a list</em></p>
+	</div><br />
+	<div>
+		<h3>mkdir()</h3>
+		<p><pre class="prettyprint">mkdir(path)</pre></p>
+		<p>Create a directory in the given <code>path</code></p>
+		<p>ie: <pre class="prettyprint">mkdir(fs.thyb.tmp); //thyb is a login</pre></p>
+	</div><br />
+	<div>
+		<h3>write()</h3>
+		<p><pre class="prettyprint">write({
+  path: (WebshellPath),
+  content: (string)
+})</pre></p>
+		<p>write content in the given <code>WebshellPath</code>.</p>
+		<p>An assignation to a WebshellPath object will also write the content into its path:<pre class="prettyprint">write({
+  path: fs.path.to.file
+  content: 'hello'
+});
+
+// is equivalent to:
+fs.path.to.file = 'hello'</pre></p>
+	</div><br />
+	<div>
+		<h3>stat()</h3>
+		<p><pre class="prettyprint">stat(path)</pre></p>
+		<p>Receive a file or directory informations for the given <code>path</code></p>
+		<p>ie: <pre class="prettyprint">stat(fs.login.tmp);</pre></p>
+		<p>If the file/directory exists, stat will return an object containing<br/>
+			<ul>
+				<li>- <code>mode</code>: your rights on this path</li>
+				<li>- <code>size</code>: size of the file</li>
+				<li>- <code>atime</code>: last access timestamp</li>
+				<li>- <code>mtime</code>: last modification timestamp</li>
+				<li>- <code>ctime</code>: creation timestamp</li>
+			</ul>
+		</p>
+	</div><br />
+	<div>
+		<h3>require()</h3>
+		<p><pre class="prettyprint">require(WebshellPath)</pre></p>
+		<p>Import the file in <code>path</code> in your code in the same way of node.js.<br/>
+		in <code>test</code> file:<pre class="prettyprint">
+module.exports = {
+  a: 42	
+}
+</pre>
+In a user's file:
+<pre class="prettyprint">
+var t = require('test');
+
+//t.a == 42
+</pre></p>
+	</div><br />
+	<div>
+		<h3>rm()</h3>
+		<p><pre class="prettyprint">rm(WebshellPath)</pre></p>
+		<p>remove recursively files and directories in the given <code>WebshellPath</code></p>
+	</div><br />
+	<div>
+		<h3>mv()</h3>
+		<p><pre class="prettyprint">mv({
+  src: (WebshellPath),
+  dst: (WebshellPath)
+});</pre></p>
+		<p>move file or directory <code>src</code> to <code>dst</code>. <code>dst</code> MUST be the final path and not the container's path</p>
+	</div>
+</section><br /><br />
+<section id="views">
+	<h2>Views builtins</h2>
+	<div>
+		<h3>render()</h3>
+		<p><pre class="prettyprint">render(data, {view: 'html or path'})</pre></p>
+		<p>render a view using EJS template.</p>
+		<pre class="prettyprint">render({
+  name: 'thyb'
+}, {
+  view: '&lt;h1&gt;Hello &lt;%= data.name %&gt;!&lt;/h1&gt;'
+});</pre>
+		<p>For the complete documentation of EJS templating, you can see the <a href="http://embeddedjs.com/">official EJS website</a></p>
+	</div>
+</section>

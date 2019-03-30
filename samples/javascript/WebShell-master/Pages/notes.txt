@@ -1,0 +1,33 @@
+﻿//    $.ajax({
+//        url: '{{Notes}}',
+//        dataType: "json",
+//        success: function (data) {
+//            alert(data.items[1]);
+//            //var d = '{"items":[{"id":3,"title":"first note","content":"<p>first note</p>","date":"8/31/2010 2:39:41 PM"},{"id":2,"title":"second note","content":"<p>first note</p>","date":"8/31/2010 2:39:41 PM"}]}';
+//            //d = jQuery.parseJSON(data);
+//            $.each(data.items, function (k, v) {
+//                var link = '<p style="color:blue;text-decoration:underline"">' + v.title + ',  ' + '<a href="#" style="text-decoration:none">[Edit]</a></p>';
+//                $("#notes").append(link);
+//                var content = '<div>' + v.content + '</div><br></br>';
+//                $("#notes").append(content);
+//            });
+//        },
+//        error: function () {
+//            $("#notes").append('error, cannot get contents!');
+//        },
+//        complete: function () {
+//            // alert('mynotes ajax completed');
+//        }
+    //    });
+
+
+
+
+############### Remaining Features ####################
+1- localization, implementing command code
+2- module deployment tool, that facilate the way of adding new module to system
+2- improve httpHandler to implement IHttpAsyncHandler interface
+3- handling input validation from code
+
+###################ISSUES########################
+1- Response.Redirect need optimization, i see to do redirect from handler class not command class.

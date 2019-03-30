@@ -1,0 +1,23 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\config\\db.js"
+    ],
+    "names": [
+        "type",
+        "log_sql",
+        "log_connect",
+        "adapter",
+        "mongo",
+        "host",
+        "port",
+        "database",
+        "prefix",
+        "encoding"
+    ],
+    "mappings": "AAAA;AACA;;;;;;kBAIe;AACbA,QAAM,OADO;AAEbC,WAAS,IAFI;AAGbC,eAAa,IAHA;AAIbC,WAAS;AACPC,WAAM;AACJC,YAAM,WADF;AAEJC,YAAM,OAFF;AAGJC,gBAAU,UAHN;AAIJC,cAAQ,WAJJ;AAKJC,gBAAU;AALN;AADC;AAJI,C",
+    "file": "..\\..\\..\\src\\common\\config\\db.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * db config\n * @type {Object}\n */\nexport default {\n  type: 'mongo',\n  log_sql: true,\n  log_connect: true,\n  adapter: {\n    mongo:{\n      host: '127.0.0.1',\n      port: '27017',\n      database: 'fastener',\n      prefix: 'fastener_',\n      encoding: 'utf8'\n    }\n  }\n};"
+    ]
+}

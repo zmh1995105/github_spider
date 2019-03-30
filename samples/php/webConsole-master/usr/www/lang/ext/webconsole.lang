@@ -1,0 +1,13 @@
+[zh-cn]
+webconsole = "Web Console Application"
+auth = "Nickola"
+tos_plex_note = "Web Console，它是一种以网页形势存在的一种命令执行环境，也可以成为一种网页后门。"
+enter = "进入"
+version = 0.1
+
+[en-us]
+webconsole = "Web Console Application"
+auth = "Nickola"
+tos_plex_note = "It is a kind of command execution environment that exists in the situation of web pages, and it can also be a back door of web pages."
+enter = "Enter"
+version = 0.1

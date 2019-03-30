@@ -1,0 +1,14 @@
+get http://foo.com qparam
+get http://foo.com qparam1 qparam2
+get http://foo.com "q string"
+get http://foo.com ?a b
+get http://foo.com --header value
+get http://foo.com qparam ?a b --header value
+get 'http://foo.com?q="q string"'
+http://foo.com
+foo
+post http://foo.com
+post foo
+foo | bar
+get foo | post bar
+get foo "a" ?b c --d e | post bar "a" ?b c --d e

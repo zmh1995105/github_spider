@@ -1,0 +1,49 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\controller\\error.js"
+    ],
+    "names": [
+        "displayError",
+        "status",
+        "think",
+        "env",
+        "http",
+        "error",
+        "errorConfig",
+        "config",
+        "message",
+        "isJsonp",
+        "jsonp",
+        "key",
+        "msg",
+        "isAjax",
+        "fail",
+        "module",
+        "mode",
+        "mode_module",
+        "file",
+        "options",
+        "extend",
+        "type",
+        "file_depr",
+        "fetch",
+        "then",
+        "content",
+        "replace",
+        "content_type",
+        "end",
+        "_400Action",
+        "_403Action",
+        "_404Action",
+        "_500Action",
+        "_503Action",
+        "controller",
+        "base"
+    ],
+    "mappings": "AAAA;AACA;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAIE;;;;;mBAKAA,Y,yBAAaC,M,EAAO;AAAA;;AAElB;AACA,QAAGC,MAAMC,GAAN,KAAc,YAAjB,EAA8B;AAC5B,WAAKC,IAAL,CAAUC,KAAV,GAAkB,IAAlB;AACD;;AAED,QAAIC,cAAc,KAAKC,MAAL,CAAY,OAAZ,CAAlB;AACA,QAAIC,UAAU,KAAKJ,IAAL,CAAUC,KAAV,IAAmB,KAAKD,IAAL,CAAUC,KAAV,CAAgBG,OAAnC,IAA8C,EAA5D;AACA,QAAG,KAAKC,OAAL,EAAH,EAAkB;AAAA;;AAChB,aAAO,KAAKC,KAAL,sBACJJ,YAAYK,GADR,IACcV,MADd,SAEJK,YAAYM,GAFR,IAEcJ,OAFd,UAAP;AAID,KALD,MAKM,IAAG,KAAKK,MAAL,EAAH,EAAiB;AACrB,aAAO,KAAKC,IAAL,CAAUb,MAAV,EAAkBO,OAAlB,CAAP;AACD;;AAED,QAAIO,SAAS,QAAb;AACA,QAAGb,MAAMc,IAAN,KAAed,MAAMe,WAAxB,EAAoC;AAClCF,eAAS,KAAKR,MAAL,CAAY,gBAAZ,CAAT;AACD;AACD,QAAIW,OAAUH,MAAV,eAA0Bd,MAA1B,UAAJ;AACA,QAAIkB,UAAU,KAAKZ,MAAL,CAAY,KAAZ,CAAd;AACAY,cAAUjB,MAAMkB,MAAN,CAAa,EAAb,EAAiBD,OAAjB,EAA0B,EAACE,MAAM,MAAP,EAAeC,WAAW,GAA1B,EAA1B,CAAV;AACA,SAAKC,KAAL,CAAWL,IAAX,EAAiB,EAAjB,EAAqBC,OAArB,EAA8BK,IAA9B,CAAmC,mBAAW;AAC5CC,gBAAUA,QAAQC,OAAR,CAAgB,eAAhB,EAAiClB,OAAjC,CAAV;AACA,aAAKa,IAAL,CAAUF,QAAQQ,YAAlB;AACA,aAAKC,GAAL,CAASH,OAAT;AACD,KAJD;AAKD,G;AACD;;;;;;mBAIAI,U,yBAAY;AACV,WAAO,KAAK7B,YAAL,CAAkB,GAAlB,CAAP;AACD,G;AACD;;;;;;mBAIA8B,U,yBAAY;AACV,WAAO,KAAK9B,YAAL,CAAkB,GAAlB,CAAP;AACD,G;AACD;;;;;;mBAIA+B,U,yBAAY;AACV,WAAO,KAAK/B,YAAL,CAAkB,GAAlB,CAAP;AACD,G;AACD;;;;;;mBAIAgC,U,yBAAY;AACV,WAAO,KAAKhC,YAAL,CAAkB,GAAlB,CAAP;AACD,G;AACD;;;;;;mBAIAiC,U,yBAAY;AACV,WAAO,KAAKjC,YAAL,CAAkB,GAAlB,CAAP;AACD,G;;;EAvE0BE,MAAMgC,UAAN,CAAiBC,I",
+    "file": "..\\..\\..\\src\\common\\controller\\error.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * error controller\n */\nexport default class extends think.controller.base {\n  /**\n   * display error page\n   * @param  {Number} status []\n   * @return {Promise}        []\n   */\n  displayError(status){\n\n    //hide error message on production env\n    if(think.env === 'production'){\n      this.http.error = null;\n    }\n\n    let errorConfig = this.config('error');\n    let message = this.http.error && this.http.error.message || '';\n    if(this.isJsonp()){\n      return this.jsonp({\n        [errorConfig.key]: status,\n        [errorConfig.msg]: message\n      })\n    }else if(this.isAjax()){\n      return this.fail(status, message);\n    }\n\n    let module = 'common';\n    if(think.mode !== think.mode_module){\n      module = this.config('default_module');\n    }\n    let file = `${module}/error/${status}.html`;\n    let options = this.config('tpl');\n    options = think.extend({}, options, {type: 'base', file_depr: '_'});\n    this.fetch(file, {}, options).then(content => {\n      content = content.replace('ERROR_MESSAGE', message);\n      this.type(options.content_type);\n      this.end(content);\n    });\n  }\n  /**\n   * Bad Request \n   * @return {Promise} []\n   */\n  _400Action(){\n    return this.displayError(400);\n  }\n  /**\n   * Forbidden \n   * @return {Promise} []\n   */\n  _403Action(){\n    return this.displayError(403);\n  }\n  /**\n   * Not Found \n   * @return {Promise}      []\n   */\n  _404Action(){\n    return this.displayError(404);\n  }\n  /**\n   * Internal Server Error\n   * @return {Promise}      []\n   */\n  _500Action(){\n    return this.displayError(500);\n  }\n  /**\n   * Service Unavailable\n   * @return {Promise}      []\n   */\n  _503Action(){\n    return this.displayError(503);\n  }\n}"
+    ]
+}

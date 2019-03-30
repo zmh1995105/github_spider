@@ -1,0 +1,21 @@
+{
+    "version": "1.2.0",
+    "name": "hm",
+    "description": "hm -a magic webshell scanner",
+    "linux-386": {
+        "url": "http://www.webshell.pub/download/hm/1.2.0/hm-linux-386.tgz",
+        "md5": "3e044376bf56a3345b097ecbc6159311",
+        "sha1": "5da3c67a13d958c9668d753135cea64ecc156ed6"
+    },
+    "windows-386": {
+        "url": "http://down.shellpub.com/hm-ui/1.2.0/HemaSetup1.2.0.zip",
+        "md5": "D41659B780321D108E37112CE207EB94",
+        "sha1": "0CBC40B0183F3F85B2C63B4CE84D23A40F648784"
+    },
+    "linux-amd64": {
+        "url": "http://www.webshell.pub/download/hm/1.2.0/hm-linux-amd64.tgz",
+        "md5": "35826fc237841b1938c917700528eed7",
+        "sha1": "b8273e84a2a5d06906698e3a31aca8e89ad3c63a"
+    },
+    "releasenote": "1.2.0"
+}

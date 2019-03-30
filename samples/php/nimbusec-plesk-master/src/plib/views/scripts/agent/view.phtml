@@ -1,0 +1,282 @@
+<?= $this->response; ?>
+<?= $this->renderTabs($this->tabs); ?>
+
+<!-- ========================================= [ AGENT INFORMATION ] ===================================================================== -->
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("agent.view.subtitle"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <div>
+                <?= $this->lmsg("agent.view.description"); ?>
+                <br>
+                <br>
+
+                <div class="box-area">
+
+                    <div class="form-row">
+                        <div class="field-name">
+                            <span><?= $this->lmsg("agent.view.installed.title"); ?> </span>
+                        </div>
+                        <div class="field-value">
+                            <span><?= $this->lmsg("msg.installed"); ?></span>
+                        </div>
+                    </div>
+                        
+                    <div class="form-row">
+                        <div class="field-name">
+                            <span><?= $this->lmsg("agent.view.version.title"); ?> </span>
+                        </div>
+                        <div class="field-value">
+                            <span><?= $this->agent_version; ?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field-name">
+                            <span><?= $this->lmsg("agent.view.os.title"); ?> </span>
+                        </div>
+                        <div class="field-value">
+                            <span><?= $this->lmsg("agent.view.os.{$this->agent_os}"); ?></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field-name">
+                            <span><?= $this->lmsg("agent.view.arch.title"); ?> </span>
+                        </div>
+                        <div class="field-value">
+                            <span><?= $this->lmsg("agent.view.arch.{$this->agent_arch}"); ?></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="btns-box">
+                <?php if ($this->agent_outdated === "true"): ?>
+
+                    <form method="post" action="<?= $this->h->url('update-agent', 'agent'); ?>">
+                        <div class="box-area">
+                            <div class="form-row">
+                                <div class="field-name">
+                                    <span class="required">*</span>
+                                    <span> <?= $this->lmsg("msg.required"); ?></span>
+                                </div>
+                                <div class="field-value">
+                                    <span class="btn action">
+                                    
+                                        <button type="submit" name="submit" value="updateAgent">
+                                            <?= sprintf($this->lmsg("agent.controller.update"), $this->update_version) ?>
+                                        </button> 
+                                    
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                <?php endif; ?>
+            </div>
+            
+        </div>
+    </div>
+</div>
+<br>
+
+<!-- ========================================= [ SCHEDULE SETTINGS ] ===================================================================== -->
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("agent.view.schedule.title"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <?= $this->lmsg("agent.view.schedule.description"); ?>
+            <br>
+            <br>
+            
+            <form method="post" id="schedule" action="<?= $this->h->url('schedule', 'agent'); ?>">
+
+                <!-- scheduled -->
+                <div class="form-row">
+                    <div class="field-name">
+                        <?= $this->lmsg("agent.view.schedule.status"); ?>
+                    </div>
+
+                    <?php $agent_scheduled = pm_Settings::get("agent_scheduled"); ?>                
+                    <div class="field-value">
+                        <label class="customswitch">
+                            <input name="status" type="checkbox" value="true" <?php if ($agent_scheduled === "true"): ?> checked="checked" <?php endif; ?>>
+                            <span class="customslider round">
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- yara -->
+                <div class="form-row">
+                    <?php $agent_arch = json_decode(pm_Settings::get("agent"), true)["arch"]; ?>
+                    <?php $agent_yara = pm_Settings::get("agent_yara"); ?>
+
+                    <div class="field-name">
+                        <span>
+                            <?= $this->lmsg("agent.view.schedule.yara"); ?>
+                        </span>
+                        <?php if ($agent_arch === "32bit"): ?>
+                            <span>
+                                <?= $this->lmsg("agent.view.schedule.yara_not_supported"); ?>
+                            </span>
+                        <?php endif ?>
+                    </div>
+
+                    <div class="field-value">
+                        <label class="customswitch">
+                            <input name="yara" type="checkbox" value="true" 
+                                <?php if ($agent_arch === "32bit"): ?> disabled="disabled" <?php endif ?>
+                                <?php if ($agent_yara === "true"): ?> checked="checked" <?php endif ?>/>
+                            <span class="customslider round">
+                            </span>
+                        </label> 
+                    </div>
+                </div>
+                <br/>
+
+                <!-- interval -->
+                <div class="form-row">
+                    <div class="field-name">
+                        <?= $this->lmsg("agent.view.schedule.interval"); ?>
+                    </div>
+                    <div class="field-value">
+                        <select name="interval"> 
+                            <option value="0" <?php if (pm_Settings::get("agent_schedule_interval") == "0"): ?> selected <?php endif; ?>>
+                                <?= $this->lmsg("agent.view.schedule.interval.once"); ?>
+                            </option>
+                            <option value="12" <?php if (pm_Settings::get("agent_schedule_interval") == "12"): ?> selected <?php endif; ?>>
+                                <?= $this->lmsg("agent.view.schedule.interval.twice"); ?>
+                            </option>
+                            <option value="8" <?php if (pm_Settings::get("agent_schedule_interval") == "8"): ?> selected <?php endif; ?>>
+                                <?= $this->lmsg("agent.view.schedule.interval.three_times"); ?>
+                            </option>
+                            <option value="6" <?php if (pm_Settings::get("agent_schedule_interval") == "6"): ?> selected <?php endif; ?>>
+                                <?= $this->lmsg("agent.view.schedule.interval.four_times"); ?>
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="btns-box">
+                    <div class="box-area">
+                        <div class="form-row">
+                            <div class="field-name">
+                                <span id="btn-send" class="btn action">
+                                    <button type="submit" name="submit" value="schedule">
+                                        <?= $this->lmsg("agent.view.schedule.update"); ?>    
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+
+<!-- ========================================= [ AGENT CONFIGURATION ] ===================================================================== -->
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("agent.view.conf.title"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <?= $this->lmsg("agent.view.conf.description"); ?>
+            <br>
+            <br>
+            <div class="form-row">
+                <textarea id="agentConfiguration" style="margin-right: 5px; height: 355px; width: 455px" readonly><?= $this->configuration; ?></textarea>
+                <div class="objects-toolbar" style="width: auto;">
+                    <a id="configClipboard" class="s-btn sb-upgrade" style="vertical-align: top;">Copy to clipboard</a>
+                </div>
+                <span style="vertical-align: top;">
+                    <span id="configClipboardMessage" style="padding: 5px"></span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================= [ JS ] ===================================================================== -->
+
+<script>
+
+    var setLoading = function (toggle) {
+        
+        // hide button
+        toggle.style.display = "None";
+
+        // disable parent
+        var parent = toggle.parentNode;
+        parent.classList.toggle("disabled");
+
+        // rotating loading spinner
+        var spinner = document.createElement("span");
+        spinner.classList.toggle("wait");
+        spinner.appendChild(document.createTextNode("Please wait"));
+
+        parent.appendChild(spinner);
+    } 
+
+    var eventHandler = function (event) {
+
+        // get the clicked element
+        var toggle = event.target;
+
+        if (toggle.nodeName.toLowerCase() === "button") {
+            
+            // for all submit buttons
+            if (toggle.type === "submit") {
+
+                // init loading
+                setLoading(toggle);
+            }
+        }
+
+        if (toggle.nodeName.toLowerCase() === "a") {
+
+            if (toggle.id === "configClipboard") {
+                document.getElementById("agentConfiguration").select();
+                var successful = document.execCommand("copy");
+
+                var clipboardMessage = document.getElementById("configClipboardMessage");
+                clipboardMessage.textContent = "";
+                clipboardMessage.style.color = "#000000";
+                
+                if (successful) {
+                    clipboardMessage.textContent = "successfully copied to clipboard";
+                    clipboardMessage.style.color = "green";
+                } else {
+                    clipboardMessage.textContent = "could not copy to clipboard";
+                    clipboardMessage.style.color = "red";
+                }
+            }
+        }
+    };
+
+    document.addEventListener("click", eventHandler);
+
+</script>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>urlencoded form example</title>
+  </head>
+
+  <body>
+    <h1>It's A Form!</h1>
+{{if .Processed}}
+    {{with .User}}
+    <p>Hello, {{.Name}}!</p>
+    {{end}}
+{{else}}
+    <form action="/" method="post" name="userdata">
+      Name: <input type="text" name="name"><br /> 
+      Email: <input type="text" name="email"><br />
+      <input type="submit">
+    </form>
+{{end}}
+  </body>
+</html>

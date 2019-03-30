@@ -1,0 +1,15 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\home\\controller\\index.js"
+    ],
+    "names": [
+        "indexAction",
+        "display"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;AAEA;;;;AACA;;;;;;;;;;;;;;AAGE;;;;mBAIAA,W,0BAAa;AACX,WAAO,KAAKC,OAAL,EAAP;AACD,G",
+    "file": "..\\..\\..\\src\\home\\controller\\index.js",
+    "sourcesContent": [
+        "'use strict';\n\nimport Base from './base.js';\nimport svgCaptcha from 'svg-captcha';\n\nexport default class extends Base {\n  /**\n   * index action\n   * @return {Promise} []\n   */\n  indexAction(){\n    return this.display();\n  }\n}"
+    ]
+}

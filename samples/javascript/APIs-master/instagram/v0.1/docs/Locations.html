@@ -1,0 +1,211 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<body>
+ <div class="apicontainer">
+<div class="main api-profile">
+ <div class="constraint">
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">getLocations</span>
+</div>
+<div class="meta">
+<p>Get information about a location.<br/>               </p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The ID of the location to reference.<br/>               </p>
+</div>
+<div class="name">
+<span class="parameter-name">location-id</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">getLocationsMediaRecent</span>
+</div>
+<div class="meta">
+<p>Get a list of recent media objects from a given location.<br/>               </p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The ID of the location to reference.<br/>               </p>
+</div>
+<div class="name">
+<span class="parameter-name">location-id</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Return media after this max_id<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">max_id</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Return media before this min_id<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">min_id</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Return media after this UNIX timestamp<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">min_timestamp</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Return media before this UNIX timestamp<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">max_timestamp</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">getLocationsSearch</span>
+</div>
+<div class="meta">
+<p>Search for a location by name and geographic coordinate.<br/>               </p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Latitude of the center search coordinate. If used, lng is required.<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">lat</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Longitude of the center search coordinate. If used, lat is required.<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">lng</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Returns a location mapped off of a foursquare v1 api location id. If used, you are not required to use lat and lng. Note that this method is deprecated; you should use the new foursquare IDs with V2 of their API.<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">foursquare_id</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Returns a location mapped off of a foursquare v2 api location id. If used, you are not required to use lat and lng.<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">foursquare_v2_id</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+1000</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Search distance, in meters. Default is 1km (distance=1000), max distance is 5km (5000)<br/>                       </p>
+</div>
+<div class="name">
+<span class="parameter-name">distance</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>

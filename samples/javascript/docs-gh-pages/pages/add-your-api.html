@@ -1,0 +1,225 @@
+<section id="js-wrapper">
+  <h2>Wrapper in Javascript</h2>
+  <p>If you have a WADL, Swagger or Mashape XML file, it will be easy to integrate it into Webshell. We made some builtins function in the Webshell standart library that enable to generate Javascript files and documentation in HTML from these API description files. For little API with few endpoints, you can easily do a wrapper yourself. Example for metwit we saw in <a href="#js-aas" class="inter-link">Javascript as a service</a> chapter</p>
+
+  <p>You would like to call it like <code>fs.yourNickname.weather({lat: "45.45", lng: "9.18"});</code> (replace your nickname by your nickname on webshell). You could just make something like that in your file system</p>
+  <pre class="prettyprint">yourNickname/
+  weather/
+    weather</pre>
+  <p>In the weather file, write the following:</p>
+  <pre class="prettyprint">//fs.yourNickname.weather.weather
+if (!args.lat || !args.lng)
+  error('You have to specify `lat` and `lng` argument');
+get({
+  "url":"https://api.metwit.com/v2/weather",
+  "params":{
+    "location_lat": lat,
+    "location_lng": lng
+  }
+});</pre>
+  <p>It's a great way to make simple script with one functionnality.</p>
+  <p>Now you want to make the integrate the complete metwit API, you could use the following structure:</p>
+  <pre class="prettyprint">yourNickname/
+  metwit/
+    metwit</pre>
+  <p>With the following code in metwit file</p>
+  <pre class="prettyprint">module_exports = {
+  weather: function(args, opts) {
+    if (!args.lat || !args.lng)
+      error('You have to specify `lat` and `lng` argument');
+    return get({
+      "url":"https://api.metwit.com/v2/weather",
+      "params":{
+        "location_lat": lat,
+        "location_lng": lng
+      }
+    });
+  },
+  anotherMethod: function(args, opts) {
+    echo('Todo :)');
+  }
+}</pre>
+</section>
+<section id="generate-from-wadl">
+  <h2>Generate from WADL</h2>
+    <p>WADL is a standard for describing REST API using a XML file. We've made a builtin which generate javascript compatible with Webshell from a WADL File</p>
+    <a href="http://webshell.github.io/docs/example/yoda.wadl">Example of a wadl file </a>
+  <pre class="prettyprint">wadl({
+  xml: fs.username.path['wadl.xml'],
+  target: fs.username.apiName
+})</pre><br />
+  <p>It will write in <code>fs.username.apiName</code> javascript generated from <code>fs.username.path['wadl.xml']</code>. Change paths by your own.</p>
+  <p>If the WADL need authentication, you need to write your conf.json manually because WADL's file don't contains any information about the authentication.</p>
+  <p>As the documentation of the API is contained in the WADL File, we generate HTML files to make a pretty and simple docs. To read documentation, use <code>docs()</code> builtin function</p>
+  <p> At the end we have a js file and a docs directory with all the HTML file : </p>
+ <img src="http://webshell.github.io/docs/images/webshell-wadl.png" /> <br />
+ <a href="http://webshell.github.io/docs/example/yoda.js"> Example of a js file generated </a>
+</section>
+<section id="generate-from-mashape">
+  <h2>Generate from Mashape XML File</h2>
+  <p>Mashape is an API Hub with more than 2240 APIs. All APIs available on Mashape have a description XML files associated with all endpoints/parameters and documentation. We've made a tool for generate your API from Mashape transforming the Mashape XML into a WADL file. Authentication information is in the Mashape XML file so, we generate for you the configuration file (conf.json)</p>
+  <p>The mashape builtin generate a WADL file, then call the wadl builtin to generate all the js and documentation for the api </p>
+  <pre class="prettyprint">mashape({
+  xml: fs.username.path['mashape-api.xml'],
+  output: fs.username.apiName
+})</pre><br />
+  <p>It will write in <code>fs.username.apiName</code> javascript generated from <code>fs.username.path['mashape.xml']</code>. Change paths by your own.</p>
+</section>
+<section id="api-docs">
+  <h2>API Documentation</h2>
+  <p>The webshell documentation is automatically genereted by the jsdoc builtin.</p>
+  <img src="http://webshell.github.io/docs/images/webshell-docs.png" />
+</section>
+<section id="jsdoc">
+  <h2>Generate docs with jsdoc</h2>
+  <p> Webshell can generate your doc from your js file. This builtin is based with the jsdoc syntax </p>
+  <p> JsDoc is a syntax for adding inline API documentation to JavaScript source code </p>
+  <pre class="prettyprint">module_exports = {
+  /**
+   * @category All
+   * @param {string} [sentence] Input sentence to tundr into Yoda-speak
+   * @methodhttp GET
+   */
+  'YodaSpeak': function(args, opts) {
+    // ...
+  }
+}</pre><br />
+  <p>The <code>category</code> tag was added by webshell, to correctly sort your method in your API</p>
+  <p>The <code>param</code> tag allows to declare a parameter that your method needs; you specify the type of your param between the curly brackets and after the name of your param. If your parameter is required, you have to write the name of your param between square brackets otherwise just write down the name of your param. And after the name, you can specify a description of the parameter</p>
+  <p>The <code>methodhttp</code> tag was added by webshell to specify the type of http method that your method will send. GET / POST / PUT or DELETE</p>
+  <pre class="prettyprint">doc.generate(fs.username.apiName.filename)</pre>
+  <p>Or</p>
+  <pre class="prettyprint">doc.generate("username/path/to/file")</pre><br />
+  <p>It will create a docs directory with all your HTML files from your file path (ie: <code>fs.thyb.yoda.yoda</code>). <code>doc.generate()</code> can take an array of files (ie: <code>[fs.thyb.yoda.yoda, fs.thyb.yoda.file2]</code>)
+  <p>This method is like the <code>jsdoc()</code> builtin function from the stdlib, and takes the same arguments</code>
+  <pre class="prettyprint">doc.search({query:'yoda', path: fs.username.apiName})</pre><br />
+  <p>It will search the query <code>yoda</code> for all the methods or categories in the <code>fs.username.apiName</code>. the result will be formatted in json</p>
+  <pre class="prettyprint">doc(fs.username.apiName.docs['file.html'])</pre><br />
+  <p>It will display the <code>file.html</code> with the 
+    css of webshell </p>
+</section><section id="setup-auth">
+  <h2>Setup authentication : conf.json</h2>
+    <p>You may want to connect to any API, which is not present on the platform, or enable an authentification for users using your API. To do so, you have to write a configuration file describing the authentication method named <code>conf.json</code>. You can add this file through the API Editor. Here is how to write this JSON file, based on the facebook conf:</p>
+  <pre class="prettyprint">{ 
+  //Displayed name on the platform
+  "displayName": "Facebook"
+  //All relative path requests will use this base
+  "base_url":"https://graph.facebook.com/",
+  //Default authentication when using auth builtin
+  "default_auth":"oauth2",
+  //Describes the different possible authentication modes
+  "auth":{ 
+    //If 'none' is present, you can still use non authenticated requests.
+    "none":{},
+    //Contains informations about a custom auth scheme (see below)
+    "manual": [[Manual Auth Object]],
+    //Contains informations about OAuth 2 informations (see below)
+    "oauth2": [[OAuth 2 Object]],
+    //Contains informations about OAuth 1 informations (see below)
+    "oauth1": [[OAuth 1 Object]],
+  },
+  //Contains configurable global parameters array (see below)
+  "parameters": [[Parameters Object]]
+}</pre>
+
+  <br/><p>Depending on authentications modes the api uses, you can set different configuration object:<p>
+  <a href="http://webshell.io/images/oauth2_scheme.png"><img src="http://webshell.io/images/oauth2_scheme.png" /></a>
+  <p><code>[[Manual Auth Object]]</code> is suited for simple authenticated requests based on http auth or unique apikey auth:</p>
+  <pre class="prettyprint">{
+  "httpauth":{ // To enable http authentication
+    "username":"{client_id}",
+    "password":"{client_secret}"
+  },
+  // "headers": { ... } to add some http headers
+  // "get": { ... } to add some url parameters
+  "format":"xml" // Force response format: "url" for url encoding, "json" for json encoding (default "json")
+  "parameters": [[Parameters Array]] // Contains configurable parameters array, relative to this mode (see below)
+}</pre>
+
+  <br/><p><code>[[OAuth2 Object]]</code> in based on facebook exemple:</p>
+  <pre class="prettyprint">{
+  "authorize":{ // Contains informations about the authorize step (auth popup)
+    "url":"https://graph.facebook.com/oauth/authorize", // Authentication popup url
+    "params":{ // Contains request parameters. The provider's documentation must specify which params are required.
+      "client_id":"{client_id}",
+      "redirect_uri":"{_callback_url}?{_callback_args}", 
+      "scope":"{scope}" 
+    }
+  },
+  "access_token":{ // Contains informations about the access_token step (auth token recuperation)
+    "url":"https://graph.facebook.com/oauth/access_token", // Request's url
+    "format":"url", // Force response format: "url" for url encoding, "json" for json encoding (default "json")
+    // "headers": { ... } to add some http headers
+    "params":{ // Request's parameters
+      "client_id":"{client_id}",
+      "client_secret":"{client_secret}",
+      "redirect_uri":"{_callback_url}?{_callback_args}",
+      "code":"{_code}"
+    }
+  },
+  "request":{ // Informations added to authenticated requests
+    // "headers": { ... } to add some http headers
+    "format": "json" // Force request's body encoding (http default: url encoding)
+    "get":{ // Added url parameters
+      "oauth_token":"{_access_token}"
+    },
+  },
+  "parameters": [[Parameters Array]] // Contains configurable parameters array, relative to this mode (see below)
+}</pre>
+  <p>You can use special keywords between braces <code>{...}</code> to include special values (every of them begins with an underscore):<ul>
+    <li><code>{_callback_url}</code> gives the auth callback url to webshell</li>
+    <li><code>{_callback_args}</code> contains the parameters to be passed in the callback. Some providers has a "state" pararameter, others may accept them in the callback url.</li>
+    <li><code>{_code}</code> in the "access_token" part contains the auth code passed to the callback</li>
+    <li><code>{_access_token}</code> in the "request" part contains the access token (often named "oauth_token") received after the authentication process</li>
+  </ul></p>
+
+  <br/><p><code>[[OAuth1 Object]]</code> based on twitter exemple:</p>
+  <pre class="prettyprint">{
+  "request_token":{ // Contains informations about the request token step (non authorized token recuperation)
+    "url":"https://api.twitter.com/oauth/request_token", // Request's url
+    "params":{ // OAuth parameters (standard names)
+      "oauth_consumer_key":"{client_id}",
+      "oauth_callback":"{_callback_url}?{_callback_args}"
+    }
+  },
+  "authorize":{ // Contains informations about the authorize step (auth popup)
+    "url":"https://api.twitter.com/oauth/authenticate" // Authentication popup url
+  },
+  "access_token":{ // Contains informations about the access_token step (receive authorized token)
+    "url":"https://api.twitter.com/oauth/access_token", // Request's url
+    "params":{ // OAuth parameters (standard names)
+      "oauth_consumer_key":"{client_id}"
+    }
+  },
+  "request":{ // Request's parameters
+    // "headers": { ... } to add some http headers
+    "format":"json", // Force request's body encoding (http default: url encoding)
+    "params":{ // OAuth parameters (standard names)
+      "oauth_consumer_key":"{client_id}"
+    }
+  },
+  "parameters": [[Parameters Array]] // Contains configurable parameters array, relative to this mode (see below)
+}</pre>
+
+  <br/><p><code>[[Parameters Array]]</code> contains every configurable parameter from the API Key Manager and can be use in the authentication mode object "manual", "oauth1" or "oauth2" when used into braces (e.g. "{client_id}"). Here is an exemple for facebook configuration:</p>
+<pre class="prettyprint">[
+  { "name":"client_id", "type":"string" },
+  { "name":"client_secret", "type":"string" },
+  { 
+    "name":"scope", // Name of the parameter
+    "type":"string", // Type of the parameter ("string",........)
+    "separator":",", // Separator for multiples values
+    "cardinality":"*", // Number of possible values number or "*" (default: 1)
+    "values": { // Possible values and descriptions
+      "read_friendlists":"Provides access to any friend lists the user created. All user's friends are provided as part of basic data, this extended permission grants access to the lists of friends a user has created, and should only be requested if your application utilizes lists of friends.",
+      "read_insights":"Provides read access to the Insights data for pages, applications, and domains the user owns.",
+      "read_mailbox":"Provides the ability to read from a user's Facebook Inbox.",
+      "read_requests":"Provides read access to the user's friend requests",
+      "read_stream":"Provides access to all the posts in the user's News Feed and enables your application to perform searches against the user's News Feed",
+      ...
+    }
+  } 
+]</pre>
+
+  <br /><p>You can see full examples of <a href="http://api.webshell.io/apis/facebook/v0.1/conf.json">facebook's conf.json</a> or <a href="http://api.webshell.io/apis/twitter/v0.1/conf.json">twitter's conf.json</a></p> 
+</section>

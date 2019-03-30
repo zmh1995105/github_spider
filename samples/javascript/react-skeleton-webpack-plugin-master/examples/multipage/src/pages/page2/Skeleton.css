@@ -1,0 +1,10 @@
+.skeletonHeader {
+    height: 52px;
+    background: blue;
+}
+
+.skeletonBlock {
+    display: flex;
+    flex-direction: column;
+    padding-top: 8px;
+}

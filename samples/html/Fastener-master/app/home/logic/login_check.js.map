@@ -1,0 +1,30 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\home\\logic\\login_check.js"
+    ],
+    "names": [
+        "indexAction",
+        "isAjax",
+        "fail",
+        "post",
+        "username",
+        "password",
+        "captcha",
+        "session",
+        "captchaText",
+        "think",
+        "isEmpty",
+        "toLowerCase",
+        "regex",
+        "specialString",
+        "test",
+        "logic",
+        "base"
+    ],
+    "mappings": "AAAA;AACA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAME;;;;mBAIMA,W;;;;;;;;AACJ,kBAAG,CAAC,KAAKC,MAAL,CAAY,MAAZ,CAAJ,EAAwB;AACtB,qBAAKC,IAAL,CAAU,CAAV,EAAY,SAAZ,EAAsB,IAAtB;AACD;sBAKG,KAAKC,IAAL,E,EAHFC,Q,SAAAA,Q,EACAC,Q,SAAAA,Q,EACAC,O,SAAAA,O;;qBAEsB,KAAKC,OAAL,CAAa,SAAb,C;;;AAApBC,yB;;AACJ,kBAAGC,MAAMC,OAAN,CAAcJ,OAAd,CAAH,EAA0B;AACxB,qBAAKJ,IAAL,CAAU,CAAV,EAAY,OAAZ,EAAoB,SAApB;AACD;;oBACEI,QAAQK,WAAR,MAAyBH,YAAYG,WAAZ,E;;;;;;qBACpB,KAAKJ,OAAL,CAAa,SAAb,EAAuB,EAAvB,C;;;AACN,mBAAKL,IAAL,CAAU,CAAV,EAAY,OAAZ,EAAoB,SAApB;;;AAEF,kBAAGO,MAAMC,OAAN,CAAcN,QAAd,CAAH,EAA2B;AACzB,qBAAKF,IAAL,CAAU,CAAV,EAAY,OAAZ,EAAoB,UAApB;AACD;AACD,kBAAGO,MAAMC,OAAN,CAAcL,QAAd,CAAH,EAA2B;AACzB,qBAAKH,IAAL,CAAU,CAAV,EAAY,MAAZ,EAAmB,UAAnB;AACD;AACD,kBAAGU,MAAMC,aAAN,CAAoBC,IAApB,CAAyBV,QAAzB,CAAH,EAAsC;AACpC,qBAAKF,IAAL,CAAU,CAAV,EAAY,OAAZ,EAAoB,UAApB;AACD;;;;;;;;;;;;;;;;;;EA9BwBO,MAAMM,KAAN,CAAYC,I",
+    "file": "..\\..\\..\\src\\home\\logic\\login_check.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * logic\n * @param  {} []\n * @return {}     []\n */\nexport default class extends think.logic.base {\n  /**\n   * index action logic\n   * @return {} []\n   */\n  async indexAction(){\n    if(!this.isAjax('post')){\n      this.fail(1,'不支持此请求头',null)\n    }\n    let {\n      username,\n      password,\n      captcha\n    } = this.post();\n    let captchaText = await this.session('captcha');\n    if(think.isEmpty(captcha)){\n      this.fail(1,\"验证码为空\",\"captcha\");\n    }\n    if(captcha.toLowerCase() != captchaText.toLowerCase()){\n      await this.session('captcha','');\n      this.fail(1,\"验证码错误\",\"captcha\");\n    }\n    if(think.isEmpty(username)){\n      this.fail(1,\"用户名为空\",\"username\");\n    }\n    if(think.isEmpty(password)){\n      this.fail(1,\"密码为空\",\"password\");\n    }\n    if(regex.specialString.test(username)){\n      this.fail(1,\"用户名违规\",\"username\");\n    }\n  }\n}"
+    ]
+}

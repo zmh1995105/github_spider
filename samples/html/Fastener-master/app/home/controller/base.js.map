@@ -1,0 +1,16 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\home\\controller\\base.js"
+    ],
+    "names": [
+        "think",
+        "controller",
+        "base"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;EAE6BA,MAAMC,UAAN,CAAiBC,I",
+    "file": "..\\..\\..\\src\\home\\controller\\base.js",
+    "sourcesContent": [
+        "'use strict';\n\nexport default class extends think.controller.base {\n  /**\n   * some base method in here\n   */\n}"
+    ]
+}

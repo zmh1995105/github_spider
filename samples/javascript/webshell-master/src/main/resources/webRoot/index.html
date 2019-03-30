@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shell</title>
+    <link type="text/css" rel="styleSheet"  href="jquery-ui.min.css" />
+    <link type="text/css" rel="styleSheet"  href="bootstrap.min.css" />
+    <link type="text/css" rel="styleSheet"  href="xterm.css" />
+</head>
+<body>
+    <div id="layout"></div>
+</body>
+<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="jquery-ui.min.js"></script>
+<script type="text/javascript" src="xterm.js"></script>
+<script type="text/javascript" src="addons/attach/attach.js"></script>
+<script type="text/javascript" src="addons/fit/fit.js"></script>
+<script type="text/javascript" src="addons/webLinks/webLinks.js"></script>
+<script type="text/javascript" src="addons/search/search.js"></script>
+<script type="text/javascript" src="addons/winptyCompat/winptyCompat.js"></script>
+<script type="text/javascript" src="addons/fullscreen/fullscreen.js"></script>
+<script type="text/javascript" src="addons/zmodem/zmodem.js"></script>
+<script type="text/javascript" src="terminal.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var xTerm = $.createTerm("测试", "ws://localhost:3000/shell", $("#layout"));
+        xTerm.resize(800, 600);
+        xTerm.resizable();
+        xTerm.draggable();
+    });
+</script>
+</html>

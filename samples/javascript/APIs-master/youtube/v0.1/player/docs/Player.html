@@ -1,0 +1,157 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<h1>Youtube Player API</h1>
+
+<p>Youtube provide a Javascript API allowing you to integrate and manipulate a player inside your web application</p>
+
+<h3>Initialisation</h3>
+<p>To initialize a Youtube player, you have to give him the id of a Video on youtube : <code>apis.youtube.player('g1BV7XTLUNg')</code></p>
+<p>Some parameters can be given to chart()</p>
+<table class="table">
+	<thead>
+		<th>Parameter</th>
+		<th>Description</th>
+		<th>Default</th>
+		<th>Optionnal</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>idVideo</td>
+			<td>The ID of the video you want to play</td>
+			<td>g1BV7XTLUNg</td>
+			<td>true</td>
+		</tr>
+		<tr>
+			<td>width</td>
+			<td>The width of the player</td>
+			<td>100%</td>
+			<td>false</td>			
+		</tr>
+		<tr>
+			<td>height</td>
+			<td>The height of the player</td>
+			<td>300</td>
+			<td>false</td>			
+		</tr>
+	</tbody>
+</table>
+
+
+<p>e.g : <code>apis.youtube.player({idVideo: 'g1BV7XTLUNg', width: 250, height: 400})</code></p>
+
+<h3>Manipulation</h3>
+<p>Once your player instanciated and loaded: <code>var player = apis.youtube.player('g1BV7XTLUNg');</code>. You can manipulate it using the object stored in <code>player</code> variable</p>
+<p>Youtube has the following interface :</p>
+<table class="table">
+	<thead>
+		<th>Method</th>
+		<th>Description</th>
+		<th width="250">Exemple</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>playVideo()</code></td>
+			<td>Play the current video loaded</td>
+			<td><pre class="prettyprint">player.playVideo();</pre></td>
+		</tr>
+		<tr>
+			<td><code>pauseVideo()</code></td>
+			<td>Pause the current video</td>
+			<td><pre class="prettyprint">player.pauseVideo();</pre></td>
+		</tr>
+		<tr>
+			<td><code>stopVideo()</code></td>
+			<td>Stop the current video</td>
+			<td><pre class="prettyprint">player.stopVideo();</pre></td>
+		</tr>
+		<tr>
+			<td><code>seekTo(seconds, allowSeekAhead)</code></td>
+			<td>Seek to </td>
+			<td><pre class="prettyprint">player.seekTo(42);</pre></td>
+		</tr>
+		<tr>
+			<td><code>clearVideo()</code></td>
+			<td>Clear the video loaded</td>
+			<td><pre class="prettyprint">player.clearVideo();</pre></td>
+		</tr>
+		<tr>
+			<td><code>cue(url, startSeconds, suggestedQuality)</code></td>
+			<td>Cue the <code>url</code> to be played after the current video. This url can be an <code> or a <code>videoId</code>. The <code>startSeconds</code> is by default set to 0, and the suggestedQuality is auto set if none is given</td>
+			<td><pre class="prettyprint">player.cueVideo('g1BV7XTLUNg', 0, "medium");</pre></td>
+		</tr>
+		<tr>
+			<td><code>load(url, startSeconds, suggestedQuality)</code></td>
+			<td>Load another video in your player using is url or videoId</td>
+			<td><pre class="prettyprint">player.load('g1BV7XTLUNg');</pre></td>
+		</tr>
+		<tr>
+			<td><code>loadPlaylist(playlist, index, startSeconds, suggestedQuality)</code></td>
+			<td>Load a playlist (using his id), and start to play at the <code>index</code> setted. If none is given, it will play the first video first</td>
+			<td><pre class="prettyprint">player.loadPlaylist({list: 'PL21087D879B1C8E93', index: 1, startSeconds: 1, suggestedQuality: "medium"});</pre></td>
+		</tr>
+		<tr>
+			<td><code>cuePlaylist(playlist, index, startSeconds, suggestedQuality)</code></td>
+			<td>Cue a playlist (using his id), and start to play at the <code>index</code> setted. If none is given, it will play the first video first</td>
+			<td><pre class="prettyprint">player.cuePlaylist({list: 'PL21087D879B1C8E93', index: 1, startSeconds: 10, suggestedQuality: "medium"});</pre></td>
+		</tr>
+		<tr>
+			<td><code>nextVideo()</code></td>
+			<td>When some videos are loaded, you can go to the next video using this method</td>
+			<td><pre class="prettyprint">player.nextVideo();</pre></td>
+		</tr>
+		<tr>
+			<td><code>previousVideo()</code></td>
+			<td>When some videos are loaded, you can go to the previous video using this method</td>
+			<td><pre class="prettyprint">player.previousVideo();</pre></td>
+		</tr>
+		<tr>
+			<td><code>playVideoAt(index)</code></td>
+			<td>play the <code>index</code> video in the current playlist loaded</td>
+			<td><pre class="prettyprint">player.playVideoAt(5);</pre></td>
+		</tr>
+		<tr>
+			<td><code>mute()</code></td>
+			<td>set mute</td>
+			<td><pre class="prettyprint">player.mute();</pre></td>
+		</tr>
+		<tr>
+			<td><code>unmute()</code></td>
+			<td>set unmute</td>
+			<td><pre class="prettyprint">player.unmute();</pre></td>
+		</tr>
+		<tr>
+			<td><code>setVolume(vol)</code></td>
+			<td>set the volume to the player. <code>vol</code> is an integer and have to be between 1 and 99</td>
+			<td><pre class="prettyprint">pl.setVolume(75);</pre></td>
+		</tr>	
+		<tr>
+			<td><code>setLoop(loopPlaylist)</code></td>
+			<td>set loop playing to true or false.</td>
+			<td><pre class="prettyprint">player.setLoop(true);</pre></td>
+		</tr>	
+		<tr>
+			<td><code>setShuffle(shufflePlaylist)</code></td>
+			<td>set shuffle to true or false to play randomly a song in your playlist</td>
+			<td><pre class="prettyprint">player.shuffle(true);</pre></td>
+		</tr>
+		<tr>
+			<td><code>setPlaybackQuality(quality)</code></td>
+			<td>set the quality of the video played</td>
+			<td><pre class="prettyprint">pl.setPlaybackQuality('small')</pre></td>
+		</tr>	
+	</tbody>
+</table>

@@ -1,0 +1,30 @@
+Assume you got some samples from github or somewhere else. And samples is in zip format.
+
+Step 1: unzip them.
+ 1a: put all zip file in one directory
+ 1b: run myunzip.sh under that directory
+
+After step 1, you got many sub directory under your sample directory, whose names are numbers.
+
+Step 2: get sha256 value. run mysha256.sh, like this:
+ bash mysha256.sh "your sample directory" "sha256 file"
+
+After step 2, your got a sha256 file, whose content includes all your php sample files' sha256 value
+
+Step 3: de-duplicate. run hash_de_dup.py, like this:
+python hash_de_dup.py "sha256 file"
+The output are those files duplicated.
+I run command like this to remove those duplicate files:
+
+python hash_de_dup.py "sha256 file" | while read f; do rm "$f"; done
+
+Step 4: find duplicate upon base. Assume you already have a lot of php sample, now you want to add more. And you do not want to add those you already have. run hash_de_dup2.py
+
+python hash_de_dup2.py "sha256 file (new)" "sha256 file (old)"
+
+The output is duplate file names.
+Again, I run command like this to remove those duplicate files:
+
+python hash_de_dup2.py "sha256 file (new)" "sha256 file (old)"| while read f; do rm "$f"; done
+
+Step 5: merge your new samples into your repository.

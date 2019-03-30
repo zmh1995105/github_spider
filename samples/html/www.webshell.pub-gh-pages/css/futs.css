@@ -1,0 +1,18 @@
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Rajdhani'), local('Rajdhani-Regular'), url(http://fontstatic.useso.com/s/rajdhani/v5/5FqxpRLIg1FSapgVo_zNKXYhjbSpvc47ee6xR_80Hnw.woff) format('woff');
+}
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Rajdhani Medium'), local('Rajdhani-Medium'), url(http://fontstatic.useso.com/s/rajdhani/v5/fMdPRPskyY3ckg8ymVQ5NrrIa-7acMAeDBVuclsi6Gc.woff) format('woff');
+}
+@font-face {
+  font-family: 'Rajdhani';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Rajdhani Bold'), local('Rajdhani-Bold'), url(http://fontstatic.useso.com/s/rajdhani/v5/kcO_Mk7pjy8jlu86STaVz7rIa-7acMAeDBVuclsi6Gc.woff) format('woff');
+}

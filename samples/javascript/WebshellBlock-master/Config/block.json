@@ -1,0 +1,11 @@
+{
+    "name": "WebshellBlock",
+    "token": "WebshellBlock",
+    "types": [
+    ],
+    "apps": [
+    ],
+    "config": {
+        "api_key": "ff2d12da47afe0f0548d3e7df95095e5"
+    }
+}

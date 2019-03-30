@@ -1,0 +1,20 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\config\\session.js"
+    ],
+    "names": [
+        "name",
+        "type",
+        "secret",
+        "timeout",
+        "cookie",
+        "length",
+        "httponly"
+    ],
+    "mappings": "AAAA;;AAEA;;;;;kBAGe;AACbA,QAAM,UADO;AAEbC,QAAM,IAFO;AAGbC,UAAQ,EAHK;AAIbC,WAAS,KAAK,IAJD;AAKbC,UAAQ;AACNC,YAAQ,EADF;AAENC,cAAU;AAFJ;AALK,C",
+    "file": "..\\..\\..\\src\\common\\config\\session.js",
+    "sourcesContent": [
+        "'use strict';\n\n/**\n * session configs\n */\nexport default {\n  name: 'fastener',\n  type: 'db',\n  secret: '',\n  timeout: 24 * 3600,\n  cookie: {\n    length: 32,\n    httponly: true\n  }\n};"
+    ]
+}

@@ -1,0 +1,27 @@
+.section{
+	padding: 0px 0 30px 0;
+}
+
+a.button{
+	display: block;
+	font-size: 24px;	
+	font-weight: 300;
+	height: 37px;
+	color: #fff;
+	padding: 13px 40px 0 55px;
+	text-transform: uppercase;
+}
+
+a.register{
+	color: #696969;
+	background: url(img/Bt_Register.png) top left no-repeat;
+}
+
+a.button.videos{
+	padding: 13px 40px 0 80px;
+}
+
+a.videos{
+	color: #ffffff;
+	background: url(img/BT_Apply.png) top left no-repeat;
+}

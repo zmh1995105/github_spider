@@ -1,0 +1,10 @@
+{
+	"ImportPath": "github.com/samgha/vipas",
+	"GoVersion": "go1.4.1",
+	"Deps": [
+		{
+			"ImportPath": "github.com/wulijun/go-php-serialize",
+			"Rev": "bfe692b0100e148e84780172435c1178aa901803"
+		}
+	]
+}

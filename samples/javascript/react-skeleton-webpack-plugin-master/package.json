@@ -1,0 +1,72 @@
+{
+  "name": "react-skeleton-webpack-plugin",
+  "version": "1.0.0",
+  "description": "A webpack plugin for generating skeleton of pages",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "lint": "fecs ./ --rule --type 'vue,js,css'",
+    "prepublish": "npm run build",
+    "test": "nyc ava -v",
+    "nyc:report": "nyc report --reporter=html"
+  },
+  "dependencies": {
+    "extract-text-webpack-plugin": "^3.0.0",
+    "loader-utils": "^1.1.0",
+    "memory-fs": "^0.4.1",
+    "path-to-regexp": "^2.1.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "require-from-string": "^2.0.1",
+    "uglify-es": "^3.3.4"
+  },
+  "devDependencies": {
+    "ava": "^0.18.2",
+    "babel-cli": "^6.24.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-add-module-exports": "^0.2.0",
+    "babel-plugin-transform-imports": "^1.4.1",
+    "babel-plugin-transform-runtime": "^6.22.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-env": "^1.3.2",
+    "babel-preset-react-app": "^3.1.1",
+    "babel-register": "^6.23.0",
+    "bluebird": "^3.4.7",
+    "css-loader": "^0.28.0",
+    "coveralls": "^3.0.0",
+    "fecs": "^1.4.0",
+    "html-webpack-plugin": "^2.29.0",
+    "memory-fs": "^0.4.1",
+    "multipage-webpack-plugin": "^0.4.0",
+    "nyc": "^10.3.2",
+    "rimraf": "^2.6.0",
+    "style-loader": "^0.20.3",
+    "webpack": "^3.6.0",
+    "webpack-merge": "^4.1.0",
+    "webpack-node-externals": "^1.6.0"
+  },
+  "peerDependencies": {
+    "webpack": "^3.0.0"
+  },
+  "ava": {
+    "concurrency": 5,
+    "failFast": true,
+    "files": [
+      "test/*.test.js"
+    ],
+    "require": [
+      "babel-register"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "examples/**/*",
+      "test/**/*"
+    ]
+  },
+  "author": "panyuqi",
+  "license": "ISC"
+}

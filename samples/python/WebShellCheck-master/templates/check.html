@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h1 class="page-header">一个简单的WebShell检测平台 ：）</h1>
+
+<form name="form" method="post" action="/check">
+  <div class="form-group">
+      <textarea class="form-control" rows="10" name="code" placeholder="输入你的php代码,比如<?php eval($_POST[a]); ?>"></textarea>
+  </div>
+    
+  <div class="form-group">
+      <input id="float-submit" class="btn btn-primary" type="submit" value="提交">
+  </div>
+  <h3>Api使用方法 curl -F file=@2.php http://kill.weye.me:5000/api </h3>
+</form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+          {% if message == 'M' %}
+              <div class="alert alert-danger">
+                  <ul class="flashes">
+                  <li>{{ '木马文件！' }}</li>
+                  </ul>
+              </div>
+          {% elif message == 'N' %}
+              <div class="alert alert-success">
+                  <ul class="flashes">
+                  <li>{{ '正常文件。' }}</li>
+                  </ul>
+              </div>
+          {% else %}
+               <div class="alert alert-warning">
+                  <ul class="flashes">
+                  <li>{{ 'Error' }}</li>
+                  </ul>
+              </div>
+          {% endif %}
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+{% endblock %}

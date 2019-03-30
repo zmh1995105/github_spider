@@ -1,0 +1,193 @@
+<?= $this->response; ?>
+<?= $this->renderTabs($this->tabs); ?>
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("setup.view.title"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <?= $this->lmsg("setup.licence.description"); ?>
+            <br>
+            <br>
+            
+            <form method="post" action="<?= $this->h->url('download-agent', 'setup'); ?>">
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>API Key </span>
+                        <span class="required">*</span>
+                    </div>
+                    <div class="field-value">
+                        <input id="key_input" type="hidden" name="api_key" value="<?= $this->e->escapeHtml($this->api_key); ?>"/>
+                        <span id="key_text"><?= $this->e->escapeHtml($this->api_key); ?></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>API Secret </span>
+                        <span class="required">*</span>
+                    </div>
+                    <div class="field-value">
+                        <input id="secret_input" type="hidden" name="api_secret" value="<?= $this->e->escapeHtml($this->api_secret); ?>"/>
+                        <span id="secret_text"><?= $this->e->escapeHtml($this->api_secret); ?></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>API Server </span>
+                        <span class="required">*</span>
+                    </div>
+                    <div class="field-value">
+                        <input id="server_input" type="hidden" name="api_server" value="<?= $this->e->escapeHtml($this->api_server); ?>"/>
+                        <span id="server_text"><?= $this->e->escapeHtml($this->api_server); ?></span>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>Edit information</span>
+                    </div>
+                    <div class="field-value">
+                        <span id="edit">
+                            <a id="edit_text">Edit</a>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="btns-box">
+                    <div class="box-area">
+                        <div class="form-row">
+                            
+                            <div class="field-name">
+                                    <span class="required">*</span>
+                                    <span> <?= $this->lmsg("msg.required"); ?></span>
+                                </div>
+                            <div class="field-value">
+                                <span class="btn action">
+                                
+                                    <button type="submit" name="submit" value="downloadAgent">
+                                        <?= $this->lmsg("setup.view.download_agent"); ?>
+                                    </button> 
+                                
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================= [ JS ] ===================================================================== -->
+
+<script>
+
+    var setLoading = function (toggle) {
+        
+        // hide button
+        toggle.style.display = "None";
+
+        // disable parent
+        var parent = toggle.parentNode;
+        parent.classList.toggle("disabled");
+
+        // rotating loading spinner
+        var spinner = document.createElement("span");
+        spinner.classList.toggle("wait");
+        spinner.appendChild(document.createTextNode("Please wait"));
+
+        parent.appendChild(spinner);
+    }
+
+    var toggleEditMode = function () {
+        var key = document.getElementById("key_input");
+        var secret = document.getElementById("secret_input");
+        var server = document.getElementById("server_input");
+
+        var key_text = document.getElementById("key_text");
+        var secret_text = document.getElementById("secret_text");
+        var server_text = document.getElementById("server_text");
+
+        if (key.type === "hidden" && secret.type === "hidden" && server.type === "hidden") {
+            
+            // change input type
+            key.type = "text";
+            secret.type = "text";
+            server.type = "text";
+
+            // hide text elements
+            key_text.style.display = "None";
+            secret_text.style.display = "None";
+            server_text.style.display = "None";
+
+            // start edit mode
+            document.getElementById("edit_text").text = "Save";
+            return;
+        }
+
+        if (key.type === "text" && secret.type === "text" && server.type === "text") {
+
+            // change input type
+            key.type = "hidden";
+            secret.type = "hidden";
+            server.type = "hidden";
+
+            // hide text elements
+            key_text.style.display = "";
+            secret_text.style.display = "";
+            server_text.style.display = "";
+
+            key_text.textContent = key.value;
+            secret_text.textContent = secret.value;
+            server_text.textContent = server.value;
+
+            // end edit mode
+            document.getElementById("edit_text").text = "Edit";
+            return;
+        }
+    }
+
+    var eventHandler = function (event) {
+
+        // get the clicked element
+        var toggle = event.target;
+
+        if (toggle.nodeName.toLowerCase() === "button") {
+            
+            // for all submit buttons
+            if (toggle.type === "submit") {
+
+                // init loading
+                setLoading(toggle);
+            }
+        }
+
+        if (toggle.nodeName.toLowerCase() === "span") {
+            
+            if (toggle.id === "edit") {
+                toggleEditMode();
+            }
+        }
+
+        if (toggle.nodeName.toLowerCase() === "a") {
+            
+            if (toggle.id === "edit_text") {
+                toggleEditMode();
+            }
+        }
+    };
+
+    document.addEventListener("click", eventHandler);
+
+</script>

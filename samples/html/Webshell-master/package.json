@@ -1,0 +1,22 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-jwt": "^5.1.0",
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.6.8",
+    "morgan": "^1.7.0",
+    "socket.io": "^1.5.1",
+    "socketio-jwt": "^4.5.0"
+  }
+}

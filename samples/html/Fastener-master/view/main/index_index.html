@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Fastener</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/main_index.css">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">Fastener</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">站点列表</a></li>
+            <li><a href="#">存活检测</a></li>
+            <li><a href="#">统一操作</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="list-group">
+            <a href="#" class="list-group-item " data-toggle="modal" data-target=".add-site">添加站点</a>
+            <a href="#" class="list-group-item disabled">打开站点管理页面</a>
+            <a href="#" class="list-group-item disabled">查看站点信息</a>
+            <a href="#" class="list-group-item disabled">修改站点配置</a>
+            <a href="#" class="list-group-item disabled">删除站点</a>
+          </div>
+        </div>
+        <div class="col-lg-9">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="site-list-id">序号</th>
+                <th class="site-list-url">站点网址</th>
+                <th class="site-list-passwd">管理密码</th>
+                <th class="site-list-time">创建时间</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"></th>
+                <td>http://i.mooc.chaoxing.com/space/index.shtml?ename=zne_kc_icon&burl=http://passport2.chaoxing.com/mooc.jsp?v=0&s=8320d311303d3abd34080f54feb5b3c7</td>
+                <td>asdasdasdasdasdasdasdasdasdas</td>
+                <td>2017/6/30 22:05:06</td>
+              </tr>
+              <tr>
+                <th scope="row"></th>
+                <td>Jacob</td>
+                <td>Thornton</td>
+                <td>@fat</td>
+              </tr>
+              <tr>
+                <th scope="row"></th>
+                <td>Larry</td>
+                <td>the Bird</td>
+                <td>@twitter</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade add-site" tabindex="-1">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            添加站点
+          </div>
+          <div class="modal-body">
+            <div class="input-group">
+              <span class="input-group-addon">站点地址</span>
+              <input type="text" class="form-control site-url" placeholder="http://www.google.com/shell/fastener.php">
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="site-url-fileType">语言</span><span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <li><a href="#">PHP</a></li>
+                  <li><a href="#">ASP</a></li>
+                  <li><a href="#">JSP</a></li>
+                </ul>
+              </div>
+            </div>
+            <br>
+            <div class="input-group">
+              <span class="input-group-addon">访问密码</span>
+              <input type="password" class="form-control site-password" placeholder="PassW0rd">
+              <span class="input-group-btn">
+                <button class="btn btn-default site-password-toggle" type="button">显示/隐藏</button>
+              </span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <span class="add-site-callback-info"></span>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary send-site-info">添加</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="http://s4.qhimg.com/static/535dde855bc726e2/socket.io-1.2.0.js"></script>
+  <script src="/static/js/config.js"></script>
+  <script src="/static/js/main_index.js"></script>
+</html>

@@ -1,0 +1,16 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\main\\model\\index.js"
+    ],
+    "names": [
+        "think",
+        "model",
+        "base"
+    ],
+    "mappings": "AAAA;AACA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAG6BA,MAAMC,KAAN,CAAYC,I",
+    "file": "..\\..\\..\\src\\main\\model\\index.js",
+    "sourcesContent": [
+        "'use strict';\n/**\n * model\n */\nexport default class extends think.model.base {\n\n}"
+    ]
+}

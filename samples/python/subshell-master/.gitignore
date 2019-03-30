@@ -1,0 +1,23 @@
+## Python
+*.pyc
+build/*
+!.keep
+dist/*
+*.egg-info/*
+
+## generic files to ignore
+
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out*~
+
+## Virtualevn
+venv
+
+## App specific
+downloads/*
+logs/*
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<regex>
+
+	<regex_key>
+		<value>FileOutputStream,StreamConnector,getRuntime</value>
+		<enable>1</enable>
+	</regex_key>
+
+	<regex_key>
+		<value>reGeorg,X-TARGET,SocketChannel.open()</value>
+		<enable>1</enable>
+	</regex_key>
+	<regex_key>
+		<value>JspSpy,SpyClassLoader,StreamConnector,user_tab_columns</value>
+		<enable>1</enable>
+	</regex_key>
+	<regex_key>
+		<value>all_procedures,user_source,getRSValueString,getFirmPassword,getTableInfo</value>
+		<enable>1</enable>
+	</regex_key>
+	<regex_key>
+		<value>libsocks,getRuntime().exec,java.nio.,getRuntime,java.io.FileOuputStream</value>
+		<enable>1</enable>
+	</regex_key>
+	<regex_key>
+		<value>www.vonloesch.de,expandFileList,execFile</value>
+		<enable>1</enable>
+	</regex_key>
+</regex>

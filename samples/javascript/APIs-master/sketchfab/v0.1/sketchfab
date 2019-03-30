@@ -1,0 +1,44 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+({
+	search: function(args, opts) {
+		if (typeof args === 'string') {
+			args = {q: args};
+		}
+		return http({
+			url: 'https://api.sketchfab.com/v1/models',
+			method: 'GET',
+			params: args,
+			format: 'json'
+		}, opts)
+	},
+	embed: function(args, opts) {
+		if (typeof args === 'string') {
+			args = {id: args}
+		}
+		if (! args.width)
+			args.width = 854;
+
+		if (! args.height)
+			args.height = 480;
+
+		render(args, {view: '<iframe frameborder="0" height="<%= data.height %>" width="<%= data.width %>" allowFullScreen webkitallowfullscreen="true" mozallowfullscreen="true" src="https://sketchfab.com/embed/<%= data.id %>?autostart=0&transparent=0&autospin=0&controls=1&watermark=1"></iframe>'});
+	}
+})
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+</head>
+<style>
+    #logs {
+        background-color: black;
+        height: 800px;
+        overflow: auto;
+    }
+
+    .cmd {
+        color: #2ef52e;
+        font-weight: bold;
+    }
+
+    .output {
+        color: #9f99ff;
+    }
+</style>
+<body>
+<div>
+    <button class="exec" data-cmd-id="tinyproxy status">status tinyproxy</button>
+    <button class="exec" data-cmd-id="tinyproxy start">start tinyproxy</button>
+    <button class="exec" data-cmd-id="tinyproxy stop">stop tinyproxy</button>
+    <br>
+    <input type="text" style="width: 300px;" id="cmd">&nbsp;
+    <button id="exec">EXEC</button>
+    <hr>
+    <div id="logs"></div>
+</div>
+</body>
+<script src="{{ url_for('static', filename='socket.io.slim.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery-3.3.1.min.js') }}"></script>
+<script>
+    $(function () {
+        var surl = 'http://' + document.domain + ':' + location.port + '/server';
+        $('#logs').append('<span class="cmd">#&nbsp;connect...</span><br>');
+        s = io.connect(surl);
+        s.emit('connect');
+
+
+        $('.exec').click(function () {
+            var cmd_id = $(this).data('cmd-id');
+            $('#logs').append('<span class="cmd">#&nbsp;' + cmd_id + '</span><br>');
+            s.emit('exec', {cmd_id: cmd_id});
+        });
+
+        s.on('exec_output', function (data) {
+            $('#logs').append('<span class="output">&nbsp;&nbsp;&nbsp;' + data.output + '</span><br>');
+        });
+        s.on('connect_success', function (data) {
+            $('#logs').append('<span style="color:#FFF;">&nbsp;&nbsp;&nbsp;' + data.msg + '</span><br>');
+        });
+
+
+        function exec(cmd) {
+            $('#logs').append('<span class="cmd">#&nbsp;' + cmd + '</span><br>');
+            if (cmd) {
+                s.emit('exec_cmd', {cmd: cmd});
+            }
+        }
+
+        $('#exec').click(function () {
+            var cmd = $('#cmd').val();
+            exec(cmd)
+        });
+
+        $(document).keydown(function (event) {
+            if (event.keyCode == 13) {
+                var cmd = $('#cmd').val();
+                exec(cmd)
+            }
+            if (event.keyCode == 192) {
+                $('#cmd').focus();
+            }
+        })
+    });
+</script>
+</html>

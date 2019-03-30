@@ -1,0 +1,28 @@
+{
+    "name": "nimbusec/nimbusec-plesk",
+    "description": "The official Nimbusec extension fully integrated into Plesk",
+    "type": "project",
+    "require": {
+        "nimbusec/nimbusec-php": "^1.1.0",
+        "zendframework/zend-escaper": "^2.5",
+        "zendframework/zend-validator": "^2.9",
+        "zendframework/zend-uri": "^2.5",
+        "zendframework/zend-i18n": "^2.7",
+        "zendframework/zend-filter": "^2.7",
+        "sabre/uri": "^1",
+        "ramsey/uuid": "^3.7"
+    },
+    "homepage": "https://nimbusec.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alen Kocaj",
+            "email": "alen.kocaj@posteo.at",
+            "homepage": "https://github.com/rathalos64",
+            "role": "developer"
+        }
+    ],
+    "config": {
+        "vendor-dir": "src/plib/vendor"
+    }
+}

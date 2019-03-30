@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="WebNoteDB" Class="WNDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\sqlexpress;AttachDbFilename=&quot;D:\1 Hisham\amal\WebShell\Pages\App_Data\WebNote.mdf&quot;;Initial Catalog=WebNoteDB;Integrated Security=True" SettingsObjectName="WebNote.DB.Properties.Settings" SettingsPropertyName="WebNoteDBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.KeyValue" Member="KeyValues">
+    <Type Name="KeyValue">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LanguageId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="KeywordId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Association Name="Keyword_KeyValue" Member="Keyword" ThisKey="KeywordId" OtherKey="Id" Type="Keyword" IsForeignKey="true" />
+      <Association Name="Language_KeyValue" Member="Language" ThisKey="LanguageId" OtherKey="Id" Type="Language" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Keyword" Member="Keywords">
+    <Type Name="Keyword">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="comment" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="Keyword_KeyValue" Member="KeyValues" ThisKey="Id" OtherKey="KeywordId" Type="KeyValue" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Language" Member="Languages">
+    <Type Name="Language">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="comment" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="Language_KeyValue" Member="KeyValues" ThisKey="Id" OtherKey="LanguageId" Type="KeyValue" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Note" Member="Notes">
+    <Type Name="Note">
+      <Column Name="id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="NVarChar(500) NOT NULL" CanBeNull="false" />
+      <Column Name="content" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="user_Id" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="isPublic" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="creation_date" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="last_update" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="tag" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="User_Note" Member="User" ThisKey="user_Id" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Role" Member="Roles">
+    <Type Name="Role">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="description" Type="System.String" DbType="NVarChar(200)" CanBeNull="true" />
+      <Association Name="Role_UserRole" Member="UserRoles" ThisKey="Id" OtherKey="RoleId" Type="UserRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[User]" Member="Users">
+    <Type Name="User">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="User_Note" Member="Notes" ThisKey="Id" OtherKey="user_Id" Type="Note" />
+      <Association Name="User_UserRole" Member="UserRoles" ThisKey="Id" OtherKey="UserId" Type="UserRole" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserRole" Member="UserRoles">
+    <Type Name="UserRole">
+      <Column Name="Id" Type="System.Int64" DbType="BigInt NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Column Name="RoleId" Type="System.Int64" DbType="BigInt NOT NULL" CanBeNull="false" />
+      <Association Name="Role_UserRole" Member="Role" ThisKey="RoleId" OtherKey="Id" Type="Role" IsForeignKey="true" />
+      <Association Name="User_UserRole" Member="User" ThisKey="UserId" OtherKey="Id" Type="User" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

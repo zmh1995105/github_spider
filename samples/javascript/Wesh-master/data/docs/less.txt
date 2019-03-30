@@ -1,0 +1,4 @@
+less displays the content of a given file.
+
+Call it like this "less /path/to/file", for example less /docs/help/less.txt"
+to read the content of a file.

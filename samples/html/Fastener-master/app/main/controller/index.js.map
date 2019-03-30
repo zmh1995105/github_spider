@@ -1,0 +1,27 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\main\\controller\\index.js"
+    ],
+    "names": [
+        "__before",
+        "session",
+        "sessionInfo",
+        "think",
+        "isEmpty",
+        "redirect",
+        "username",
+        "password",
+        "user",
+        "model",
+        "findUser",
+        "userInfo",
+        "indexAction",
+        "display"
+    ],
+    "mappings": "AAAA;;;;;;;;;;;;;;;;;;;;;;;;AAEA;;;;;;;;;;;;;;AAGE;;;;;mBAKMA,Q;;;;;;;;qBACoB,KAAKC,OAAL,CAAa,UAAb,C;;;AAApBC,yB;;mBACDC,MAAMC,OAAN,CAAcF,WAAd,C;;;;;+CACM,KAAKG,QAAL,CAAc,OAAd,C;;;AAELC,sB,GAAWJ,YAAYI,Q;AACvBC,sB,GAAWL,YAAYK,Q;AACvBC,kB,GAAO,KAAKC,KAAL,CAAW,MAAX,C;;qBACUD,KAAKE,QAAL,CAAc;AACjCJ,0BAAUA,QADuB;AAEjCC,0BAAUA;AAFuB,eAAd,C;;;AAAjBI,sB;;mBAIDR,MAAMC,OAAN,CAAcO,QAAd,C;;;;;+CACM,KAAKN,QAAL,CAAc,OAAd,C;;;;;;;;;;;;;;;;;mBAILO,W;;;;;;gDACG,KAAKC,OAAL,E",
+    "file": "..\\..\\..\\src\\main\\controller\\index.js",
+    "sourcesContent": [
+        "'use strict';\n\nimport Base from './base.js';\n\nexport default class extends Base {\n  /**\n   * index action\n   * @return {Promise} []\n   */\n\n  async __before(){\n    let sessionInfo = await this.session(\"userInfo\");\n    if(think.isEmpty(sessionInfo)){\n      return this.redirect('/home');\n    }\n    let username = sessionInfo.username;\n    let password = sessionInfo.password;\n    let user = this.model('user');\n    let userInfo = await user.findUser({\n      username: username,\n      password: password\n    })\n    if(think.isEmpty(userInfo)){\n      return this.redirect('/home');\n    }\n  }\n\n  async indexAction(){\n    return this.display();\n  }\n}"
+    ]
+}

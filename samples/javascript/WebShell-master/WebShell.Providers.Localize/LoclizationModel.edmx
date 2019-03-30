@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="WebNoteModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="WebNoteModelStoreContainer">
+          <EntitySet Name="KeyValue" EntityType="WebNoteModel.Store.KeyValue" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Keyword" EntityType="WebNoteModel.Store.Keyword" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Language" EntityType="WebNoteModel.Store.Language" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_KeyValue_Keyword" Association="WebNoteModel.Store.FK_KeyValue_Keyword">
+            <End Role="Keyword" EntitySet="Keyword" />
+            <End Role="KeyValue" EntitySet="KeyValue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KeyValue_Language" Association="WebNoteModel.Store.FK_KeyValue_Language">
+            <End Role="Language" EntitySet="Language" />
+            <End Role="KeyValue" EntitySet="KeyValue" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="KeyValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LanguageId" Type="bigint" Nullable="false" />
+          <Property Name="KeywordId" Type="bigint" Nullable="false" />
+          <Property Name="Value" Type="nchar" Nullable="false" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="comment" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="comment" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_KeyValue_Keyword">
+          <End Role="Keyword" Type="WebNoteModel.Store.Keyword" Multiplicity="1" />
+          <End Role="KeyValue" Type="WebNoteModel.Store.KeyValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Keyword">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KeyValue">
+              <PropertyRef Name="KeywordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KeyValue_Language">
+          <End Role="Language" Type="WebNoteModel.Store.Language" Multiplicity="1" />
+          <End Role="KeyValue" Type="WebNoteModel.Store.KeyValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Language">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KeyValue">
+              <PropertyRef Name="LanguageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebNoteModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="LocalizationEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="KeyValues" EntityType="WebNoteModel.KeyValue" />
+          <EntitySet Name="Keywords" EntityType="WebNoteModel.Keyword" />
+          <EntitySet Name="Languages" EntityType="WebNoteModel.Language" />
+          <AssociationSet Name="FK_KeyValue_Keyword" Association="WebNoteModel.FK_KeyValue_Keyword">
+            <End Role="Keyword" EntitySet="Keywords" />
+            <End Role="KeyValue" EntitySet="KeyValues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KeyValue_Language" Association="WebNoteModel.FK_KeyValue_Language">
+            <End Role="Language" EntitySet="Languages" />
+            <End Role="KeyValue" EntitySet="KeyValues" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="KeyValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LanguageId" Type="Int64" Nullable="false" />
+          <Property Name="KeywordId" Type="Int64" Nullable="false" />
+          <Property Name="Value" Type="String" Nullable="false" MaxLength="10" Unicode="true" FixedLength="true" />
+          <NavigationProperty Name="Keyword" Relationship="WebNoteModel.FK_KeyValue_Keyword" FromRole="KeyValue" ToRole="Keyword" />
+          <NavigationProperty Name="Language" Relationship="WebNoteModel.FK_KeyValue_Language" FromRole="KeyValue" ToRole="Language" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="comment" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="KeyValues" Relationship="WebNoteModel.FK_KeyValue_Keyword" FromRole="Keyword" ToRole="KeyValue" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="comment" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="KeyValues" Relationship="WebNoteModel.FK_KeyValue_Language" FromRole="Language" ToRole="KeyValue" />
+        </EntityType>
+        <Association Name="FK_KeyValue_Keyword">
+          <End Role="Keyword" Type="WebNoteModel.Keyword" Multiplicity="1" />
+          <End Role="KeyValue" Type="WebNoteModel.KeyValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Keyword">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KeyValue">
+              <PropertyRef Name="KeywordId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KeyValue_Language">
+          <End Role="Language" Type="WebNoteModel.Language" Multiplicity="1" />
+          <End Role="KeyValue" Type="WebNoteModel.KeyValue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Language">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="KeyValue">
+              <PropertyRef Name="LanguageId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebNoteModelStoreContainer" CdmEntityContainer="LocalizationEntities">
+          <EntitySetMapping Name="KeyValues"><EntityTypeMapping TypeName="WebNoteModel.KeyValue"><MappingFragment StoreEntitySet="KeyValue">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+            <ScalarProperty Name="KeywordId" ColumnName="KeywordId" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Keywords"><EntityTypeMapping TypeName="WebNoteModel.Keyword"><MappingFragment StoreEntitySet="Keyword">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="name" ColumnName="name" />
+            <ScalarProperty Name="comment" ColumnName="comment" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Languages"><EntityTypeMapping TypeName="WebNoteModel.Language"><MappingFragment StoreEntitySet="Language">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="name" ColumnName="name" />
+            <ScalarProperty Name="comment" ColumnName="comment" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="LoclizationModel">
+        <EntityTypeShape EntityType="WebNoteModel.KeyValue" Width="1.5" PointX="3" PointY="0.875" Height="1.9210009765625" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebNoteModel.Keyword" Width="1.5" PointX="0.75" PointY="1.125" Height="1.592306315104167" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebNoteModel.Language" Width="1.5" PointX="0.75" PointY="4.125" Height="1.5923063151041657" IsExpanded="true" />
+        <AssociationConnector Association="WebNoteModel.FK_KeyValue_Keyword" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="1.9211531575520835" />
+          <ConnectorPoint PointX="3" PointY="1.9211531575520835" />
+        </AssociationConnector>
+        <AssociationConnector Association="WebNoteModel.FK_KeyValue_Language" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="4.9211531575520828" />
+          <ConnectorPoint PointX="3.75" PointY="4.9211531575520828" />
+          <ConnectorPoint PointX="3.75" PointY="2.7960009765625" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

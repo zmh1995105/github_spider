@@ -1,0 +1,77 @@
+{
+  "name": "pm2-webshell",
+  "version": "1.24.0",
+  "description": "Expose a fully capable terminal in your browser ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "pmx": "^0.5.5",
+    "tty.js": "^0.2.15"
+  },
+  "config": {
+    "port": "8080",
+    "username": "foo",
+    "password": "bar",
+    "https": "false",
+    "bind": "0.0.0.0",
+    "ssl_key": "./term-default.key",
+    "ssl_cert": "./term-default.crt"
+  },
+  "keywords": [
+    "webshell",
+    "terminal",
+    "ssh",
+    "webssh",
+    "pm2"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pm2-hive/pm2-webshell.git"
+  },
+  "apps": [
+    {
+      "script": "app.js",
+      "name": "pm2-webshell",
+      "max_memory_restart": "100M",
+      "merge_logs": true
+    }
+  ],
+  "author": "",
+  "license": "ISC",
+  "gitHead": "abd0848e7a34035f5b43d9afd776da321bac1c61",
+  "bugs": {
+    "url": "https://github.com/pm2-hive/pm2-webshell/issues"
+  },
+  "homepage": "https://github.com/pm2-hive/pm2-webshell#readme",
+  "_id": "pm2-webshell@1.24.0",
+  "_shasum": "02f8301c52349074dee83709992789a925cd9cc7",
+  "_from": "pm2-webshell@latest",
+  "_npmVersion": "3.3.12",
+  "_nodeVersion": "5.5.0",
+  "_npmUser": {
+    "name": "tknew",
+    "email": "strzelewicz.alexandre@gmail.com"
+  },
+  "dist": {
+    "shasum": "02f8301c52349074dee83709992789a925cd9cc7",
+    "tarball": "https://registry.npmjs.org/pm2-webshell/-/pm2-webshell-1.24.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "tknew",
+      "email": "strzelewicz.alexandre@gmail.com"
+    },
+    {
+      "name": "jshkurti",
+      "email": "jonishkurti90@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-6-west.internal.npmjs.com",
+    "tmp": "tmp/pm2-webshell-1.24.0.tgz_1455529472893_0.4754891006741673"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/pm2-webshell/-/pm2-webshell-1.24.0.tgz"
+}

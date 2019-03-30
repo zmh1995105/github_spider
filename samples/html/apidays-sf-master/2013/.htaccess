@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+RewriteEngine off
+#Options +FollowSymLinks 
+# On Apache 2.0+ only:
+#AcceptPathInfo off
+
+#DirectoryIndex /index.php
+</IfModule>

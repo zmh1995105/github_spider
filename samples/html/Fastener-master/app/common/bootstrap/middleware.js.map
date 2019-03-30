@@ -1,0 +1,12 @@
+{
+    "version": 3,
+    "sources": [
+        "..\\..\\..\\src\\common\\bootstrap\\middleware.js"
+    ],
+    "names": [],
+    "mappings": "AAAA;;;;;;AAMA",
+    "file": "..\\..\\..\\src\\common\\bootstrap\\middleware.js",
+    "sourcesContent": [
+        "/**\n * this file will be loaded before server started\n * you can register middleware\n * https://thinkjs.org/doc/middleware.html\n */\n\n/**\n * \n * think.middleware('xxx', http => {\n *   \n * })\n * \n */\n"
+    ]
+}

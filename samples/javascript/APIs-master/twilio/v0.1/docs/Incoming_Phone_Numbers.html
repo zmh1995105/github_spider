@@ -1,0 +1,977 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<body>
+ <div class="apicontainer">
+<div class="main api-profile">
+ <div class="constraint">
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">getIncomingPhoneNumber</span>
+</div>
+<div class="meta">
+<p>Fetches the details of a phone number purchased from Twilio</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A 34 character string that uniquely idetifies this resource.</p>
+</div>
+<div class="name">
+<span class="parameter-name">IncomingPhoneNumberSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method POST">POST</span><span class="route">updateIncomingPhoneNumberByPost</span>
+</div>
+<div class="meta">
+<p>Update an incoming phone number obtained from Twilio via POST.</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A 34 character string that uniquely idetifies this resource.</p>
+</div>
+<div class="name">
+<span class="parameter-name">IncomingPhoneNumberSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A human readable description of the new incoming phone number resource, with maximum length 64 characters.</p>
+</div>
+<div class="name">
+<span class="parameter-name">FriendlyName</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Calls to this phone number will start a new TwiML session with this API version. Either 2010-04-01 or 2008-08-01.</p>
+</div>
+<div class="name">
+<span class="parameter-name">ApiVersion</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody dials the phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML defined by VoiceUrl.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceFallbackUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio will request to pass status parameters (such as call ended) to your application.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallback</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method Twilio will use to make requests to the StatusCallback URL. Either GET or POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody sends an SMS to the new phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML defined by SmsUrl.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsFallbackUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Do a lookup of a caller's name from the CNAM database and post it to your app. Either true or false. Defaults to false.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceCallerIdLookup</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method PUT">PUT</span><span class="route">updateIncomingPhoneNumberByPut</span>
+</div>
+<div class="meta">
+<p>Update an incoming phone number obtained from Twilio via PUT.</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A 34 character string that uniquely idetifies this resource.</p>
+</div>
+<div class="name">
+<span class="parameter-name">IncomingPhoneNumberSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A human readable description of the new incoming phone number resource, with maximum length 64 characters.</p>
+</div>
+<div class="name">
+<span class="parameter-name">FriendlyName</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Calls to this phone number will start a new TwiML session with this API version. Either 2010-04-01 or 2008-08-01.</p>
+</div>
+<div class="name">
+<span class="parameter-name">ApiVersion</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody dials the phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML defined by VoiceUrl.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceFallbackUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio will request to pass status parameters (such as call ended) to your application.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallback</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method Twilio will use to make requests to the StatusCallback URL. Either GET or POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody sends an SMS to the new phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML defined by SmsUrl.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsFallbackUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Do a lookup of a caller's name from the CNAM database and post it to your app. Either true or false. Defaults to false.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceCallerIdLookup</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method DELETE">DELETE</span><span class="route">deleteIncomingPhoneNumber</span>
+</div>
+<div class="meta">
+<p>Deletes a phone number purchased from Twilio</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A 34 character string that uniquely idetifies this resource.</p>
+</div>
+<div class="name">
+<span class="parameter-name">IncomingPhoneNumberSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method GET">GET</span><span class="route">getIncomingPhoneNumberList</span>
+</div>
+<div class="meta">
+<p>Returns a list of incoming phone number resources, each representing a phone number given to your account</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Only show the incoming phone number resources that match this pattern. You can specify partial numbers and use '*' as a<br/>					wildcard for any digit.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">PhoneNumber</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Only show the incoming phone number resources with friendly names that exactly match this name.</p>
+</div>
+<div class="name">
+<span class="parameter-name">FriendlyName</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method POST">POST</span><span class="route">addIncomingPhoneNumber</span>
+</div>
+<div class="meta">
+<p>Adds a new phone number to your account. If a phone number is found for your request, Twilio will add it to your account<br/>			</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The phone number you want to purchase. The number should be formated starting with a '+' followed by the country code<br/>					and the number in E.164 format<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">PhoneNumber</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A human readable description of the new incoming phone number. Maximum 64 characters. Defaults to a formatted version of<br/>					the number.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">FriendlyName</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody dials the new phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceUrl. Must be either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML at Url.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceFallbackUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio will request to pass status parameters (such as call ended) to your application.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallback</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method Twilio will use to make requests to the StatusCallback URL. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody sends an SMS to the phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsUrl. Must be either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML defined by SmsUrl.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsFallbackUrl. Must be either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Do a lookup of a caller's name from the CNAM database and post it to your app. Either true or false. Defaults to false.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceCallerIdLookup</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>
+<div class="endpoint" data-group="documentation" id="endpoint-nameOfTheMethod" style="">
+<div class="title">
+<span class="method POST">POST</span><span class="route">addIncomingPhoneNumberByAreaCode</span>
+</div>
+<div class="meta">
+<p>Adds a random phone number available for the area depending on the Area Code provided</p>
+</div>
+<hr>
+<div class="parameters">
+<div class="titles">
+<div class="console">Default</div>
+<div class="description">Description</div>
+<div class="name">Parameter</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Represents the unique id of the Account responsible for this caller Id.</p>
+</div>
+<div class="name">
+<span class="parameter-name">AccountSid</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The area code in which you'd like a new incoming phone number. Any three digit, US area code is valid. Twilio will<br/>					provision a random phone number within this area code for you. You must include either this or a PhoneNumber parameter<br/>					to have your POST succeed.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">AreaCode</span>
+<p class="required">Required</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A human readable description of the new incoming phone number. Maximum 64 characters. Defaults to a formatted version of<br/>					the number.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">FriendlyName</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody dials the new phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceUrl. Must be either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML at Url.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the VoiceFallbackUrl. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio will request to pass status parameters (such as call ended) to your application.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallback</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method Twilio will use to make requests to the StatusCallback URL. Either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">StatusCallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The URL that Twilio should request when somebody sends an SMS to the phone number.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsUrl. Must be either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+A URL that Twilio will request if an error occurs requesting or executing the TwiML defined by SmsUrl.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackUrl</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+The HTTP method that should be used to request the SmsFallbackUrl. Must be either GET or POST. Defaults to POST.</p>
+</div>
+<div class="name">
+<span class="parameter-name">SmsFallbackMethod</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+<div class="parameter">
+<div class="console">
+</div>
+<div class="description">
+<span class="parameter-type">string</span>
+<p>
+Do a lookup of a caller's name from the CNAM database and post it to your app. Either true or false. Defaults to false.<br/>			</p>
+</div>
+<div class="name">
+<span class="parameter-name">VoiceCallerIdLookup</span>
+<p class="optional">Optional</p>
+</div>
+</div>
+</div>
+</div>

@@ -1,0 +1,342 @@
+<?= $this->response; ?>
+<?= $this->renderTabs($this->tabs); ?> 
+
+<!-- ========================================= [ UNREGISTERED DOMAINS ] ===================================================================== -->
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("settings.view.unreg.title"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <?= $this->lmsg("settings.view.unreg.description"); ?>
+            <br>
+            <br>
+
+            <form method="post" action="<?= $this->h->url('register', 'settings'); ?>">
+                <div class="form-row">
+                    
+                    <div class="field-name" style="width: auto;">
+                        <select id="bundle-select" name="bundle">
+                            <?php foreach ($this->registered_domains as $bundle_id => $bundle_element): ?>
+
+                                <?php $active = $bundle_element['bundle']['active']; ?>
+                                <?php $contingent = $bundle_element['bundle']['contingent']; ?>
+                                <?php $display = sprintf("%s (used %d / %d)", 
+                                    $bundle_element['bundle']['name'],
+                                    $bundle_element['bundle']['active'],
+                                    $bundle_element['bundle']['contingent']); ?>
+                                
+                                <?php $value = "{$bundle_id}__{$bundle_element['bundle']['name']}"; ?>
+                                <option value="<?= $value ?>" active=<?= $active ?> contingent=<?= $contingent ?>>
+                                    <?= $display ?>
+                                </option>
+
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="field-value">
+                        <?php if (count($this->nonregistered_domains) > 0): ?>
+                            <span id="btn-send" class="btn action" style="margin-left: 20px;">
+                            
+                                <button id="register" type="submit" name="submit" value="registerSelected">
+                                    <?= $this->lmsg("settings.view.unreg.register"); ?>
+                                </button>
+                            
+                            </span>
+                        <?php endif; ?>
+
+                        <span id="contingentLeft" style="margin-left: 10px; display: None;"></span>
+                    </div>
+                    <br>
+                    
+                    <div class="list">
+                        <?php if (count($this->nonregistered_domains) == 0): ?>
+                        
+                            <span class="hint">
+                                <?= $this->lmsg("settings.view.unreg.no_domains"); ?>
+                            </span>
+                        
+                        <?php else: ?>
+                            <table width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input name="act" id="act" type="checkbox" setter> <?= $this->lmsg("settings.view.unreg.domain"); ?>
+                                        </th>
+                                        <th>
+                                            <a><?= $this->lmsg("msg.directory"); ?></a>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach($this->nonregistered_domains as $domain => $directory): ?>
+                                    <tr>
+                                        <td>
+                                            <input id="active" name="active[]" value="<?= $domain; ?>" type="checkbox"> <?= $domain; ?>
+                                        </td>
+                                        <td>
+                                            <?= $directory; ?>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php endif; ?>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+
+<!-- ========================================= [ REGISTERED DOMAINS ] ===================================================================== -->
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("settings.view.reg.title"); ?>
+                </h3>
+            </div>
+        </div>
+        
+        <div class="content">
+            <?= $this->lmsg("settings.view.reg.description"); ?>
+            <br>
+            <br>
+
+            <?php $i = 1; ?>
+            <?php foreach ($this->registered_domains as $bundle_element): ?>
+
+                <form method="post" action="<?= $this->h->url('unregister', 'settings'); ?>">
+                    <input type="hidden" name="bundle" value="<?= $bundle_element["bundle"]["name"]; ?>"/>
+                    <div class="form-row">
+                        
+                        <div class="field-name">
+                            <h5><b><?= $bundle_element["bundle"]["name"]; ?></b></h5>
+                        </div>
+                        
+                        <div class="field-value">
+                            <?php if (count($bundle_element["domains"]) > 0): ?>
+                                <span id="btn-send" class="btn action">
+                                
+                                    <button type="submit" name="submit" value="removeSelected<?= $i; ?>">
+                                        <?= $this->lmsg("settings.view.reg.unregister"); ?>
+                                    </button>
+                                
+                                </span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="list">
+                            <?php if (count($bundle_element["domains"]) == 0): ?>
+                            
+                                <span class="hint">
+                                    <?= $this->lmsg("settings.view.reg.no_domains"); ?>
+                                </span>
+                            
+                            <?php else: ?>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input name="deact<?= $i; ?>" id="deact<?= $i; ?>" type="checkbox" setter> <?= $this->lmsg("settings.view.reg.domain"); ?> 
+                                            </th>
+                                            <th>
+                                                <a><?= $this->lmsg("msg.directory"); ?></a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach($bundle_element["domains"] as $domain): ?>
+                                            <tr>
+                                                <td>
+                                                    <input name="deactive<?= $i; ?>[]" value="<?= $domain['name']; ?>" type="checkbox"> <?= $domain['name']; ?>
+                                                </td>
+                                                <td>
+                                                    <?= $domain["directory"]; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
+                        </div>
+
+                    </div>
+                </form>
+                
+                <div class="btns-box"></div>
+
+            <?php $i = $i + 1; ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================= [ JS ] ===================================================================== -->
+
+<script>
+
+    var setLoading = function (toggle) {
+        
+        // hide button
+        toggle.style.display = "None";
+
+        // disable parent
+        var parent = toggle.parentNode;
+        parent.classList.toggle("disabled");
+
+        // rotating loading spinner
+        var spinner = document.createElement("span");
+        spinner.classList.toggle("wait");
+        spinner.appendChild(document.createTextNode("Please wait"));
+
+        parent.appendChild(spinner);
+    }
+
+    var clickHandler = function (event) {
+
+        // get the clicked element
+        var toggle = event.target;
+
+        if (toggle.nodeName.toLowerCase() === "button") {
+            
+            // for all submit buttons
+            if (toggle.type === "submit") {
+
+                // init loading
+                setLoading(toggle);
+            }
+        }
+
+        if (toggle.nodeName.toLowerCase() === "input") {
+
+            if (toggle.type === "checkbox") {
+
+                // toggle one checkbox for registering domains
+                if (toggle.id === "active") {
+                    if (toggle.checked) {
+                        currentSelectedRegister += 1;
+                    } 
+
+                    if (!toggle.checked) {
+                        currentSelectedRegister -= 1;
+                    }
+                }
+
+                // toggle all checkboxes
+                if(toggle.hasAttribute ("setter")) {
+
+                    // register
+                    if (toggle.id === "act") {
+                        document.getElementsByName("active[]").forEach(function(element) {
+                            if (toggle.checked && !element.checked) {
+                                currentSelectedRegister += 1;
+                            }
+
+                            if (!toggle.checked && element.checked) {
+                                currentSelectedRegister -= 1;
+                            }
+                            
+                            element.checked = toggle.checked;
+                        });
+                    }
+
+                    // unregister
+                    if (toggle.id.lastIndexOf("deact", 0) === 0) {
+
+                        var index = toggle.id.slice(-1);
+                        document.getElementsByName("deactive" + index + "[]").forEach(function(element) {
+                            element.checked = toggle.checked;
+                        });
+                    }
+                }
+
+                updateRegister();
+            }
+        }
+    };
+
+    var getContingentLeft = function () {
+        return (currentContingent - currentActive - currentSelectedRegister);
+    };
+
+    var updateRegister = function () {
+        // show contingent label
+        var contingentLeft = document.getElementById("contingentLeft");
+        contingentLeft.textContent = getContingentLeft() + " domains according to bundle limit left";
+        contingentLeft.style.display = "";
+        contingentLeft.style.color = "black";
+
+        var registerButton = document.getElementById("register");
+        if (getContingentLeft() < 0) {
+            contingentLeft.textContent = "Bundle limit of " + currentContingent + " exceeded by " + (-1 * getContingentLeft());
+            contingentLeft.style.color = "red";
+
+            // disable register button
+            if (registerButton != null) {
+                registerButton.disabled = true;
+                registerButton.parentElement.classList.add("disabled");
+            }
+        } 
+            
+        if (getContingentLeft() >= 0) {
+            
+            // enable register button
+            if (registerButton != null) {
+                registerButton.disabled = false;
+                registerButton.parentElement.classList.remove("disabled");
+            }
+        }
+    }
+
+    var handleRegisterButtonSelect = function (select) {
+        var option = select.options[select.selectedIndex];
+
+        currentActive = Number(option.getAttribute("active"));
+        currentContingent = Number(option.getAttribute("contingent"));
+        currentSelectedRegister = 0;
+
+        // loop through checked domains
+        document.querySelectorAll("#active").forEach(function(element) { 
+            if (element.checked) {
+                currentSelectedRegister += 1;
+            }
+        });
+
+        updateRegister();
+    };
+
+    var changeHandler = function (event) {
+        var toggle = event.target;
+
+        if (toggle.nodeName.toLowerCase() === "select") {
+            
+            if (toggle.id === "bundle-select") {
+                handleRegisterButtonSelect(toggle);
+            }
+        }
+    };
+
+    document.addEventListener("click", clickHandler);
+    document.addEventListener("change", changeHandler);
+
+    // global variables
+    var currentActive = 0;
+    var currentContingent = 0;
+    var currentSelectedRegister = 0;
+
+    window.addEventListener("load", () => {
+        handleRegisterButtonSelect(document.getElementById("bundle-select"));
+    });
+</script>

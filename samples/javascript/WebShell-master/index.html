@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebShell 1.0</title>
+    <link rel="shortcut icon" type="image/x-icon" href="tag.png">
+    <script src="jquery.min.js"></script>
+    <script src="main.js"></script>
+    <style>
+        #left {
+            width: 45%;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            margin: 5px;
+        }
+
+        #right {
+            width 50%;
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            margin: 5px;
+        }
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.75);
+        }
+        #modal-content {
+            color: black;
+            background-color: #ffffff;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #8f8f8f;
+            border-radius: 25px;
+            width: 80%;
+        }
+        #close {
+            color: #8f8f8f;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        #close:hover,#close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onkeypress="CharCode(event)" onkeydown="KeyCode(event)" id="body" style="background-color: black; color: white; font-size: 16px; font-family: Courier, monospace">
+<div id="modal">
+    <div id="modal-content">
+        <span id="close" onclick="closeM()">&times;</span>
+        <h1>Options</h1>
+        <p>Background color:</p>
+        <input type="color" id="bg" value="#000000">
+        <p>Text color:</p>
+        <input type="color" id="txt" value="#ffffff">
+        <p>Font size:</p>
+        <input type="number" id="fs" value="16" min="6" max="75">
+        <p>Font:</p>
+        <input type="text" id="f" value="Courier, monospace">
+        <p>Close this window to save your changes.<br>If you have any suggestions for additional features to go on this page or there is a bug, please write your suggestion <a href="https://github.com/EricAndrechek/WebShell/issues">here</a>.</p>
+    </div>
+</div>
+<div id="left">
+    <p id="previous">If you are reading this message, please refresh the page. If that does not work, please report the bug <a href="https://github.com/EricAndrechek/WebShell/issues">here</a>.</p>
+    <br>
+    <b id="input"></b>
+    <span id="text"></span>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+<div id="right">
+    <p id="output"></p>
+</div>
+<script>
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("modal")) {
+            closeM();
+        }
+    }
+    document.querySelector("body").addEventListener("paste", function(e) {
+        e.preventDefault();
+        var text = e.clipboardData.getData("text/plain");
+        document.getElementById("text").innerHTML = document.getElementById("text").innerHTML + text;
+    });
+    document.getElementById("previous").innerHTML = "<b>Welcome to WebShell v1.0, the universal shell available on all major web browsers and operating systems.<br><br>To suggest a feature, report a bug, or see more information about this program, including a full list of function and examples, FAQs, current issues, and other ways of accessing WebShell including mobile apps, and desktop apps, visit us at <a href=\"https://github.com/EricAndrechek/WebShell\">https://github.com/EricAndrechek/WebShell</a><br><br>Type \'help\' for a list of commands.<br><br>\u00A9Eric Andrechek 2018</b>";
+    name("ran");
+</script>
+</body>
+</html>

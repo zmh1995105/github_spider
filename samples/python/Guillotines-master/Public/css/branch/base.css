@@ -1,0 +1,184 @@
+@font-face {
+  font-family: 'iconfont';
+  src: url('//at.alicdn.com/t/font_1473306205_9283552.eot');
+  src: url('//at.alicdn.com/t/font_1473306205_9283552.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */ url('//at.alicdn.com/t/font_1473306205_9283552.woff') format('woff'), /* chrome、firefox */ url('//at.alicdn.com/t/font_1473306205_9283552.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url('//at.alicdn.com/t/font_1473306205_9283552.svg#iconfont') format('svg');
+  
+  /* IE9*/
+  /* iOS 4.1- */
+}
+.iconfont {
+  font-family: "iconfont";
+  font-size: 16px;
+  font-style: normal;
+}
+body {
+  font-family: "文泉驿微米黑", "Noto Sans CJK SC", "WenQuanYi Zen Hei", sans-serif;
+  padding-top: 50px;
+  background-color: #252831;
+  font-size: 16px;
+}
+ul.nav-tabs {
+  width: 222.5px;
+  border-radius: 4px;
+  border: none;
+}
+ul.nav-tabs li a {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  padding: 7px 15px;
+  border-radius: 4px;
+  color: #F9F0EF;
+  border: none !important;
+}
+ul.nav-tabs li.nav-list-span {
+  padding-left: 15px;
+  margin-bottom: 5px;
+  font-size: 95%;
+  letter-spacing: 2px;
+  color: #51586a;
+}
+ul.nav-tabs li.active a,
+ul.nav-tabs li.active a:hover,
+ul.nav-tabs li a:focus {
+  background-color: #29A8DA;
+  color: #252830 !important;
+}
+ul.nav-tabs li:not(.active) a:hover {
+  background-color: #434857;
+}
+ul.nav-tabs form.nav-tabs-form {
+  position: relative;
+  margin-bottom: 30px;
+}
+ul.nav-tabs form.nav-tabs-form .form-control {
+  color: #ffffff;
+  border: 1px solid #434857;
+  background-color: #434857;
+  box-shadow: none;
+}
+ul.nav-tabs form.nav-tabs-form button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 9px 10px;
+  color: #b7bcc8;
+  background-color: transparent;
+  border: 0;
+  line-height: 0;
+  outline: none;
+}
+ul.nav-tabs > span:first-child {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 40px;
+  color: #51586A;
+  cursor: default;
+}
+.hr-text {
+  position: relative;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+.hr-text:before {
+  position: absolute;
+  top: 50%;
+  display: block;
+  content: "";
+  width: 100%;
+  height: 1px;
+  background-color: #434857;
+}
+.hr-text h6 {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  padding-left: 1em;
+  padding-right: 1em;
+  font-size: 13px;
+  color: #CFD2DA;
+  vertical-align: middle;
+  background-color: #252830;
+}
+.button-info {
+  float: right;
+  padding: 6px 12px;
+  line-height: 1.5;
+  background-color: #434857;
+  color: #ffffff;
+  font-size: 14px;
+  letter-spacing: 1px;
+  border: 1px solid #434857;
+  border-radius: 4px;
+  outline: none;
+  cursor: default;
+}
+.button-info span {
+  font-size: 20px;
+  top: 5px;
+  margin-right: 10px;
+  line-height: 0.5;
+  color: #9F86FF !important;
+}
+.sweet-alert {
+  background-color: #252831;
+  animation: initial !important;
+}
+.sweet-alert h2,
+.sweet-alert p {
+  color: #fff;
+}
+.sweet-alert p {
+  word-wrap: break-word;
+}
+.sweet-alert p input {
+  display: inline-block;
+  color: #ffffff;
+  border: none;
+  height: 39px;
+  background-color: #434857;
+  box-shadow: none;
+  outline: none;
+  letter-spacing: 1px;
+}
+.sweet-alert p input:focus,
+.sweet-alert p input:active,
+.sweet-alert p input:hover {
+  box-shadow: none;
+  border: none;
+}
+.sweet-alert p:last-of-type {
+  letter-spacing: -0.5px;
+}
+.sweet-alert button.cancel,
+.sweet-alert button.confirm {
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+.sweet-alert .sa-icon.sa-success::before,
+.sweet-alert .sweet-alert .sa-icon.sa-success::after,
+.sweet-alert .sa-icon.sa-success::before,
+.sweet-alert .sa-icon.sa-success::after,
+.sweet-alert .sa-fix {
+  background-color: transparent !important;
+}
+.alert-input {
+  display: inline;
+  margin-top: 10px;
+  width: 75%;
+}
+.dom-hidden {
+  display: none !important;
+}
+.dom-show {
+  display: block !important;
+}
+.container {
+  width: 1400px !important;
+}
+.container .col-xs-3 {
+  width: 21% !important;
+}

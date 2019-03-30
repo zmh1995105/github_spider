@@ -1,0 +1,85 @@
+/* 
+# Webshell APIs
+# Copyright (C) 2013 Webshell SAS
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+({
+	auth:function(){return auth({provider:fs('..')})},
+	'createTask': function(args, opts) {
+		var url = 'https://api.idntik.it/api/proxy/call/api/tasks'
+		args = args || {}
+		if (args['Application-Id'] == null) args['Application-Id'] = "wordlift"
+		var rgx = new RegExp('\{Application-Id\}', 'g')
+		if (url.match(rgx)) {
+			url = url.replace(rgx, args['Application-Id'])
+			if (args['Application-Id']) delete args['Application-Id']
+		}
+		if (url.indexOf('[/Application-Id]') !== -1) {
+			url = url.replace('[/Application-Id]', '/' + args['Application-Id'])
+			if (args['Application-Id']) delete args['Application-Id']
+		}
+		var rgx = new RegExp('\{Callback-Url\}', 'g')
+		if (url.match(rgx)) {
+			url = url.replace(rgx, args['Callback-Url'])
+			if (args['Callback-Url']) delete args['Callback-Url']
+		}
+		if (url.indexOf('[/Callback-Url]') !== -1 && args['/Callback-Url']) {
+			url = url.replace('[/Callback-Url]', '/' + args['Callback-Url'])
+			if (args['Callback-Url']) delete args['Callback-Url']
+		}
+		if (args['body'] == null) throw new Error('body is a required parameter')
+		var rgx = new RegExp('\{body\}', 'g')
+		if (url.match(rgx)) {
+			url = url.replace(rgx, args['body'])
+			if (args['body']) delete args['body']
+		}
+		if (url.indexOf('[/body]') !== -1) {
+			url = url.replace('[/body]', '/' + args['body'])
+			if (args['body']) delete args['body']
+		}
+		if (url.indexOf('[/Application-Id]') !== -1) url = url.replace('[/Application-Id]', '')
+		if (url.indexOf('[/Callback-Url]') !== -1) url = url.replace('[/Callback-Url]', '')
+		if (url.indexOf('[/body]') !== -1) url = url.replace('[/body]', '')
+		return http({provider:fs('..'),url:url,method:'POST',params:args, auth:'manual'}, opts)
+	},
+	'getTaskResults': function(args, opts) {
+		var url = 'https://api.idntik.it/api/proxy/{transactionId}/results'
+		args = args || {}
+		if (args['transactionId'] == null) throw new Error('transactionId is a required parameter')
+		var rgx = new RegExp('\{transactionId\}', 'g')
+		if (url.match(rgx)) {
+			url = url.replace(rgx, args['transactionId'])
+			if (args['transactionId']) delete args['transactionId']
+		}
+		if (url.indexOf('[/transactionId]') !== -1) {
+			url = url.replace('[/transactionId]', '/' + args['transactionId'])
+			if (args['transactionId']) delete args['transactionId']
+		}
+		if (args['Application-Id'] == null) args['Application-Id'] = "wordlift"
+		var rgx = new RegExp('\{Application-Id\}', 'g')
+		if (url.match(rgx)) {
+			url = url.replace(rgx, args['Application-Id'])
+			if (args['Application-Id']) delete args['Application-Id']
+		}
+		if (url.indexOf('[/Application-Id]') !== -1) {
+			url = url.replace('[/Application-Id]', '/' + args['Application-Id'])
+			if (args['Application-Id']) delete args['Application-Id']
+		}
+		if (url.indexOf('[/transactionId]') !== -1) url = url.replace('[/transactionId]', '')
+		if (url.indexOf('[/Application-Id]') !== -1) url = url.replace('[/Application-Id]', '')
+		return http({provider:fs('..'),url:url,method:'GET',params:args, auth:'none'}, opts)
+	}
+})

@@ -1,0 +1,35 @@
+{
+	"name": "asinfotrack/yii2-webshell",
+	"type": "yii2-extension",
+	
+	"description": "Yii2-Webshell allows you to execute any shell command from a web-interface.",
+	"keywords": ["yii2", "web", "shell", "widget", "bundle", "action", "process", "windows", "linux", "console"],
+	
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Pascal Mueller",
+			"email": "pascal.mueller@asinfotrack.ch",
+			"homepage": "http://www.asinfotrack.ch"
+		}
+	],
+	
+	"minimum-stability": "stable",
+	"support": {
+		"source": "https://github.com/asinfotrack/yii2-webshell",
+		"issues": "https://github.com/asinfotrack/yii2-webshell/issues"
+	},
+	
+	"require": {
+		"php": ">=5.4.0",
+		
+		"yiisoft/yii2": "2.0.*",
+		"symfony/process": "3.1.*"
+	},
+	
+	"autoload": {
+		"psr-4": {
+			"asinfotrack\\yii2\\webshell\\": ""
+		}
+	}
+}

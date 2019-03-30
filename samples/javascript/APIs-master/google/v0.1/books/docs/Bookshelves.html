@@ -1,0 +1,1180 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<!DOCTYPE html>
+<html>
+  <body>
+    
+    <div class="apicontainer">
+      <div class="main api-profile">
+	<div class="constraint">
+	  
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-addVolume" style="">
+  <div class="title">
+    <span class="method POST"> POST </span><span class="route">
+      addVolume 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Adds a volume to a mutable pre-defined or user-defined bookshelf. Authentication is required.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of bookshelf to which to add a volume. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> shelf </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of volume to add. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> volumeId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-clearVolumes" style="">
+  <div class="title">
+    <span class="method POST"> POST </span><span class="route">
+      clearVolumes 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Clears all volumes from a bookshelf. Authentication is required.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of bookshelf from which to clear all volumes. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> shelf </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-getAuthenticatedUserBookshelf" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      getAuthenticatedUserBookshelf 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Retrieves a specific Bookshelf resource belonging to the authenticated user. Authentication is required.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of bookshelf to retrieve. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> shelf </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-getUserBookshelf" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      getUserBookshelf 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Retrieves a specific Bookshelf resource for the specified user.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of user for whom to retrieve bookshelves. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> userId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of bookshelf to retrieve. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> shelf </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-listAuthenticatedUserBookshelves" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      listAuthenticatedUserBookshelves 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Retrieves a list of Bookshelf resources belonging to the authenticated user. Authentication is required.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-listUserBookshelves" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      listUserBookshelves 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Retrieves a list of public Bookshelf resources for the specified user.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of user for whom to retrieve bookshelves. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> userId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-moveVolume" style="">
+  <div class="title">
+    <span class="method POST"> POST </span><span class="route">
+      moveVolume 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Moves a volume within a bookshelf.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of bookshelf from which to move a volume. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> shelf </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of volume to move. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> volumeId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">integer</span>
+
+
+
+      
+      <p> Position on shelf to move the item (0 puts the item before the current first item, 1 puts it between the first and the second and so on.) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> volumePosition </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-removeVolume" style="">
+  <div class="title">
+    <span class="method POST"> POST </span><span class="route">
+      removeVolume 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Removes a volume from a mutable pre-defined or user-defined bookshelf. Authentication is required.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of bookshelf from which to remove a volume. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> shelf </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Id of volume to remove. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> volumeId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ISO-3166-1 code to override the IP-based location. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> country </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> String to identify the originator of this request. (string) </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> source </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+	</div>
+      </div>
+    </div>
+    
+    <footer>
+      Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed May 22 2013 18:57:13 GMT+0200 (CEST)
+    </footer>
+    
+    <script> prettyPrint(); </script>
+  </body>
+</html>

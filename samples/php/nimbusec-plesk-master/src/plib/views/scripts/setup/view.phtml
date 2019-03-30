@@ -1,0 +1,192 @@
+<?= $this->response; ?>
+<?= $this->renderTabs($this->tabs); ?>
+
+<div class="form-box">
+    <div class="box-area">
+        <div class="title">
+            <div class="title-area">
+                <h3>
+                    <?= $this->lmsg("setup.view.title"); ?>
+                </h3>
+            </div>
+        </div>
+        <div class="content">
+            <?= $this->lmsg("setup.view.description"); ?>
+            <br>
+            <br>
+            
+            <form method="post" action="<?= $this->h->url('download-agent', 'setup'); ?>">
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>API Key </span>
+                        <span class="required">*</span>
+                    </div>
+                    <div class="field-value">
+                        <input type="text" name="api_key" value="<?= $this->e->escapeHtml($this->api_key); ?>" 
+                            <?php if ($this->extension_installed === "true"): ?> readonly="true" <?php endif; ?>/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>API Secret </span>
+                        <span class="required">*</span>
+                    </div>
+                    <div class="field-value">
+                        <input id="api_secret" type="password" name="api_secret" value="<?= $this->e->escapeHtml($this->api_secret); ?>" 
+                            <?php if ($this->extension_installed === "true"): ?> readonly="true" <?php endif; ?>/>
+                        <span id="show_secret" style="background: #ededed; border: solid 1px #afbac1; margin-left: 5px; cursor: default;">
+                            <span style="margin-left: 3px;">
+                                <img id="show_secret_icon" src="/theme/icons/16/plesk/preview.png"/>
+                            </span>
+                            <span style="color: #188dd9; margin-right: 3px;">
+                                View
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="field-name">
+                        <span>API Server </span>
+                        <span class="required">*</span>
+                    </div>
+                    <div class="field-value">
+                        <input type="text" name="api_server" value="<?= $this->e->escapeHtml($this->api_server); ?>" 
+                            <?php if ($this->extension_installed === "true"): ?> readonly="true" <?php endif; ?>/>
+                    </div>
+                </div>
+
+                <div class="btns-box">
+                    <?php if ($this->extension_installed !== "true"): ?>
+                        <div class="box-area">
+                            <div class="form-row">
+                                <div class="field-name">
+                                    <span class="required">*</span>
+                                    <span> <?= $this->lmsg("msg.required"); ?></span>
+                                </div>
+                                <div class="field-value">
+                                    <span class="btn action">
+                                    
+                                        <button type="submit" name="submit" value="downloadAgent">
+                                            <?= $this->lmsg("setup.view.download_agent"); ?>
+                                        </button> 
+                                    
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================= [ JS ] ===================================================================== -->
+
+<script>
+
+    var setLoading = function (toggle) {
+        
+        // hide button
+        toggle.style.display = "None";
+
+        // disable parent
+        var parent = toggle.parentNode;
+        parent.classList.toggle("disabled");
+
+        // rotating loading spinner
+        var spinner = document.createElement("span");
+        spinner.classList.toggle("wait");
+        spinner.appendChild(document.createTextNode("Please wait"));
+
+        parent.appendChild(spinner);
+    };
+
+    var viewButtonHoveringChangeColors = function() {
+        return {
+            "#ededed": "#f9f9f9",
+            "#f9f9f9": "#ededed"
+        };
+    };
+
+    var rgbToHex = function(backgroundColorString) {
+        var rgb = backgroundColorString.match(/\d+/g);
+        var r   = parseInt(rgb[0], 10);
+        var g   = parseInt(rgb[1], 10);
+        var b   = parseInt(rgb[2], 10);
+        return "#" + r.toString(16) + g.toString(16) + b.toString(16);
+    };
+
+    var eventHandler = function (event) {
+
+        // get the clicked element
+        var toggle = event.target;
+
+        if (toggle.nodeName.toLowerCase() === "button") {
+            
+            // for all submit buttons
+            if (toggle.type === "submit") {
+
+                // init loading
+                setLoading(toggle);
+            }
+        }
+
+        // check id directly
+        if (toggle.id === "show_secret" || document.getElementById("show_secret").contains(toggle)) {
+            var api_secret = document.getElementById("api_secret");
+            
+            if (api_secret.type === "password") {
+                api_secret.type = "text";
+            } else {
+                api_secret.type = "password"
+            }
+
+            var show_secret_span = document.getElementById("show_secret");
+            show_secret_span.style.background = viewButtonHoveringChangeColors()[rgbToHex(show_secret_span.style.background)];
+        }
+    };
+
+    var viewButtonMouseOverColors = function () {
+        return {
+            "#ededed": "#f9f9f9",
+            "#e0e0e0": "#ededed"
+        };
+    };
+
+    var onMouseOverHandler = function (event) {
+        var toggle = event.target;
+        
+        // check id directly
+        if (toggle.id === "show_secret" || document.getElementById("show_secret").contains(toggle)) {
+            var show_secret_span = document.getElementById("show_secret");
+            show_secret_span.style.background = viewButtonMouseOverColors()[rgbToHex(show_secret_span.style.background)];
+        }
+    };
+
+    var viewButtonMouseOutColors = function () {
+        return {
+            "#f9f9f9": "#ededed",
+            "#ededed": "#e0e0e0"
+        };
+    };
+
+    var onMouseOutHandler = function (event) {
+        var toggle = event.target;
+        
+        // check id directly
+        if (toggle.id === "show_secret" || document.getElementById("show_secret").contains(toggle)) {
+            var show_secret_span = document.getElementById("show_secret");
+            show_secret_span.style.background = viewButtonMouseOutColors()[rgbToHex(show_secret_span.style.background)];
+        }
+    };
+
+    document.addEventListener("click", eventHandler);
+    document.addEventListener("mouseover", onMouseOverHandler);
+    document.addEventListener("mouseout", onMouseOutHandler);
+
+</script>

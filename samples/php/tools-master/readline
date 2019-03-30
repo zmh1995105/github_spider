@@ -1,0 +1,111 @@
+#!/usr/bin/php
+<?php
+
+define('HISTORY_FILENAME',
+	sys_get_temp_dir()."/"
+	.get_current_user().".history.readline"
+);
+
+define('VARIABLES_FILENAME',
+	sys_get_temp_dir()."/"
+	.get_current_user().".variables.readline"
+);
+
+if (file_exists(HISTORY_FILENAME)) {
+	if (!readline_read_history(HISTORY_FILENAME)) {
+		trigger_error("can't read readline history", E_USER_ERROR);
+	}
+}
+
+if (file_exists(VARIABLES_FILENAME)) {
+	require VARIABLES_FILENAME;
+}
+
+register_shutdown_function(function() {
+	if (!empty(HISTORY_FILENAME)) {
+		readline_write_history(HISTORY_FILENAME);
+	}
+
+	if (!empty(VARIABLES_FILENAME)) {
+	file_put_contents(VARIABLES_FILENAME, "<?php\n");
+	}
+
+	reset($GLOBALS);
+	while (key($GLOBALS) !== NULL && current($GLOBALS) !== false) {
+		if (
+			!in_array(key($GLOBALS), array(
+				 'GLOBALS'
+				,'_SERVER'
+				,'_GET'
+				,'_POST'
+				,'_FILES'
+				,'_REQUEST'
+				,'_SESSION'
+				,'_ENV'
+				,'_COOKIE'
+				,'php_errormsg'
+				,'HTTP_RAW_POST_DATA'
+				,'http_response_header'
+				,'argc'
+				,'argv'
+			)) &&
+			in_array(gettype(current($GLOBALS)), array(
+				 'boolean'
+				,'integer'
+				,'double'
+				,'float'
+				,'string'
+				,'array'
+				,'NULL'
+			))
+		) {
+			if (!empty(VARIABLES_FILENAME)) {
+				file_put_contents(
+					VARIABLES_FILENAME,
+					'$' . key($GLOBALS) . '=' . var_export(current($GLOBALS), true) . ";\n",
+					FILE_APPEND
+				);
+			}
+		}
+	next($GLOBALS);
+	}
+});
+
+declare(ticks = 1);
+pcntl_signal(SIGINT, function() {
+	exit;
+});
+
+function export(string $filename, $variable)
+{
+	$content = serialize($variable);
+	if (!is_string($content)) {
+		user_error("can't serialize content");
+		return false;
+	}
+	if (!is_int(file_put_contents($filename, $content))) {
+		user_error("can't put content to file");
+		return false;
+	}
+}
+
+function import(string $filename)
+	{
+	$content = file_get_contents($filename);
+	if (!is_string($content)) {
+		user_error("can't get content from file");
+		return false;
+	}
+	return(unserialize($content));
+	}
+
+
+while(true) {
+	eval(
+		"declare(ticks = 1);\n" .
+		call_user_func(function() {
+			readline_add_history(func_get_arg(0));
+			return(func_get_arg(0)); 
+		}, readline("<?php "))
+	);
+}

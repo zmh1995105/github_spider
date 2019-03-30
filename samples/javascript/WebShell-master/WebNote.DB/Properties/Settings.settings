@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="WebNote.DB.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="WebNoteConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=.\sqlexpress;AttachDbFilename="D:\1 Hisham\amal\WebShell\Pages\App_Data\WebNote.mdf";Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=.\sqlexpress;AttachDbFilename="D:\1 Hisham\amal\WebShell\Pages\App_Data\WebNote.mdf";Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="D__1_HISHAM_AMAL_WEBSHELL_PAGES_APP_DATA_WEBNOTE_MDFConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=.\sqlexpress;Initial Catalog="D:\1 HISHAM\AMAL\WEBSHELL\PAGES\APP_DATA\WEBNOTE.MDF";Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=.\sqlexpress;Initial Catalog="D:\1 HISHAM\AMAL\WEBSHELL\PAGES\APP_DATA\WEBNOTE.MDF";Integrated Security=True</Value>
+    </Setting>
+    <Setting Name="WebNoteDBConnectionString" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;Data Source=.\sqlexpress;AttachDbFilename="D:\1 Hisham\amal\WebShell\Pages\App_Data\WebNote.mdf";Initial Catalog=WebNoteDB;Integrated Security=True&lt;/ConnectionString&gt;
+  &lt;ProviderName&gt;System.Data.SqlClient&lt;/ProviderName&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">Data Source=.\sqlexpress;AttachDbFilename="D:\1 Hisham\amal\WebShell\Pages\App_Data\WebNote.mdf";Initial Catalog=WebNoteDB;Integrated Security=True</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

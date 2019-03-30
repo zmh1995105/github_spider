@@ -1,0 +1,65 @@
+@charset "utf-8";
+/* CSS Document */
+body{margin:0;padding:0;font-size:12px;background:#f5f7fa;color:#6d6d6d;font-family:'微软雅黑','宋体',"Lucida Grande",sans-serif;outline-style:none;}
+.clear{clear:both;width:100%;font-size:1px;height:1px;}
+.logo,.logo2{width:164px;height:42px;position:absolute;background:url(index_img.png) -19px -238px;top:23px;cursor:pointer;}
+.logo{left:45px;}
+.logo2{left:45px;}
+*{}
+*{ }
+.indexWap1005{width:1000px;margin:0 auto;background:#fff;}
+.indexWap1005 .header{height:90px;width:1000px; position:relative;}
+.indexWap1005 .mainPic{height:436px;width:1000px; position:relative;background:url(bh.png) no-repeat center;}
+.indexWap1005 .mainPic .donwBtn,.indexWap1005 .mainPic .donwBtnHov,.indexWap1005 .mainPic .donwBtnAct{width:163px;height:84px;position:absolute;top:274px;left:712px;background:url(index_img.png) -195px -229px;cursor:pointer;}
+.indexWap1005 .mainPic .donwBtn{background:url(index_img.png) -195px -229px;}
+.indexWap1005 .mainPic .donwBtnHov{background:url(index_img.png) -359px -229px;}
+.indexWap1005 .mainPic .donwBtnAct{background:url(index_img.png) -523px -229px;}
+.indexWap1005 .mainPic .browPic{width:590px;height:340px;background:url(bros.png) no-repeat; position:absolute;top:96px;left:10px;}
+.indexWap1005 .mainPic .browTex{width:380px;height:86px;background:url(index_img.png) -0px -314px no-repeat; position:absolute;left:605px;top:150px;}
+.indexWap1005 .mainPic .browTex h2{color:#fff;font-weight:normal;text-align:center;font-size:31px;margin:0;padding:0;}
+.indexWap1005 .mainPic .browTex h3{color:#fff;font-weight:normal;text-align:center;font-size:24px;margin:0;padding:0;}
+.indexWap1005 .mainPic .donwBtn h4,
+.indexWap1005 .mainPic .donwBtnHov h4,
+.indexWap1005 .mainPic .donwBtnAct h4{font-weight:normal;color:#eee8e4;text-align:center;margin:60px 0 0 0;padding:0;*font-size:12px;}
+
+.header a{text-decoration:none;color:#6d6d6d}
+.header a:hover{color:#fb6149;}
+.header .btn1act a,.header .btn2act a,.header .btn3act a{color:#fb6149;}
+
+.mainPic a{text-decoration:none;color:#ffffff}
+.mainPic a:hover{color:#fb6149;}
+.mainPic .btn1act a,.mainPic .btn2act a,.mainPic .btn3act a{color:#fb6149;}
+
+.header .btn1,.header .btn1act,.header .btn2,.header .btn2act,.header .btn3,.header .btn3act,.mainPic .btn1,.mainPic .btn1act,.mainPic .btn2,.mainPic .btn2act,.mainPic .btn3,.mainPic .btn3act{width:81px;height:34px;display:block;position:absolute;cursor:pointer;font-size:14px;text-align:center;line-height:30px;}
+.header .btns,.mainPic .btns{width:256px;height:90px;position:absolute;right:60px;}
+.header .btn1,.mainPic .btn1{background:url(index_img.png) -696px -257px no-repeat;top:30px;left:32px;}
+.header .btn1act,.mainPic .btn1act{background:url(index_img.png) -696px -267px no-repeat;top:30px;left:32px;}
+.header .btn2,.mainPic .btn2{background:url(index_img.png) -777px -257px  no-repeat;top:30px;left:113px;}
+.header .btn2act,.mainPic .btn2act{background:url(index_img.png) -777px -267px no-repeat;top:30px;left:113px;}
+.header .btn3,.mainPic .btn3{background:url(index_img.png) -859px -257px no-repeat;;top:30px;left:164px}
+.header .btn3act,.mainPic .btn3act{background:url(index_img.png) -859px -267px no-repeat;top:30px;left:164px;}
+
+.udPage{width:944px;margin:27px 30px 30px 30px;clear:both;}
+.udPage .udList{margin:0 3px 15px 25px;border-bottom:1px solid #e7e7e7; padding-bottom:15px;}
+.udPage h2,.udPage h3,.udPage h4{margin:0;padding:0;font-weight:normal;}
+.udPage h2{margin:5px 0 5px 40px;_margin:5px 0 5px 20px;font-size:14px;color:#ff6f3d;float:left;}
+.udPage h3{margin:5px 50px 0px 33px;font-size:12px;float:right;}
+.udPage h4{margin:20px 0 7px 42px;_margin:20px 0 7px 22px;font-size:12px;float:left;clear:both;font-weight:bold}
+.udPage p{margin:5px 0 0px 42px;clear:both;line-height:24px;}
+	
+.feature{width:970px;height:222px;background:url(index_img.png) 0 0;margin:36px auto 36px auto; position:relative;}
+.fea1,.fea2,.fea3,.fea4{width:243px;text-align:center; position:absolute;top:100px;left:729px;}
+.fea1{left:0px;}
+.fea2{left:243px;}
+.fea2 h2{color:#fff;}
+.fea2 span{color:#fff;}
+.fea3{left:486px;}
+.fea4{left:729px;}
+.feature h2{margin:30px 0 8px 0;font-size:14px;}
+
+.footer{width:100%;height:50px;border-top:1px solid #f2f2f2;padding-top:30px;}
+.footer p{text-align:center;margin:0;padding:0;font-size:12px;margin-top:20px;}
+.footer a{text-decoration:none;color:#6D6D6D}
+.footer a:hover{text-decoration:underline;color:#333}
+.footer a:active{text-decoration:underline;color:#777}
+

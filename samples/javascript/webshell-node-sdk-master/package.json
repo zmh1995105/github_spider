@@ -1,0 +1,40 @@
+{
+	"name": "wsh",
+	"description": "The easiest way to work with APIs: Integrate APIs in minutes, better performance, easy authentications",
+	"version": "0.1.4",
+	"author": {
+		"name": "Webshell team",
+		"email": "team@webshell.io"
+	},
+	"contributors": [
+	    {
+	      "name": "Arnaud Richard",
+	      "email": "a.richard@webshell.io"
+	    }
+	],
+	"keywords": [
+	    "webshell",
+	    "wsh",
+	   	"api",
+	   	"apis",
+	   	"sdk",
+	   	"web",
+	   	"rest",
+	   	"auth",
+	   	"oauth",
+	    "framework",
+	    "app"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/webshell/webshell-node-sdk.git"
+	},
+	"main": "index",
+	"bin": {},
+	"dependencies": {},
+	"devDependencies": {},
+	"optionalDependencies": {},
+	"engines": {
+		"node": "*"
+	}
+}

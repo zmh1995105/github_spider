@@ -1,0 +1,283 @@
+<section id="intro">
+  <h2>Introduction</h2>
+
+  <h4>What is Webshell?</h4>
+  <p>We are happy to present you webshell.io – an API of APIs trough a Javascript, declarative, evented, data-retrieval and aggregation gateway for HTTP APIs, built on node.js. Through Webshell, we want to help developers to develop application faster using APIs.</p>
+  <p><a href="http://webshell.io">Webshell.io</a> reduce the number of lines of code required to call multiple HTTP APIs mixed with some client side APIs. Simultaneously bringing down network latency and bandwidth usage, for mobile for example.</p>
+  <p>Webshell consists of a top layer of node.js focused on APIs, transforming API endpoints into Javascript objects, inspired by UNIX shell scripting paradigm, and this node.js-based runtime will process webshell scripts written in Javascript or Coffeescript throw an HTTP request.</p>
+
+  <h4>Why using Webshell?</h4>
+
+  <p>HTTP based APIs are now an integral part of the web, they even compose a coherent part of it we often call the programmable web. More than 8500 open APIs and their providers companies use the Web for content and information delivery through these APIs.
+  In this growing part of the web, there are still several pain points for application developers attempting to integrate and script APIs for their applications.</p>
+
+  <p>Most real-world client apps need to mashup multiple APIs in one go. APIs mashups are often complicated as client apps need to worry about :
+    <ul>
+      <li>- authentication protocol which often are not the same specs</li>
+      <li>- endpoint description which oblige you to check the API documentation in depth to see each time at same functionalities between 2 APIs have not same method name</li>
+      <li>- data format which oblige you to parse XML or JSON response from an API  to fit with the reception API when you make an API workflow</li>
+      <li>- order of requests, inter-dependencies, error handling, and parallelization to reduce overall latency.</li>
+      <li>- HTML views that you have always to do again and again.</li>
+    </ul>
+  </p>
+
+  <p>With 100 new APIs per week and 1 000 000 expected for 2017 this will grow exponentially.</p>
+
+  <p>We found that these issues have three critical impacts: development time, end-user experience and engineering clock speed</p>
+
+  <p>The goal of webshell.io is to ease these pain points:
+    <ul>
+      <li>- By transforming all API endpoints into javascript objects, it become easy for developers to integrate, combine and script any APIs together, and automatically assemble the data you want on the client-side code.</li>
+      <li>- By using a Javascript interface to declare and use API calls, their interdependencies, you can cut down the number of lines of code from hundreds of lines to a few, and the development time from entire sprints to mere hours. Using Javascript, you can create new consumer-centric interfaces that are optimized for your application’s requirements.</li>
+      <li>- You can use webshell.io as an HTTP gateway between client applications and API servers side or client side so that webshell.io can process and condense the data to just the fields that the client needs and also providing the views that you don’t have to make again and again. This helps reduce the number of requests that the client needs to make as well as the amount of data transported to clients.</li>
+    </ul>
+  </p>
+</section>
+<section id="getting-started">
+  <h2>Getting started</h2>
+  <p>All you need to get started is a Webshell Account, a supported browser, and a basic understanding of JavaScript. If you're new to JavaScript, MDN's JavaScript wiki has a lot of information.</p></section>
+  <p>Create an app in your <a href="/dashboard">Dashboard</a> which will generate a valid API Key.</p>
+
+  <h4>Hello World!</h4>
+  <p>The following example is the simplest app you can do with Webshell using the Javascript SDK:</p>
+<pre class="prettyprint linenums">&lt;!DOCTYPE HTML&gt;
+&lt;html lang=&quot;en-US&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Hello World!&lt;/title&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;http://code.jquery.com/jquery-1.8.2.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot; src=&quot;http://api.webshell.io/sdk/js?key={API_KEY}&quot;&gt;&lt;/script&gt;
+  &lt;script type=&quot;text/javascript&quot;&gt;
+$('document').ready(function() {
+  wsh.exec({
+    code: function() {
+      echo('Hello World!');
+    },
+    process: function(json, meta) {
+      $('body').append(meta.view);
+    }
+  })
+})
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre><br />
+  <p>You can find more information about the <a href="#executing-scripts/js-sdk">JS SDK here</a></p>
+</section>
+
+<section id="js-aas">
+  <h2>Javascript as a Service</h2>
+
+  <p>Webshell is an original API which take as HTTP parameter Javascript code. We execute the code on our server and give you a consistent response in JSON or XML. To execute code, just call this url:</p>
+
+  <code>http://api.webshell.io?code={code}&args={args}&output={output}&key={key}</code>
+
+  <p>It enables developers to script APIs together and combine them easily either HTTP APIs (like facebook, Twitter, Spotify...) or client side APIs (like Google Maps, Google Chart, Youtube Player...). To do that, we made the Webshell's Standart library, some simple function to allow you make HTTP request, access your account's file system and lots more.</p>
+
+
+<pre class="prettyprint">$> curl --url "http://api.webshell.io" -d 'code=get({"url":"https://api.metwit.com/v2/weather","params":{"location_lat": "45.45", "location_lng": "9.18"}})'
+[
+  {
+    "objects": [
+      {
+        "weather": {
+          "status": "clear",
+          "measured": {
+            "wind_speed": 3.084,
+            "wind_direction": 140,
+            "temperature": 288,
+            "humidity": 51
+          }
+        },
+        (...)
+      },
+      (...)
+    ],
+  },
+  {
+    "_meta": {
+      "cookie_add": {
+        "sid": "CfLFMRVAZ9ljhH9U571Lp25E"
+      }
+    }
+  }
+]</pre><br />
+  <p>The code given in parameter can be complex and coding in this way is not simple so we made some SDKs - currently available in <a target="_blank" href="https://github.com/webshell/webshell-js-sdk">Javascript (using jQuery)</a>, and <a target="_blank" href="https://github.com/webshell/webshell-node-sdk">node.js</a> but we're working on SDK for PHP, Ruby, Python and more.</p>
+  <pre class="prettyprint">//Same exemple using SDK - node.js or jQuery (same syntax)
+wsh.exec({
+  code: function() {
+    get({
+      url: 'https://api.metwit.com/v2/weather',
+      params: {
+        "location_lat": "45.45",
+        "location_lng": "9.18"
+      }
+    })
+  },
+  success: function(data) {
+    console.log(data);
+    //todo
+  }
+})
+  </pre>
+  <p>Learn more about <a href="#executing-scripts">Webshell API and SDKs</a>
+</section>
+<section id="fs">
+  <h2>File system</h2>
+  <p>We let you some space to store data and scripts on our platform. It let you write modular code to be reused in every project.</p>
+  <p>To let you manipulate your files in a simple way, we have implemented some builtins function in the standart library of Webshell:</p>
+  <pre class="prettyprint">/*
+** I can write in my user directory some data (here in a file named `test`)
+** replace login by your login ;)
+*/
+write({path: fs.login.test, data: "Hello World"});
+
+/*
+** read and display the test file
+*/
+cat(fs.login.test);
+
+/*
+** Execute helloWorld file of a user
+*/
+fs.login.helloWorld();
+
+/*
+** You can chain directories
+*/
+fs.login.directory1.subDirectory2.file</pre><br />
+
+  <p>Currently, everybody can read and execute files of everybody but you can write only in your user workspace. We're working on setting rights (private file, team member), it will coming soon ;). In most case, it's not a problem thanks the APIKey manager, You can make scripts using lots of private key stored in the APIKey manager that stay private and don't display them in your source.</p>
+  <p>You can use this file system to share data or scripts with the community.</p>
+
+  <h4>Cloud9 IDE</h2>
+  <p>To manage your file, we have integrated Cloud9 IDE adapted to the Webshell file API. You can edit and run your scripts in your browser.</p>
+  <p>You can prototype fastly some mashups or design a complex wrapper for your API in this IDE. Lots of features is available in C9 : Visit <a target="_blank" href="http://c9.io">Cloud9</a> </p>
+</section>
+
+<section id="apis-endpoints-as-js-object">
+  <h2>APIs endpoints as Javascript objects</h2>
+
+  <p>The idea behind Webshell is that it is easier for developers to use and script APIs with the whole expressivity of a programming language for APIs than to make the traditionnal way using REST/JSON protocols.<br />
+  Webshell has transformed every APIs endpoints into Javascript Objects, via its builtins and file system.</p>
+  <p>As we saw in <a class="inter-link" href="#fs">File System</a> chapter, you can store scripts into files on your File System and execute it in your application and/or in your others scripts. So, we made a base of scripts based on most popular APIs and put them in the user <code>bin</code> (we chose <code>bin</code> username for <code>/bin</code> on Unix system).</p>
+
+  <pre class="prettyprint">fs.bin.spotify.searchAlbum('plastic beach');</pre><br />
+
+  <p>To simplify the use of APIs, we setted a global variable <code>apis</code> to <code>fs.bin</code>. So you can write the same code in this way:</p>
+
+  <pre class="prettyprint">apis.spotify.searchAlbum('plastic beach');</pre><br />
+
+  <p>All APIs on the platform are documented in the <a href="http://webshell.io/explorer">API Explorer</a> and you can checkout our <code>bin</code> user on <a href="https://github.com/webshell/APIs">github - webshell/APIs</a>.</p>
+  <p>It becomes easy to play with APIs into your apps:</p>
+  <pre class="prettyprint">var m = apis.google.maps({height: "215px"})
+m.center("San francisco")
+m.zoom(9)
+
+m.addMarker({
+  address: "Cityhall, San Francisco, CA",
+  icon: apis.gravatar("team@webshell.io", {view: null})
+});
+
+m.directions({
+  origin: "Cityhall, San Francisco, CA",
+  destination: "Liberty Island, New York"
+});
+</pre><button class="btn" id="run-gmaps">Run</button>
+<div id="demo-gmap"></div>
+<script type="text/javascript">
+$('document').ready(function() {
+  $('#run-gmaps').click(function() {
+    wsh.exec({
+      code: function() {
+        var m = apis.google.maps({height: "215px"})
+        m.center("San francisco")
+        m.zoom(9)
+
+        m.addMarker({
+          address: "Cityhall, San Francisco, CA",
+          icon: apis.gravatar("team@webshell.io", {view: null})
+        });
+
+        m.directions({
+          origin: "Cityhall, San Francisco, CA",
+          destination: "Liberty Island, New York"
+        });
+      },
+      process: function(data, meta) {
+        $('#demo-gmap').append(meta.view);
+      }
+    })
+  });
+});</script>
+
+</section>
+<section id="auth">
+  <h2>APIs Authentication made easy</h2>
+  <p>To be authenticated should take a maximum of 5 minutes but in the reality, it tooks lots more time. You need to find a good OAuth library which support the API you want to use and setup your backend to receive the callback and so on... On Webshell, you have just to setup your API Key in the <a href="http://webshell.io/dashboard">API Key manager - Dashboard</a>
+  </p>
+
+  <pre class="prettyprint">apis.facebook.auth().success(function() {
+  //this is executed when the user is authenticated to facebook
+  return apis.facebook.me(); //return user information
+});</pre>
+
+  <p>We manage query auth, http basic auth, oauth 1 & 2 and more...</p>
+  <p>When you create an app on facebook, we associate a callback for OAuth2 and OAuth1 callbacks.</p>
+</section>
+
+<section id="add-your-api">
+  <h2>Add your API</h2>
+  <p>This is an overview on how add API on Webshell. All is described in detail in <a href="#add-your-api">Add your API</a></p>
+  <p>As all APIs on Webshell are written in Javascript using the Webshell standart library, you can write your own scripts and publish them as a new API on the platform.</p>
+  <p>You have 4 ways to add APIs on Webshell:</p>
+  <ul>
+    <li>- in Javascript</li>
+    <li>- from a WADL File</li>
+    <li>- from a SWAGGER File</li>
+    <li>- from a Mashape XML file</li>
+  </ul>
+  <p>If you have a WADL, Swagger or Mashape XML file, it will be easy to integrate it into Webshell. We made some builtins function in the Webshell standart library that enable to generate Javascript files and documentation in HTML from these API description files. For little API with few endpoints, you can easily do a wrapper yourself. Example for metwit we saw in <a href="#js-aas" class="inter-link">Javascript as a service</a> chapter</p>
+
+  <p>You would like to call it like <code>fs.yourNickname.weather({lat: "45.45", lng: "9.18"});</code> (replace your nickname by your nickname on webshell). You could just make something like that in your file system</p>
+  <pre class="prettyprint">login/
+  weather/
+    weather</pre>
+  <p>In the weather file, write the following:</p>
+  <pre class="prettyprint">//fs.yourNickname.weather.weather
+if (!args.lat || !args.lng)
+  throw new Error('You have to specify `lat` and `lng` argument');
+get({
+  "url":"https://api.metwit.com/v2/weather",
+  "params":{
+    "location_lat": lat,
+    "location_lng": lng
+  }
+});</pre>
+  <p>It's a great way to make simple script with one functionnality.</p>
+  <p>Now you want to make the integrate the complete metwit API, you could use the following structure:</p>
+  <pre class="prettyprint">login/
+  metwit/
+    metwit</pre>
+  <p>With the following code in metwit file using exports (or module.exports)</p>
+  <pre class="prettyprint">exports.weather: function(args, opts) {
+  if (!args.lat || !args.lng)
+    throw new Error('You have to specify `lat` and `lng` argument');
+  return get({
+    "url":"https://api.metwit.com/v2/weather",
+    "params":{
+      "location_lat": lat,
+      "location_lng": lng
+    }
+  });
+}
+
+exports.anotherMethod: function(args, opts) {
+  echo('Todo :)');
+}
+</pre>
+<p>Then you can call your script like that: <code>fs.login.metwit.weather({lat: "45.45", lng: "9.18"});</code> or <code>fs.login.metwit.anotherMethod();</code></p>
+<p>Once your script stabilized, you can publish it on the <a href="http://webshell.io/explorer">API Explorer</a>.</p>
+<p>You can configure the authentication of your API using a conf.json file in your metwit folder (cf <a href="#add-your-api/conf-auth">Add your API / conf.json</a>).</p>
+</section>

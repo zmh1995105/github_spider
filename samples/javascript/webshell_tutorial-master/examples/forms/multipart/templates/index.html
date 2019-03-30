@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>urlencoded form example</title>
+  </head>
+
+  <body>
+    <h1 style="text-align:center">It's A Form!</h1>
+{{if .Processed}}
+{{with .Image}}
+        <img src={{.ImageFile}} width="600" style="display: block;margin-left: auto;margin-right: auto">
+        <p style="text-align:center"><em>{{.Caption}}</em></p>
+{{end}}
+{{else}}
+    <p>Upload an image and caption it. Images should be in PNG format.</p>
+    <form action="/" method="post" name="userdata" enctype="multipart/form-data">
+      Caption: <input type="text" name="caption"><br /> 
+      Image: <input type="file" name="image"><br />
+      <input type="submit">
+    </form>
+{{end}}
+  </body>
+</html>

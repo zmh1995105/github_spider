@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body %}
+    <h1>IP List</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>Client IP</th>
+        </tr>
+        {% for entry in entries %}
+        <tr>
+            <td><a href="{{ url_for('.ip_activity', ip=entry.0) }}">{{ entry.0 }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -1,0 +1,3 @@
+木马文件名称
+"[u'python', '/root/trojan/python 1> /dev/null/ 2>/dev/null\n']"
+"[u'python', '/root/trojan/python 1>/dev/null 2>/dev/null\n']"

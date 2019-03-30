@@ -1,0 +1,9 @@
+ls lists the content of the current or the specified directory.
+
+You can use this application to get an overview of the files and
+folders on a specified location.
+
+To get a listing of the files and folders in the current directory, type "ls".
+If you want a listing for some other location, type "ls /the/location/you/want".
+For example, if you want to see the available applications, type
+"ls /apps".

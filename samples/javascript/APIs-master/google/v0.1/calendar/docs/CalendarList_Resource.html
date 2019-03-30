@@ -1,0 +1,1796 @@
+<!-- Webshell APIs
+ Copyright (C) 2013 Webshell SAS
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program. If not, see <http://www.gnu.org/licenses/>.
+ -->
+<!DOCTYPE html>
+<html>
+  <body>
+    
+    <div class="apicontainer">
+      <div class="main api-profile">
+	<div class="constraint">
+	  
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-addCalendarEntry" style="">
+  <div class="title">
+    <span class="method POST"> POST </span><span class="route">
+      addCalendarEntry 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Adds an entry to the user's calendar list.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether to use the 'foregroundColor' and 'backgroundColor' fields to write the calendar colors (RGB). If this feature is used, the index-based 'colorId' field will be set to the best matching option automatically. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> colorRgbFormat </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Type of the resource ("calendar#calendarListEntry"). </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> kind </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ETag of the resource. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> etag </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Identifier of the calendar. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> id </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Title of the calendar. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> summary </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Description of the calendar. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> description </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Geographic location of the calendar as free-form text. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> location </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The time zone of the calendar. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> timeZone </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The summary that the authenticated user has set for this calendar. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> summaryOverride </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The color of the calendar. This is an ID referring to an entry in the "calendar" section of the colors definition (see the "colors" endpoint). Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> colorId </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The main color of the calendar in the format '#0088aa'. This property supersedes the index-based colorId property. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> backgroundColor </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The foreground color of the calendar in the format '#ffffff'. This property supersedes the index-based colorId property. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> foregroundColor </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether the calendar has been hidden from the list. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> hidden </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether the calendar content shows up in the calendar UI. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> selected </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The effective access role that the authenticated user has on the calendar. Read-only. Possible values are:"freeBusyReader" - Provides read access to free/busy information."reader" - Provides read access to the calendar. Private events will appear to users with reader access, but event details will be hidden."writer" - Provides read and write access to the calendar. Private events will appear to users with writer access, and event details will be visible."owner" - Provides ownership of the calendar. This role has all of the permissions of the writer role with the additional ability to see and manipulate ACLs. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> accessRole </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The method used by this reminder. Possible values are:"email" - Reminders are sent via email."sms" - Reminders are sent via SMS."popup" - Reminders are sent via a UI popup. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> defaultReminders[].method </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">interger</span>
+
+
+
+      
+      <p> Number of minutes before the start of the event when the reminder should trigger. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> defaultReminders[].minutes </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-calendarList" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      calendarList 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Returns entries on the user's calendar list.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">int</span>
+
+
+
+      
+      <p> Maximum number of entries returned on one result page. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> maxResults </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The minimum access role for the user in the returned entires. Optional. The default is no restriction. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> minAccessRole </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Token specifying which result page to return. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> pageToken </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Whether to show hidden entries. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> showHidden </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-deleteCalendarEntry" style="">
+  <div class="title">
+    <span class="method DELETE"> DELETE </span><span class="route">
+      deleteCalendarEntry 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Deletes an entry on the user's calendar list.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Calendar identifier. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> calendarId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-getCalendarEntry" style="">
+  <div class="title">
+    <span class="method GET"> GET </span><span class="route">
+      getCalendarEntry 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Returns an entry on the user's calendar list.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Calendar identifier. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> calendarId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-patchCalendarEntry" style="">
+  <div class="title">
+    <span class="method PATCH"> PATCH </span><span class="route">
+      patchCalendarEntry 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Updates an entry on the user's calendar list. This method supports patch semantics.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Calendar identifier. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> calendarId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether to use the 'foregroundColor' and 'backgroundColor' fields to write the calendar colors (RGB). If this feature is used, the index-based 'colorId' field will be set to the best matching option automatically. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> colorRgbFormat </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Type of the resource ("calendar#calendarListEntry"). </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> kind </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ETag of the resource. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> etag </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Identifier of the calendar. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> id </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Title of the calendar. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> summary </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Description of the calendar. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> description </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Geographic location of the calendar as free-form text. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> location </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The time zone of the calendar. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> timeZone </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The summary that the authenticated user has set for this calendar. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> summaryOverride </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The color of the calendar. This is an ID referring to an entry in the "calendar" section of the colors definition (see the "colors" endpoint). Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> colorId </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The main color of the calendar in the format '#0088aa'. This property supersedes the index-based colorId property. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> backgroundColor </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The foreground color of the calendar in the format '#ffffff'. This property supersedes the index-based colorId property. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> foregroundColor </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether the calendar has been hidden from the list. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> hidden </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether the calendar content shows up in the calendar UI. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> selected </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The effective access role that the authenticated user has on the calendar. Read-only. Possible values are:"freeBusyReader" - Provides read access to free/busy information."reader" - Provides read access to the calendar. Private events will appear to users with reader access, but event details will be hidden."writer" - Provides read and write access to the calendar. Private events will appear to users with writer access, and event details will be visible."owner" - Provides ownership of the calendar. This role has all of the permissions of the writer role with the additional ability to see and manipulate ACLs. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> accessRole </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The method used by this reminder. Possible values are:"email" - Reminders are sent via email."sms" - Reminders are sent via SMS."popup" - Reminders are sent via a UI popup. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> defaultReminders[].method </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">interger</span>
+
+
+
+      
+      <p> Number of minutes before the start of the event when the reminder should trigger. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> defaultReminders[].minutes </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+    
+
+        
+
+<div class="endpoint" data-group="documentation" id="endpoint-updateCalendarEntry" style="">
+  <div class="title">
+    <span class="method PUT"> PUT </span><span class="route">
+      updateCalendarEntry 
+    </span>
+  </div>
+  
+  
+  <div class="meta">
+    <p>Updates an entry on the user's calendar list.<br/></p>
+  </div>
+  <hr>
+  
+  
+  
+  
+
+
+
+<div class="parameters">
+  <div class="titles">
+    <div class="console">Default</div>
+    <div class="description">Description</div>
+    <div class="name">Parameter</div>
+  </div>
+  
+
+
+
+
+
+
+  
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Calendar identifier. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> calendarId </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether to use the 'foregroundColor' and 'backgroundColor' fields to write the calendar colors (RGB). If this feature is used, the index-based 'colorId' field will be set to the best matching option automatically. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> colorRgbFormat </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Selector specifying which fields to include in a partial response. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> fields </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Type of the resource ("calendar#calendarListEntry"). </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> kind </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> ETag of the resource. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> etag </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Identifier of the calendar. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> id </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Title of the calendar. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> summary </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Description of the calendar. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> description </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> Geographic location of the calendar as free-form text. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> location </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The time zone of the calendar. Optional. Read-only. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> timeZone </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The summary that the authenticated user has set for this calendar. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> summaryOverride </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The color of the calendar. This is an ID referring to an entry in the "calendar" section of the colors definition (see the "colors" endpoint). Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> colorId </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The main color of the calendar in the format '#0088aa'. This property supersedes the index-based colorId property. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> backgroundColor </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The foreground color of the calendar in the format '#ffffff'. This property supersedes the index-based colorId property. Optional. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> foregroundColor </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether the calendar has been hidden from the list. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> hidden </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">boolean</span>
+
+
+
+      
+      <p> Whether the calendar content shows up in the calendar UI. Optional. The default is False. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> selected </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The effective access role that the authenticated user has on the calendar. Read-only. Possible values are:"freeBusyReader" - Provides read access to free/busy information."reader" - Provides read access to the calendar. Private events will appear to users with reader access, but event details will be hidden."writer" - Provides read and write access to the calendar. Private events will appear to users with writer access, and event details will be visible."owner" - Provides ownership of the calendar. This role has all of the permissions of the writer role with the additional ability to see and manipulate ACLs. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> accessRole </span>
+      
+      <p class="optional">Optional</p>
+      
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">string</span>
+
+
+
+      
+      <p> The method used by this reminder. Possible values are:"email" - Reminders are sent via email."sms" - Reminders are sent via SMS."popup" - Reminders are sent via a UI popup. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> defaultReminders[].method </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+  <div class="parameter">
+    <div class="console"></div>
+    <div class="description">
+      
+      
+<span class="parameter-type">interger</span>
+
+
+
+      
+      <p> Number of minutes before the start of the event when the reminder should trigger. </p>
+    </div>
+    <div class="name">
+      <span class="parameter-name"> defaultReminders[].minutes </span>
+      
+      
+      <p class="required" >Required</p>
+      
+   </div>
+  
+</div>
+
+</div>
+
+  
+  
+</div>
+
+
+
+    
+    
+    
+    
+    
+    
+
+
+
+
+	</div>
+      </div>
+    </div>
+    
+    <footer>
+      Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Wed May 22 2013 21:58:07 GMT+0200 (CEST)
+    </footer>
+    
+    <script> prettyPrint(); </script>
+  </body>
+</html>

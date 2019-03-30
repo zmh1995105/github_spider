@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Web shell.</title>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+</head>
+<style>
+ h1{
+    text-align:center;
+ }
+
+ form {
+     text-align:center;
+ }
+</style>
+<body>
+<h1>Login</h1>
+
+<form method="POST" name="login" action="/login">
+    <label for="username">Username</label>
+    <br>
+    <input id="username" type="text" name="username">
+    <br>
+    <label for="password">Password</label>
+    <br>
+    <input id="password" type="password" name="password">
+    <br>
+    <br>
+    <input type="submit" value="Log in">
+</form>
+<br>
+<div class="errorLogin"></div>
+
+<br>
+<br>
+<script>
+    $(function () {
+        var socket = io.connect('http://localhost:3000');
+        $('form').submit(function(e){
+            e.preventDefault();
+            var username = $('#username').val();
+            var password = $('#password').val();
+
+            $('.errorLogin').css({
+                'text-align':'center'
+            });
+            if(!(username) || !(password)){
+                $('.errorLogin').text("Veuillez bien remplir tous les champs ");
+
+            }else{
+                $.post('/login', {
+                    username: $('username').val(),
+                    password: $('password').val()
+                }).done(function (result) {
+                    localStorage.setItem('token', result.token);
+                    console.log(result.token);
+                });
+
+                window.location.replace("/");
+            }
+        });
+
+
+
+
+    });
+
+</script>
+</body>
+</html>

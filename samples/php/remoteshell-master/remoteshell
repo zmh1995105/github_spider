@@ -1,0 +1,27 @@
+#!/bin/bash
+GREEN='\033[0;32m'
+printf "${GREEN}"
+printf "
+  _____            _____   _              _   _ 
+ |  __ \          / ____| | |            | | | |
+ | |__) |   ___  | (___   | |__     ___  | | | |
+ |  _  /   / _ \  \___ \  | '_ \   / _ \ | | | |
+ | | \ \  |  __/  ____) | | | | | |  __/ | | | |
+ |_|  \_\  \___| |_____/  |_| |_|  \___| |_| |_|
+                                                
+                                                
+\n"
+case "$1" in
+  "connect")
+      php connect.php
+      printf "\n"
+  ;;
+  "generate")
+      php generate.php
+      printf "\n"
+  ;;
+    *)
+      printf "remoteshell generate -> generate your remoteshell\n"
+      printf "remoteshell connect -> connect to your remoteshell\n"
+  ;;
+esac
