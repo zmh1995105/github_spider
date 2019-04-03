@@ -2,10 +2,10 @@
 # encoding: utf-8
 """
 @author: zmh
-@license: (C) Copyright 2018-2018, sangfor.Co.Ltd. All rights reserved.
-@contact: 86023@sangfor.com
+@license: (C) Copyright 2018-2018, Jason_0211. All rights reserved.
+@contact: Jason_zhengminghao@163.com
 @software: PyCharm
-@file: proxy.py
+@file: main.py
 @time: 2019/2/28 17:31
 @desc: A spider used to scrape proxy pool
 """
